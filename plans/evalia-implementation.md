@@ -58,6 +58,8 @@ flowchart LR
 
 Cada caso tendrá `id`, `text`, `source_url` opcional, `source_license`, `redistribution_allowed`, `split`, `expected` y `evidence`. Cada valor no nulo tendrá una cita literal propia y su posición inicial/final en `text`; cuando no haya respaldo se marcará `null`. Los campos esperados serán:
 
+La estructura autoritativa se define en `schemas/evalia-case.schema.json` y sus reglas semánticas en `docs/annotation-guide.md`. La subtarea 0.1 incorpora `schema_version` y `review_status` para registrar versión y exclusión de borradores o conflictos. Los modelos Python posteriores deberán cumplir ese contrato.
+
 - `closing_date`: fecha ISO o `null`.
 - `modality`: `remota`, `hibrida`, `presencial` o `null`.
 - `skills`: lista de términos normalizados.
@@ -143,7 +145,7 @@ Cada paso se divide en subtareas revisables. El usuario autorizó la creación d
 
 ### Fichas de ejecución
 
-**0. Contrato y 10 casos.** Contexto: las métricas solo tendrán sentido si las respuestas esperadas están definidas antes de probar modelos. Crear `docs/annotation-guide.md`, `datasets/seed.jsonl` y el esquema en `src/evalia/domain/`. Incluir 2 casos sin fecha, 2 sobre requisito de estudiante ausente o negado y 1 contradictorio marcado para revisión. Verificar manualmente que cada valor no nulo tenga cita y posición; una segunda lectura diferida, al menos 24 horas después, corregirá inconsistencias registradas. Salida: 10 casos conformes y una tabla de decisiones de anotación. Si se cambia un campo, versionar el esquema y volver a revisar los 10 casos.
+**0. Contrato y 10 casos.** Contexto: las métricas solo tendrán sentido si las respuestas esperadas están definidas antes de probar modelos. Subtarea 0.1: crear `docs/annotation-guide.md` y `schemas/evalia-case.schema.json`. Subtarea 0.2: crear `datasets/seed.jsonl` con 2 casos sin fecha, 2 sobre requisito de estudiante ausente o negado y 1 contradictorio marcado para revisión. Subtarea 0.3: verificar manualmente que cada valor no nulo tenga cita y posición; una segunda lectura diferida, al menos 24 horas después de crear los casos, corregirá inconsistencias registradas. Salida: 10 casos conformes y una tabla de decisiones de anotación; el conflicto pendiente se excluye de métricas. Si se cambia un campo, versionar el esquema y volver a revisar los 10 casos.
 
 **1. Base instalable.** Contexto: todavía no existe código. Crear `pyproject.toml`, `src/evalia/cli.py`, `tests/`, `.gitignore`, README y configuración de Ruff/pytest. Verificar en entorno limpio con `python -m pip install -e .`, `evalia --help`, `python -m pytest` y `ruff check .`. Salida: comandos funcionales sin red ni claves. Si una dependencia complica la instalación, retirarla antes de continuar.
 

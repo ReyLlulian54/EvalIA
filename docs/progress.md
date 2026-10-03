@@ -8,7 +8,7 @@ El plan de implementación está aprobado. El repositorio se organiza en entrega
 
 | Subtarea | Estado | Entregable |
 | --- | --- | --- |
-| 0.1. Definir contrato y guía de anotación | En curso | Esquema JSON autoritativo y decisiones de anotación. |
+| 0.1. Definir contrato y guía de anotación | Completada | Esquema JSON autoritativo 0.1.0 y decisiones de anotación. |
 | 0.2. Crear diez casos de arranque | Pendiente | JSONL con casos positivos, ausencias, negaciones y contradicción. |
 | 0.3. Revisar los casos después de al menos 24 horas | Pendiente | Registro de correcciones y casos aprobados. |
 
@@ -19,3 +19,13 @@ La configuración del paquete Python pertenece al paso 1. El conjunto inicial de
 - Carpeta de trabajo: repositorio local EvalIA.
 - Verificación: inspección del estado de Git y lectura del plan aprobado.
 - Entregable: README, instrucciones de trabajo, convenciones de contribución e inventario de subtareas.
+
+### Entrega 0.1 — contrato y guía
+
+Se definieron los cuatro campos de extracción, su evidencia, la procedencia del texto y el estado de revisión. Las ausencias se distinguen de negativas explícitas. Un caso contradictorio se marca para revisión y queda fuera de las métricas finales hasta resolverlo.
+
+El esquema JSON es la fuente autoritativa de la estructura. La guía fija cómo interpretar las convocatorias y documenta qué debe verificar posteriormente el validador del paso 2. Esta entrega no declara realizada la revisión diferida ni la creación de los diez casos.
+
+Verificación: `python scripts/check_case_contract.py` con `jsonschema` 4.26.0 comprobó el esquema Draft 2020-12, aceptó cuatro ejemplos válidos y rechazó catorce inválidos. Entre ellos: fechas imposibles, claves desconocidas, evidencias incompatibles con `null` y estados de revisión incompletos. Se revisaron enlaces locales y diferencias de Git. Las instrucciones para repetir la comprobación están en la guía.
+
+Siguiente subtarea: 0.2, crear `datasets/seed.jsonl` con diez textos ficticios y sus respuestas de referencia, siguiendo esta guía.
