@@ -2,6 +2,8 @@
 
 Estado: aprobado por el usuario el 3 de octubre de 2026; implementación iniciada por subtareas. Horizonte: 10 a 12 semanas. Presupuesto máximo: USD 30 en total. El avance se registra en `docs/progress.md`.
 
+Avance del paso 0 al 3 de octubre de 2026: contrato y guía (0.1) entregados; diez casos ficticios y comprobación mecánica (0.2) entregados. La revisión diferida (0.3) permanece pendiente y podrá comenzar desde `2026-10-04T05:54:00Z`. Todavía no hay casos aprobados ni métricas de modelos.
+
 ## 1. Objetivo y usuario
 
 EvalIA permitirá a una persona que desarrolla sistemas de IA comparar modelos y versiones de prompts con casos de prueba en español. Cada ejecución debe poder repetirse y explicar **qué acertó, qué falló, cuánto tardó y cuánto costó**. El repositorio contendrá el motor, un conjunto de referencia, pruebas, documentación y una demostración pública de resultados.
