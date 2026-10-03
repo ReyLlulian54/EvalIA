@@ -6,7 +6,7 @@ Esta guía define cómo construir las respuestas de referencia que EvalIA compar
 
 Un caso contiene el fragmento original completo en `text`, su procedencia, permiso de publicación, división del conjunto, estado de revisión, valores esperados y evidencia. Se conserva el texto tal como se recibió: cambiar espacios, tildes o saltos de línea después de anotar invalidaría las posiciones de las citas.
 
-Los casos iniciales serán ejemplos ficticios identificados como tales. Los diez casos de arranque se crearán en la subtarea 0.2; todavía no existe un conjunto aprobado.
+Los diez casos de arranque de la subtarea 0.2 están en `datasets/seed.jsonl` y son ejemplos ficticios identificados como tales. Su procedencia, inventario y fecha de revisión mínima están en [la documentación del conjunto](../datasets/README.md). Todavía no existe un conjunto aprobado mediante la revisión diferida.
 
 | Campo esperado | Significado | Ausencia |
 | --- | --- | --- |
