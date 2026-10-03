@@ -16,6 +16,7 @@ La primera tarea será extraer fecha de cierre, modalidad, habilidades obligator
 - [Guía de anotación](docs/annotation-guide.md): significado de los campos y reglas de evidencia.
 - [Contrato de casos](schemas/evalia-case.schema.json): estructura autoritativa del formato 0.1.0.
 - [Casos de arranque](datasets/README.md): diez ejemplos ficticios, decisiones de anotación y estado de revisión.
+- [Registro de revisión](docs/seed-review.md): procedimiento y decisiones pendientes de la segunda lectura.
 
 ## Desarrollo
 
