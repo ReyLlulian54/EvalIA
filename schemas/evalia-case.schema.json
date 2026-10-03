@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EvalIA reference case",
+  "description": "Contrato autoritativo del caso de referencia para extracción estructurada en español.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "id", "text", "source_license", "redistribution_allowed", "split", "review_status", "expected", "evidence"],
+  "properties": {
+    "schema_version": {"const": "0.1.0"},
+    "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{2,63}$"},
+    "text": {"type": "string", "minLength": 1, "maxLength": 20000},
+    "source_url": {"type": ["string", "null"], "format": "uri", "pattern": "^https?://"},
+    "source_license": {"type": "string", "minLength": 1},
+    "redistribution_allowed": {"type": "boolean"},
+    "split": {"enum": ["seed", "dev", "test"]},
+    "review_status": {"enum": ["draft", "review_required", "reviewed"]},
+    "review_notes": {"type": "string"},
+    "expected": {"$ref": "#/$defs/extraction"},
+    "evidence": {"$ref": "#/$defs/evidence"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"expected": {"properties": {"closing_date": {"type": "null"}}}}},
+      "then": {"properties": {"evidence": {"properties": {"closing_date": {"type": "null"}}}}},
+      "else": {"properties": {"evidence": {"properties": {"closing_date": {"$ref": "#/$defs/span"}}}}}
+    },
+    {
+      "if": {"properties": {"expected": {"properties": {"modality": {"type": "null"}}}}},
+      "then": {"properties": {"evidence": {"properties": {"modality": {"type": "null"}}}}},
+      "else": {"properties": {"evidence": {"properties": {"modality": {"$ref": "#/$defs/span"}}}}}
+    },
+    {
+      "if": {"properties": {"expected": {"properties": {"student_required": {"type": "null"}}}}},
+      "then": {"properties": {"evidence": {"properties": {"student_required": {"type": "null"}}}}},
+      "else": {"properties": {"evidence": {"properties": {"student_required": {"$ref": "#/$defs/span"}}}}}
+    },
+    {
+      "if": {"properties": {"expected": {"properties": {"skills": {"maxItems": 0}}}}},
+      "then": {"properties": {"evidence": {"properties": {"skills": {"maxItems": 0}}}}},
+      "else": {"properties": {"evidence": {"properties": {"skills": {"minItems": 1}}}}}
+    },
+    {
+      "if": {"properties": {"review_status": {"const": "review_required"}}},
+      "then": {"required": ["review_notes"], "properties": {"review_notes": {"minLength": 1}}}
+    }
+  ],
+  "$defs": {
+    "extraction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["closing_date", "modality", "skills", "student_required"],
+      "properties": {
+        "closing_date": {"type": ["string", "null"], "format": "date", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+        "modality": {"enum": ["remota", "hibrida", "presencial", null]},
+        "skills": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "student_required": {"type": ["boolean", "null"]}
+      }
+    },
+    "span": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["quote", "start", "end"],
+      "properties": {
+        "quote": {"type": "string", "minLength": 1},
+        "start": {"type": "integer", "minimum": 0},
+        "end": {"type": "integer", "minimum": 1}
+      }
+    },
+    "skill_span": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["skill", "quote", "start", "end"],
+      "properties": {
+        "skill": {"type": "string", "minLength": 1},
+        "quote": {"type": "string", "minLength": 1},
+        "start": {"type": "integer", "minimum": 0},
+        "end": {"type": "integer", "minimum": 1}
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["closing_date", "modality", "skills", "student_required"],
+      "properties": {
+        "closing_date": {"anyOf": [{"$ref": "#/$defs/span"}, {"type": "null"}]},
+        "modality": {"anyOf": [{"$ref": "#/$defs/span"}, {"type": "null"}]},
+        "skills": {"type": "array", "items": {"$ref": "#/$defs/skill_span"}},
+        "student_required": {"anyOf": [{"$ref": "#/$defs/span"}, {"type": "null"}]}
+      }
+    }
+  }
+}

@@ -13,6 +13,8 @@ La primera tarea será extraer fecha de cierre, modalidad, habilidades obligator
 - [Plan de implementación](plans/evalia-implementation.md): alcance, secuencia, dependencias y criterios de cierre.
 - [Bitácora](docs/progress.md): subtareas realizadas, verificaciones y siguiente trabajo.
 - [Modo de contribución](CONTRIBUTING.md): ramas, commits y revisión de cambios.
+- [Guía de anotación](docs/annotation-guide.md): significado de los campos y reglas de evidencia.
+- [Contrato de casos](schemas/evalia-case.schema.json): estructura autoritativa del formato 0.1.0.
 
 ## Desarrollo
 
