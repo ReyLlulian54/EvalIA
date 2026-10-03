@@ -55,7 +55,7 @@ Todas las claves se incluyen aunque no exista un valor. `null` representa inform
 
 Los campos escalares no nulos tienen una evidencia con `quote`, `start` y `end`. Si su valor es `null`, su evidencia también es `null`. Las habilidades tienen una entrada por término con `skill`, `quote`, `start` y `end`; si no hay habilidades, ambas listas están vacías.
 
-Las posiciones son índices de caracteres Unicode según las cadenas de Python, comenzando en cero. `start` se incluye y `end` se excluye: debe cumplirse `text[start:end] == quote`. Un emoji cuenta como un carácter en este contrato; los futuros consumidores de JavaScript deberán respetar esa convención. Una cita debe contener la información necesaria, incluida la negación o la obligatoriedad cuando corresponda.
+Las posiciones son índices de puntos de código Unicode según las cadenas de Python, comenzando en cero. `start` se incluye y `end` se excluye: debe cumplirse `text[start:end] == quote`. El símbolo 📌 ocupa un punto de código; otros emojis pueden combinar varios, aunque visualmente parezcan un solo carácter. Los futuros consumidores de JavaScript deberán respetar esta convención. Una cita debe contener la información necesaria, incluida la negación o la obligatoriedad cuando corresponda.
 
 Que una cita exista en el texto solo verifica su localización. La revisión humana debe comprobar que respalda el valor anotado.
 
