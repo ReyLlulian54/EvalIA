@@ -2,7 +2,7 @@
 
 Estado: aprobado por el usuario el 3 de octubre de 2026; implementación iniciada por subtareas. Horizonte: 10 a 12 semanas. Presupuesto máximo: USD 30 en total. El avance se registra en `docs/progress.md`.
 
-Avance del paso 0 al 3 de octubre de 2026: contrato y guía (0.1) entregados; diez casos ficticios y comprobación mecánica (0.2) entregados. La revisión diferida (0.3) permanece pendiente y podrá comenzar desde `2026-10-04T05:54:00Z`. Todavía no hay casos aprobados ni métricas de modelos.
+Avance del paso 0 al 3 de octubre de 2026: contrato y guía (0.1) entregados; diez casos ficticios y comprobación mecánica (0.2) entregados. La subtarea 0.3 tiene su registro preparado en `docs/seed-review.md`; la segunda lectura permanece pendiente y podrá comenzar desde `2026-10-04T05:54:00Z`. Todavía no hay casos aprobados ni métricas de modelos. El paso 0 sigue abierto.
 
 ## 1. Objetivo y usuario
 

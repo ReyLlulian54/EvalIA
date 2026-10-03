@@ -10,7 +10,7 @@ El plan de implementación está aprobado. El repositorio se organiza en entrega
 | --- | --- | --- |
 | 0.1. Definir contrato y guía de anotación | Completada | Esquema JSON autoritativo 0.1.0 y decisiones de anotación. |
 | 0.2. Crear diez casos de arranque | Completada | Diez textos ficticios anotados, inventario y comprobación de 30 citas. |
-| 0.3. Revisar los casos después de al menos 24 horas | Pendiente | Registro de correcciones y casos aprobados. |
+| 0.3. Revisar los casos después de al menos 24 horas | En curso | Registro preparado; segunda lectura y aprobación pendientes. |
 
 La configuración del paquete Python pertenece al paso 1. El conjunto inicial del paso 0 será de diez casos y no representa todavía un benchmark final de modelos.
 
@@ -39,3 +39,13 @@ Verificación: `python scripts/check_seed_cases.py` comprueba los diez casos con
 Registro de creación: `2026-10-03T05:54:00Z`. Nueve casos quedan en `draft` y uno en `review_required`; ninguno en `reviewed`. La conformidad mecánica no constituye revisión semántica ni resultados de un benchmark final.
 
 Siguiente subtarea: 0.3, realizar la segunda lectura desde `2026-10-04T05:54:00Z`, registrar correcciones y estados de revisión. El caso contradictorio queda fuera de métricas finales mientras no se resuelva.
+
+### Preparación 0.3 — registro de revisión
+
+La PR #2 de los casos se integró en `main`. Se creó [el registro de revisión](seed-review.md) con hash de entrada, procedimiento de lectura, focos por caso y campos para decisiones y correcciones. Sigue el contrato existente y distingue verificación mecánica de respaldo semántico revisado por una persona.
+
+El `2026-10-03T18:52:38Z` se comprobó la hora: habían pasado 12 horas, 58 minutos y 38 segundos desde la creación. El plan exige al menos 24 horas; por tanto, no se realizó la segunda lectura ni se aprobaron casos. La preparación mantiene los diez registros sin cambios y deja 0.3 en curso.
+
+Verificación de preparación: el script del conjunto mantiene diez casos conformes y 30 citas exactas. Hash SHA-256 con saltos LF: `63523c2e9d52a055e06d3a561712d0c5fee3761cdf167313c8bc83487ac4040a`. Se revisaron los enlaces locales y el diff de documentación. No hubo ejecución de modelos ni gasto de API.
+
+Próximo trabajo: realizar la segunda lectura desde el **4 de octubre a las 02:54 en America/Santiago** (`2026-10-04T05:54:00Z`), completar el registro, documentar discrepancias y mantener excluidos los conflictos sin resolver. El paso 0 sigue abierto.
