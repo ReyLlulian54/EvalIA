@@ -20,9 +20,13 @@ htmlcov/
 # Resultados y trabajo temporal
 runs/
 work/
+artifacts/private/
+results/private/
 *.log
 .streamlit/secrets.toml
 
-# Archivos del sistema
+# Editores y archivos del sistema
+.vscode/
+.idea/
 .DS_Store
 Thumbs.db

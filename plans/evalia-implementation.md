@@ -2,7 +2,7 @@
 
 Estado: aprobado por el usuario el 3 de octubre de 2026; implementación iniciada por subtareas. Horizonte: 10 a 12 semanas. Presupuesto máximo: USD 30 en total. El avance se registra en `docs/progress.md`.
 
-Avance del paso 0 al 4 de octubre de 2026: contrato y guía (0.1) entregados; diez casos ficticios y comprobación mecánica (0.2) entregados; segunda lectura y validación humana (0.3) completadas. Nueve casos quedaron en `reviewed` y `seed-008` conserva su conflicto, estado `review_required` y exclusión de métricas. No se propusieron correcciones semánticas y todavía no hay métricas de modelos. El paso 0 está completado.
+Avance al 4 de octubre de 2026: el paso 0 está completado con nueve casos en `reviewed` y `seed-008` en `review_required`. El paso 1 está en curso: la subtarea 1.1 creó el paquete instalable y configuró pytest y Ruff; la CLI mínima permanece para 1.2. Todavía no hay ejecuciones ni métricas de modelos.
 
 ## 1. Objetivo y usuario
 
@@ -149,7 +149,7 @@ Cada paso se divide en subtareas revisables. El usuario autorizó la creación d
 
 **0. Contrato y 10 casos.** Contexto: las métricas solo tendrán sentido si las respuestas esperadas están definidas antes de probar modelos. Subtarea 0.1: crear `docs/annotation-guide.md` y `schemas/evalia-case.schema.json`. Subtarea 0.2: crear `datasets/seed.jsonl` con 2 casos sin fecha, 2 sobre requisito de estudiante ausente o negado y 1 contradictorio marcado para revisión. Subtarea 0.3: verificar manualmente que cada valor no nulo tenga cita y posición; una segunda lectura diferida, al menos 24 horas después de crear los casos, corregirá inconsistencias registradas. Salida: 10 casos conformes y una tabla de decisiones de anotación; el conflicto pendiente se excluye de métricas. Si se cambia un campo, versionar el esquema y volver a revisar los 10 casos.
 
-**1. Base instalable.** Contexto: todavía no existe código. Crear `pyproject.toml`, `src/evalia/cli.py`, `tests/`, `.gitignore`, README y configuración de Ruff/pytest. Verificar en entorno limpio con `python -m pip install -e .`, `evalia --help`, `python -m pytest` y `ruff check .`. Salida: comandos funcionales sin red ni claves. Si una dependencia complica la instalación, retirarla antes de continuar.
+**1. Base instalable.** Contexto inicial: todavía no existía código. Subtarea 1.1: crear `pyproject.toml`, el paquete `src/evalia`, `tests/`, `.gitignore`, README y configuración de Ruff/pytest; verificar instalación editable, importación, pruebas y lint. Subtarea 1.2: añadir `src/evalia/cli.py` con una CLI mínima y comprobar `evalia --help` desde una instalación limpia. Salida: comandos funcionales sin red ni claves. Si una dependencia complica la instalación, retirarla antes de continuar.
 
 **2. Validador.** Contexto: consume el contrato del paso 0. Implementar lectura JSONL, mensajes de error con línea/caso, normalización de fechas y vocabulario de habilidades. Verificar `evalia validate datasets/seed.jsonl` y pruebas negativas para fecha sin año, valor desconocido, cita fuera de rango y `null` frente a `false`. Salida: el archivo correcto pasa y cada archivo malo falla por la razón prevista. Si cambia el contrato, actualizar guía y casos antes de tocar métricas.
 
