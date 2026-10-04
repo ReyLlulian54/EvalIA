@@ -2,7 +2,7 @@
 
 Estado: aprobado por el usuario el 3 de octubre de 2026; implementación iniciada por subtareas. Horizonte: 10 a 12 semanas. Presupuesto máximo: USD 30 en total. El avance se registra en `docs/progress.md`.
 
-Avance del paso 0 al 3 de octubre de 2026: contrato y guía (0.1) entregados; diez casos ficticios y comprobación mecánica (0.2) entregados. La subtarea 0.3 tiene su registro preparado en `docs/seed-review.md`; la segunda lectura permanece pendiente y podrá comenzar desde `2026-10-04T05:54:00Z`. Todavía no hay casos aprobados ni métricas de modelos. El paso 0 sigue abierto.
+Avance del paso 0 al 4 de octubre de 2026: contrato y guía (0.1) entregados; diez casos ficticios y comprobación mecánica (0.2) entregados. En 0.3 se realizó una segunda lectura asistida después de 38 horas: nueve casos fueron consistentes, no se propusieron correcciones y se confirmó el conflicto de `seed-008`. La validación humana y los estados finales permanecen pendientes; todavía no hay casos aprobados ni métricas de modelos. El paso 0 sigue abierto.
 
 ## 1. Objetivo y usuario
 

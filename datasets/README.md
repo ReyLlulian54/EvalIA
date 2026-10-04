@@ -29,9 +29,9 @@ La anotación inicial contiene cinco fechas no determinables: cuatro por ausenci
 
 Registro de creación del conjunto: **2026-10-03T05:54:00Z**. Nueve casos están en `draft`; `seed-008` está en `review_required`. Ninguno está en `reviewed`.
 
-La segunda lectura de la subtarea 0.3 podrá comenzar **a partir de 2026-10-04T05:54:00Z**, después de al menos 24 horas. Debe revisar significado y respaldo de cada respuesta, registrar correcciones y conservar el conflicto sin puntuar mientras siga pendiente. Esta entrega solo incluye anotación inicial y comprobaciones mecánicas. No se ha realizado la revisión diferida ni hay métricas de modelos.
+La segunda lectura de la subtarea 0.3 estaba permitida **a partir de 2026-10-04T05:54:00Z**, después de al menos 24 horas. Debía revisar significado y respaldo de cada respuesta, registrar correcciones y conservar el conflicto sin puntuar mientras siguiera pendiente. La lectura asistida ya se realizó; el conjunto continúa como anotación inicial hasta completar la validación humana y todavía no hay métricas de modelos.
 
-El [registro de revisión](../docs/seed-review.md) está preparado con referencia de entrada, focos por caso y procedimiento. La segunda lectura y todas sus decisiones permanecen pendientes.
+El [registro de revisión](../docs/seed-review.md) contiene la segunda lectura asistida realizada después del intervalo: nueve casos resultaron consistentes y el conflicto de `seed-008` fue confirmado. La validación humana y el cambio de estados permanecen pendientes; el JSONL conserva su contenido y hash.
 
 Una modificación posterior de textos, valores o citas debe registrarse en la bitácora y actualizar la versión del conjunto. Si cambia el contrato, también se debe revisar cada caso afectado.
 
