@@ -4,7 +4,7 @@ Evaluación reproducible de modelos y prompts en español. El objetivo es compar
 
 ## Estado del proyecto
 
-Proyecto en etapa inicial. El plan fue aprobado el 3 de octubre de 2026. Ya existe un contrato de datos y diez casos ficticios con anotaciones iniciales, pendientes de revisión diferida. Los comandos de evaluación y los paneles descritos en el plan son entregables futuros.
+Proyecto en etapa inicial. El plan fue aprobado el 3 de octubre de 2026. Ya existe un contrato de datos y diez casos ficticios; una segunda lectura asistida encontró nueve casos consistentes y confirmó un conflicto. La validación humana sigue pendiente. Los comandos de evaluación y los paneles descritos en el plan son entregables futuros.
 
 La primera tarea será extraer fecha de cierre, modalidad, habilidades obligatorias y requisito de ser estudiante de fragmentos de convocatorias. La primera versión usará Ollama localmente, tendrá una interfaz web local para ejecutar experimentos y una demo pública de resultados precomputados.
 
