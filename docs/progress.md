@@ -65,3 +65,22 @@ La persona responsable confirmó explícitamente las nueve decisiones consistent
 El cambio de estados produce la versión `seed-0.1.1` y el hash SHA-256 `5fd3ffb891ccdca1b7cdf4642af2dc7b547438eda8d3e4766e0af5a26e3ea78e`. El esquema autoritativo continúa en 0.1.0. Las comprobaciones mantienen diez casos conformes, 30 citas exactas, nueve `reviewed` y un `review_required`.
 
 La subtarea 0.3 y el paso 0 quedan completados. El siguiente trabajo planificado es la primera subtarea del paso 1; no se inició en esta entrega.
+
+## 4 de octubre de 2026 — paso 1 en curso
+
+### Base instalable
+
+| Subtarea | Estado | Entregable |
+| --- | --- | --- |
+| 1.1. Crear el paquete y el contrato de herramientas | Completada | Paquete `src/evalia`, metadatos, entorno aislado, pytest, Ruff y exclusiones locales. |
+| 1.2. Añadir la CLI mínima y comprobar una instalación limpia | Pendiente | Comando `evalia --help` sin red ni claves. |
+
+### Entrega 1.1 — esqueleto del paquete
+
+Se creó `pyproject.toml` como fuente de configuración del paquete `evalia` 0.1.0, con Python 3.11 o posterior, backend Hatchling y grupos de desarrollo para pytest y Ruff. La distribución todavía no declara dependencias de ejecución: Typer se incorporará en 1.2 junto con la CLI que lo utilizará. El paquete exporta su versión y publica `py.typed`; una prueba comprueba que la versión en ejecución coincida con los metadatos instalados.
+
+El entorno local usa Python 3.14.3. La creación inicial de `.venv` no pudo ejecutar `ensurepip` porque el Python base informó una ubicación incompleta; se instaló `pip` dentro del entorno mediante la opción `pip --python`, sin modificar la instalación global. Después, `python -m pip install -e .` construyó e instaló correctamente `evalia` 0.1.0.
+
+Verificación: pytest 9.1.1 ejecutó una prueba satisfactoria; Ruff 0.16.10 no encontró problemas; la importación informó versión 0.1.0 tanto en ejecución como en metadatos; `pip check` no encontró dependencias rotas. No hubo llamadas a modelos, servicios externos de inferencia ni uso de claves.
+
+Siguiente subtarea: 1.2, definir la interfaz mínima de la CLI, añadir Typer cuando exista ese consumidor y comprobar `evalia --help`. El paso 1 permanece abierto.
