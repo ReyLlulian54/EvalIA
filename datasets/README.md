@@ -1,4 +1,4 @@
-# Casos de arranque — seed 0.1.0
+# Casos de arranque — seed 0.1.1
 
 [seed.jsonl](seed.jsonl) contiene diez convocatorias ficticias en español, redactadas con asistencia de IA específicamente para EvalIA. No corresponden a oportunidades reales y no se copiaron de sitios externos. Sirven para comprobar el contrato y comenzar el desarrollo; no permiten concluir qué modelo es mejor para convocatorias reales.
 
@@ -27,11 +27,11 @@ La anotación inicial contiene cinco fechas no determinables: cuatro por ausenci
 
 ## Estado de revisión
 
-Registro de creación del conjunto: **2026-10-03T05:54:00Z**. Nueve casos están en `draft`; `seed-008` está en `review_required`. Ninguno está en `reviewed`.
+Registro de creación del conjunto: **2026-10-03T05:54:00Z**. La persona responsable confirmó la revisión el **2026-10-04T21:40:29Z**. Nueve casos están en `reviewed`; `seed-008` permanece en `review_required` y excluido de métricas.
 
-La segunda lectura de la subtarea 0.3 estaba permitida **a partir de 2026-10-04T05:54:00Z**, después de al menos 24 horas. Debía revisar significado y respaldo de cada respuesta, registrar correcciones y conservar el conflicto sin puntuar mientras siguiera pendiente. La lectura asistida ya se realizó; el conjunto continúa como anotación inicial hasta completar la validación humana y todavía no hay métricas de modelos.
+La segunda lectura de la subtarea 0.3 estaba permitida **a partir de 2026-10-04T05:54:00Z**, después de al menos 24 horas. Revisó significado y respaldo de cada respuesta, no encontró correcciones y conservó el conflicto sin puntuar. La persona responsable confirmó las decisiones registradas; todavía no hay métricas de modelos.
 
-El [registro de revisión](../docs/seed-review.md) contiene la segunda lectura asistida realizada después del intervalo: nueve casos resultaron consistentes y el conflicto de `seed-008` fue confirmado. La validación humana y el cambio de estados permanecen pendientes; el JSONL conserva su contenido y hash.
+El [registro de revisión](../docs/seed-review.md) contiene la lectura asistida, la confirmación humana y el cierre de la subtarea. El cambio de estados produjo la versión `seed-0.1.1`, con hash SHA-256 `5fd3ffb891ccdca1b7cdf4642af2dc7b547438eda8d3e4766e0af5a26e3ea78e`. El contrato de cada registro sigue siendo 0.1.0 porque no cambió su estructura.
 
 Una modificación posterior de textos, valores o citas debe registrarse en la bitácora y actualizar la versión del conjunto. Si cambia el contrato, también se debe revisar cada caso afectado.
 
@@ -46,4 +46,4 @@ python scripts/check_seed_cases.py
 
 La primera comprobación conserva los ejemplos positivos y negativos del contrato. La segunda revisa los diez casos, identificadores y textos únicos, tipos y fechas, correspondencia de habilidades y evidencia, límites y coincidencia exacta de 30 citas, además de la cobertura mínima de arranque. Muestra un hash SHA-256 del JSONL leído como UTF-8 con saltos normalizados a LF para identificar el contenido verificado en Windows y otros sistemas.
 
-El script es una comprobación acotada a este conjunto. La CLI general del paso 2 y la revisión humana siguen pendientes. La validación mecánica no demuestra respaldo semántico ni representatividad de la muestra.
+El script es una comprobación acotada a este conjunto. La CLI general del paso 2 sigue pendiente. La validación mecánica por sí sola no demuestra respaldo semántico ni representatividad de la muestra; el respaldo semántico de estos diez casos se revisó mediante el procedimiento documentado.

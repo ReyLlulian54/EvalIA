@@ -2,9 +2,9 @@
 
 ## Estado y referencia
 
-Subtarea 0.3 **en curso: segunda lectura asistida por IA terminada; validación humana pendiente**. Este documento conserva la referencia de entrada y las decisiones de la lectura realizada después del intervalo. No presenta la comprobación de IA como revisión humana ni cambia todavía los estados del conjunto.
+Subtarea 0.3 **completada: segunda lectura y validación humana registradas**. Este documento conserva la referencia de entrada, las decisiones de la lectura asistida y la confirmación posterior de la persona responsable.
 
-- Conjunto: [seed.jsonl](../datasets/seed.jsonl), versión `seed-0.1.0`.
+- Conjunto: [seed.jsonl](../datasets/seed.jsonl), versión `seed-0.1.1`.
 - Commit de creación: `f0f26401955f25eeb5ce0f130567d301492e4e54`, integrado mediante la PR #2.
 - Contrato autoritativo: [esquema 0.1.0](../schemas/evalia-case.schema.json).
 - Criterios de interpretación: [guía de anotación](annotation-guide.md).
@@ -28,7 +28,7 @@ La comprobación mecánica confirma diez casos conformes, identificadores y text
 
 ## Lista de trabajo por caso
 
-Las decisiones siguientes registran la segunda lectura asistida. «Consistente» significa que la anotación coincide con el texto y la guía; no equivale a validación humana ni cambia `review_status` por sí sola.
+Las decisiones siguientes registran la segunda lectura asistida y fueron confirmadas posteriormente por la persona responsable. «Consistente» significa que la anotación coincide con el texto y la guía.
 
 | Caso | Foco de revisión | Decisión | Motivo o corrección |
 | --- | --- | --- | --- |
@@ -45,24 +45,25 @@ Las decisiones siguientes registran la segunda lectura asistida. «Consistente»
 
 ## Resultado de la segunda lectura
 
-- Persona revisora humana: **pendiente**.
+- Persona revisora humana: **persona responsable del proyecto, mediante confirmación explícita registrada en la conversación de trabajo**.
 - Apoyo de IA utilizado: **Codex realizó una segunda lectura semántica y mecánica solicitada por la persona responsable del proyecto**.
 - Comienzo de la lectura asistida en UTC: `2026-10-04T20:12:15Z`.
 - Fin de la lectura asistida en UTC: `2026-10-04T20:13:03Z`.
 - Casos examinados mediante segunda lectura asistida: **10 de 10**.
 - Correcciones propuestas por la lectura asistida: **0**.
-- Casos aprobados: **0**.
-- Casos consistentes listos para validación humana: **9**.
+- Confirmación humana registrada en UTC: `2026-10-04T21:40:29Z`.
+- Casos aprobados: **9**.
+- Casos pendientes de validación humana: **0**.
 - Conflictos resueltos: **0**.
 - Conflicto confirmado: `seed-008`, todavía en `review_required` y excluido de métricas.
-- Versión y hash: se conserva `seed-0.1.0` y el hash de entrada, porque no cambió `datasets/seed.jsonl`.
+- Versión y hash de salida: `seed-0.1.1`; SHA-256 `5fd3ffb891ccdca1b7cdf4642af2dc7b547438eda8d3e4766e0af5a26e3ea78e`.
 
-## Validación humana pendiente
+## Validación humana
 
-La persona responsable debe leer los diez textos y las decisiones de la tabla. Si coincide con los nueve casos consistentes, registrará su nombre y fecha, cambiará esos nueve estados de `draft` a `reviewed` y mantendrá `seed-008` en `review_required`. Si encuentra una discrepancia, debe registrar el campo, el valor anterior y la corrección antes de modificar el JSONL. Después se calculará el hash de salida y se repetirán las comprobaciones.
+La persona responsable confirmó las nueve decisiones consistentes y mantener `seed-008` en `review_required`. En consecuencia, `seed-001` a `seed-007`, `seed-009` y `seed-010` cambiaron de `draft` a `reviewed`. No se modificaron textos, valores esperados ni citas y no hubo correcciones que registrar. El caso conflictivo continúa excluido de métricas.
 
 ## Criterio de cierre de 0.3
 
 La subtarea se completa cuando los diez casos tienen una decisión registrada tras la espera requerida, los casos aprobados tienen respaldo semántico revisado, los conflictos pendientes quedan identificados y excluidos, las correcciones están documentadas y las comprobaciones mecánicas pasan. El conjunto puede conservar un caso contradictorio para probar el tratamiento de exclusiones; no se debe presentarlo como un caso aprobado para puntuar modelos.
 
-La lectura asistida no cierra el paso 0 ni inicia el paso 1. La subtarea 0.3 se cerrará después de la validación humana y de actualizar los estados del conjunto con evidencia registrada.
+La validación registrada, la actualización de estados y las comprobaciones mecánicas satisfacen el criterio de cierre. La subtarea 0.3 y el paso 0 quedan completados; el paso 1 no se inició en esta entrega.
