@@ -10,7 +10,7 @@ El plan de implementación está aprobado. El repositorio se organiza en entrega
 | --- | --- | --- |
 | 0.1. Definir contrato y guía de anotación | Completada | Esquema JSON autoritativo 0.1.0 y decisiones de anotación. |
 | 0.2. Crear diez casos de arranque | Completada | Diez textos ficticios anotados, inventario y comprobación de 30 citas. |
-| 0.3. Revisar los casos después de al menos 24 horas | En curso | Segunda lectura asistida terminada; validación humana y estados finales pendientes. |
+| 0.3. Revisar los casos después de al menos 24 horas | Completada | Nueve casos revisados; conflicto de `seed-008` confirmado y excluido. |
 
 La configuración del paquete Python pertenece al paso 1. El conjunto inicial del paso 0 será de diez casos y no representa todavía un benchmark final de modelos.
 
@@ -48,7 +48,7 @@ El `2026-10-03T18:52:38Z` se comprobó la hora: habían pasado 12 horas, 58 minu
 
 Verificación de preparación: el script del conjunto mantiene diez casos conformes y 30 citas exactas. Hash SHA-256 con saltos LF: `63523c2e9d52a055e06d3a561712d0c5fee3761cdf167313c8bc83487ac4040a`. Se revisaron los enlaces locales y el diff de documentación. No hubo ejecución de modelos ni gasto de API.
 
-Esta preparación dejó habilitada la segunda lectura desde el **4 de octubre a las 02:54 en America/Santiago** (`2026-10-04T05:54:00Z`). La sección siguiente registra su ejecución y los resultados obtenidos. El paso 0 sigue abierto.
+Esta preparación dejó habilitada la segunda lectura desde el **4 de octubre a las 02:54 en America/Santiago** (`2026-10-04T05:54:00Z`). La sección siguiente registra su ejecución y los resultados obtenidos. En ese momento, el paso 0 seguía abierto.
 
 ### Segunda lectura asistida 0.3
 
@@ -56,4 +56,12 @@ La segunda lectura comenzó el `2026-10-04T20:12:15Z`, 38 horas, 18 minutos y 15
 
 Resultado: nueve casos consistentes, cero correcciones propuestas y un conflicto confirmado. `seed-008` mantiene dos cierres incompatibles, `closing_date=null`, `review_required` y exclusión completa de métricas. El JSONL no cambió, por lo que conserva la versión `seed-0.1.0` y el hash `63523c2e9d52a055e06d3a561712d0c5fee3761cdf167313c8bc83487ac4040a`.
 
-La guía exige revisión humana para el respaldo semántico. Por transparencia, los nueve casos continúan en `draft` y ninguno se presenta como aprobado. El siguiente trabajo de 0.3 es la validación de la persona responsable, seguida del cambio de estados, nuevo hash y comprobación mecánica. El paso 0 permanece abierto.
+La guía exige revisión humana para el respaldo semántico. Antes de la confirmación registrada a continuación, los nueve casos continuaban en `draft` y ninguno se presentaba como aprobado. El trabajo pendiente era la validación de la persona responsable, seguida del cambio de estados, nuevo hash y comprobación mecánica.
+
+### Cierre 0.3 — validación humana
+
+La persona responsable confirmó explícitamente las nueve decisiones consistentes y la permanencia de `seed-008` en `review_required` el `2026-10-04T21:40:29Z`. Los casos `seed-001` a `seed-007`, `seed-009` y `seed-010` cambiaron de `draft` a `reviewed`; no se modificaron textos, valores esperados ni citas.
+
+El cambio de estados produce la versión `seed-0.1.1` y el hash SHA-256 `5fd3ffb891ccdca1b7cdf4642af2dc7b547438eda8d3e4766e0af5a26e3ea78e`. El esquema autoritativo continúa en 0.1.0. Las comprobaciones mantienen diez casos conformes, 30 citas exactas, nueve `reviewed` y un `review_required`.
+
+La subtarea 0.3 y el paso 0 quedan completados. El siguiente trabajo planificado es la primera subtarea del paso 1; no se inició en esta entrega.
