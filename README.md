@@ -4,7 +4,7 @@ Evaluación reproducible de modelos y prompts en español. El objetivo es compar
 
 ## Estado del proyecto
 
-Proyecto en etapa inicial. Los pasos 0 y 1 están completados: existe un contrato de datos, diez casos ficticios y un paquete Python instalable con una CLI mínima. Nueve casos están revisados y uno está marcado para revisión por un conflicto deliberado. Los comandos de evaluación y los paneles descritos en el plan son entregables futuros.
+Proyecto en etapa inicial. Los pasos 0 y 1 están completados y el paso 2 está en curso: existe un contrato de datos, diez casos ficticios y un paquete Python instalable con validación mecánica. Nueve casos están revisados y uno está marcado para revisión por un conflicto deliberado. Los comandos de evaluación y los paneles descritos en el plan son entregables futuros.
 
 La primera tarea será extraer fecha de cierre, modalidad, habilidades obligatorias y requisito de ser estudiante de fragmentos de convocatorias. La primera versión usará Ollama localmente, tendrá una interfaz web local para ejecutar experimentos y una demo pública de resultados precomputados.
 
@@ -48,6 +48,6 @@ Comprobar el paquete y la calidad del código:
 .\.venv\Scripts\ruff check .
 ```
 
-`evalia validate` comprueba por ahora la sintaxis JSONL y la estructura de cada caso con el esquema 0.1.0. Informa línea, caso y campo de los errores detectados. Las comprobaciones entre casos y de citas, junto con la normalización de fechas y habilidades, corresponden a las siguientes subtareas del paso 2; una estructura válida todavía no acredita esas propiedades ni el respaldo semántico de las citas.
+`evalia validate` comprueba la sintaxis JSONL, el esquema 0.1.0, la unicidad de IDs y textos, las posiciones y el contenido literal de las citas, y la correspondencia entre habilidades y evidencias. Informa línea, caso y campo de los errores detectados. La normalización de fechas y habilidades corresponde a la subtarea 2.3. Una cita literal correcta no acredita por sí sola que respalde semánticamente el valor anotado; esa revisión sigue siendo humana.
 
 La licencia de distribución del código sigue pendiente de definición. La publicación del repositorio no constituye una autorización de reutilización de textos de terceros.

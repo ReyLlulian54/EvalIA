@@ -2,7 +2,7 @@
 
 Estado: aprobado por el usuario el 3 de octubre de 2026; implementación iniciada por subtareas. Horizonte: 10 a 12 semanas. Presupuesto máximo: USD 30 en total. El avance se registra en `docs/progress.md`.
 
-Avance al 5 de octubre de 2026: los pasos 0 y 1 están completados. El conjunto conserva nueve casos en `reviewed` y `seed-008` en `review_required`; el paquete es instalable y la CLI ofrece ayuda y versión. La siguiente etapa es el validador del paso 2. Todavía no hay ejecuciones ni métricas de modelos.
+Avance al 5 de octubre de 2026: los pasos 0 y 1 están completados y el paso 2 está en curso. El conjunto conserva nueve casos en `reviewed` y `seed-008` en `review_required`; el paquete es instalable y la CLI valida estructura y coherencia mecánica de casos. Falta la normalización prevista en 2.3. Todavía no hay ejecuciones ni métricas de modelos.
 
 ## 1. Objetivo y usuario
 

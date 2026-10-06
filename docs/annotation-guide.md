@@ -72,7 +72,7 @@ Que una cita exista en el texto solo verifica su localización. La revisión hum
 
 El esquema comprueba claves, tipos, enumeraciones, listas sin duplicados y la relación de nulidad entre valores y evidencias escalares. La validación de `format=date` requiere activar comprobación de formatos.
 
-El futuro validador del paso 2 comprobará también identificadores únicos entre líneas, texto no compuesto solo por espacios, límites y contenido de las citas, correspondencia uno a uno entre habilidades y evidencias, y composición del conjunto. Estas reglas entre valores no quedan garantizadas por JSON Schema.
+`evalia validate` comprueba identificadores y textos únicos entre líneas, texto no compuesto solo por espacios, límites y contenido literal de las citas, y correspondencia uno a uno entre habilidades y evidencias. Estas reglas entre valores no quedan garantizadas por JSON Schema. La composición específica del conjunto inicial se comprueba con `scripts/check_seed_cases.py`; el validador genérico no exige que todo conjunto tenga diez casos o la misma distribución de etiquetas.
 
 La revisión humana comprobará interpretación, contradicciones, equivalencias, permiso de publicación y respaldo semántico. Esas comprobaciones no se presentarán como resueltas solo porque el archivo cumpla su esquema.
 

@@ -1,4 +1,4 @@
-"""Comportamiento público de la validación estructural JSONL."""
+"""Comportamiento público de la validación mecánica JSONL."""
 
 import copy
 import json
@@ -16,11 +16,18 @@ def write_case(path: Path, case: dict) -> None:
     path.write_text(json.dumps(case, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
+def write_cases(path: Path, cases: list[dict]) -> None:
+    path.write_text(
+        "".join(json.dumps(case, ensure_ascii=False) + "\n" for case in cases),
+        encoding="utf-8",
+    )
+
+
 def seed_case() -> dict:
     return json.loads((ROOT / "datasets/seed.jsonl").read_text(encoding="utf-8").splitlines()[0])
 
 
-def test_seed_passes_structural_validation() -> None:
+def test_seed_passes_mechanical_validation() -> None:
     result = RUNNER.invoke(app, ["validate", str(ROOT / "datasets/seed.jsonl")])
 
     assert result.exit_code == 0
@@ -65,13 +72,8 @@ def test_rejects_unknown_modality(tmp_path: Path) -> None:
 
 
 def test_false_is_a_valid_explicit_negative_not_null(tmp_path: Path) -> None:
-    original = seed_case()
-    case = copy.deepcopy(original)
-    case["text"] = "No se requiere ser estudiante."
-    case["expected"]["student_required"] = False
-    case["evidence"]["student_required"] = {
-        "quote": case["text"], "start": 0, "end": len(case["text"])
-    }
+    case = json.loads((ROOT / "datasets/seed.jsonl").read_text(encoding="utf-8").splitlines()[2])
+    assert case["expected"]["student_required"] is False
     path = tmp_path / "false.jsonl"
     write_case(path, case)
 
@@ -105,3 +107,122 @@ def test_non_utf8_file_reports_a_read_error(tmp_path: Path) -> None:
 
     assert result.exit_code == 2
     assert "No se pudo leer" in result.output
+
+
+def test_rejects_repeated_id_with_both_line_numbers(tmp_path: Path) -> None:
+    first = seed_case()
+    second = copy.deepcopy(first)
+    second["text"] += " Texto adicional."
+    path = tmp_path / "duplicate-id.jsonl"
+    write_cases(path, [first, second])
+
+    result = RUNNER.invoke(app, ["validate", str(path)])
+
+    assert result.exit_code == 1
+    assert "línea 2 (caso seed-001): id" in result.output
+    assert "línea 1" in result.output
+
+
+def test_rejects_repeated_text_with_distinct_ids(tmp_path: Path) -> None:
+    first = seed_case()
+    second = copy.deepcopy(first)
+    second["id"] = "fixture-002"
+    path = tmp_path / "duplicate-text.jsonl"
+    write_cases(path, [first, second])
+
+    result = RUNNER.invoke(app, ["validate", str(path)])
+
+    assert result.exit_code == 1
+    assert "línea 2 (caso fixture-002): text" in result.output
+    assert "línea 1" in result.output
+
+
+def test_rejects_whitespace_only_text(tmp_path: Path) -> None:
+    case = seed_case()
+    case["text"] = " \n "
+    case["expected"] = {
+        "closing_date": None,
+        "modality": None,
+        "skills": [],
+        "student_required": None,
+    }
+    case["evidence"] = {
+        "closing_date": None,
+        "modality": None,
+        "skills": [],
+        "student_required": None,
+    }
+    path = tmp_path / "blank-text.jsonl"
+    write_case(path, case)
+
+    result = RUNNER.invoke(app, ["validate", str(path)])
+
+    assert result.exit_code == 1
+    assert "línea 1 (caso seed-001): text" in result.output
+    assert "solo espacios" in result.output
+
+
+def test_rejects_scalar_span_outside_text(tmp_path: Path) -> None:
+    case = seed_case()
+    case["evidence"]["closing_date"]["end"] = len(case["text"]) + 1
+    path = tmp_path / "outside-text.jsonl"
+    write_case(path, case)
+
+    result = RUNNER.invoke(app, ["validate", str(path)])
+
+    assert result.exit_code == 1
+    assert "línea 1 (caso seed-001): evidence.closing_date" in result.output
+    assert "rango inválido" in result.output
+
+
+def test_rejects_quote_not_matching_its_unicode_span(tmp_path: Path) -> None:
+    case = json.loads((ROOT / "datasets/seed.jsonl").read_text(encoding="utf-8").splitlines()[5])
+    case["evidence"]["modality"]["quote"] = "Modalidad: remota."
+    path = tmp_path / "wrong-quote.jsonl"
+    write_case(path, case)
+
+    result = RUNNER.invoke(app, ["validate", str(path)])
+
+    assert result.exit_code == 1
+    assert "línea 1 (caso seed-006): evidence.modality" in result.output
+    assert "cita no coincide" in result.output
+
+
+def test_rejects_missing_skill_evidence(tmp_path: Path) -> None:
+    case = seed_case()
+    case["evidence"]["skills"].pop()
+    path = tmp_path / "missing-skill.jsonl"
+    write_case(path, case)
+
+    result = RUNNER.invoke(app, ["validate", str(path)])
+
+    assert result.exit_code == 1
+    assert "línea 1 (caso seed-001): evidence.skills" in result.output
+    assert "SQL" in result.output
+
+
+def test_rejects_duplicate_skill_evidence(tmp_path: Path) -> None:
+    case = seed_case()
+    case["evidence"]["skills"][1]["skill"] = "Python"
+    path = tmp_path / "duplicate-skill.jsonl"
+    write_case(path, case)
+
+    result = RUNNER.invoke(app, ["validate", str(path)])
+
+    assert result.exit_code == 1
+    assert "evidence.skills" in result.output
+    assert "SQL" in result.output
+    assert "Python" in result.output
+
+
+def test_rejects_skill_quote_with_reversed_span(tmp_path: Path) -> None:
+    case = seed_case()
+    case["evidence"]["skills"][0]["start"] = case["evidence"]["skills"][0]["end"]
+    path = tmp_path / "reversed-skill.jsonl"
+    write_case(path, case)
+
+    result = RUNNER.invoke(app, ["validate", str(path)])
+
+    assert result.exit_code == 1
+    assert "evidence.skills.0" in result.output
+    assert "rango inválido" in result.output
