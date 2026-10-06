@@ -102,7 +102,7 @@ Las subtareas 1.1 y 1.2 completan el paso 1. El siguiente trabajo es el validado
 | Subtarea | Estado | Entregable |
 | --- | --- | --- |
 | 2.1. Lectura JSONL y contrato estructural | Completada | CLI `validate` con errores de línea, caso y campo; esquema 0.1.0 incluido en el paquete. |
-| 2.2. Coherencia de casos y citas | Pendiente | Identificadores y textos únicos, correspondencia y posiciones de evidencia. |
+| 2.2. Coherencia de casos y citas | Completada | Identificadores y textos únicos, correspondencia y posiciones de evidencia. |
 | 2.3. Normalización documentada | Pendiente | Fechas y vocabulario de habilidades con reglas y pruebas. |
 
 ### Entrega 2.1 — validador estructural
@@ -112,3 +112,11 @@ Las subtareas 1.1 y 1.2 completan el paso 1. El siguiente trabajo es el validado
 Las pruebas cubren el conjunto inicial de diez casos, JSON mal formado en una segunda línea, fecha sin año, modalidad desconocida y la diferencia entre `student_required=false` con cita y `null` sin ella. Esta entrega no comprueba aún unicidad entre líneas, rangos de citas, correspondencia exacta de habilidades ni respaldo semántico; esas verificaciones quedan en 2.2. La normalización queda en 2.3.
 
 Verificación: once pruebas aprobadas con pytest y Ruff sin problemas; `evalia validate datasets/seed.jsonl` informó diez casos estructuralmente válidos. Se construyó un wheel y se comprobó que el esquema empaquetado es idéntico al archivo autoritativo. La instalación de ese wheel en un entorno aislado permitió ejecutar `evalia validate` desde `work/`, fuera de la raíz del repositorio. No hubo llamadas a modelos ni uso de claves. La siguiente subtarea es **2.2**, después de revisar e integrar esta entrega.
+
+### Entrega 2.2 — coherencia mecánica y citas
+
+El validador genérico añade unicidad exacta de `id` y `text`, rechazo de texto compuesto solo por espacios, correspondencia uno a uno entre `expected.skills` y `evidence.skills`, y comprobación de rangos y contenido literal de las citas escalares y de habilidades. Los errores indican línea, caso, campo y, cuando corresponde, la primera línea del duplicado. Las posiciones se calculan con índices de cadena Python, según la convención Unicode de la guía.
+
+La validación mecánica se aplica después del esquema autoritativo; los registros con errores estructurales conservan esos diagnósticos sin ejecutar reglas que requieren campos válidos. La composición mínima del conjunto inicial continúa en `scripts/check_seed_cases.py`, sin imponer sus diez casos ni su distribución de etiquetas a los conjuntos de terceros. La coincidencia literal de una cita no demuestra respaldo semántico, y la revisión humana registrada en el paso 0 conserva su significado.
+
+Verificación: 19 pruebas aprobadas con pytest, Ruff sin errores y formato comprobado en los archivos Python modificados. Ocho pruebas negativas nuevas cubren ID y texto repetidos, texto en blanco, rango fuera del texto, cita Unicode incorrecta, habilidad sin cita, cita duplicada y rango invertido de una cita de habilidad. `evalia validate datasets/seed.jsonl` acepta los diez casos iniciales; el comprobador específico del conjunto sigue informando 30 citas exactas y el hash `5fd3ffb891ccdca1b7cdf4642af2dc7b547438eda8d3e4766e0af5a26e3ea78e`, sin cambios en los datos. La siguiente subtarea es **2.3**, normalización documentada de fechas y habilidades; no se inició aquí.

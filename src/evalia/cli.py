@@ -27,7 +27,7 @@ def version() -> None:
 
 @app.command()
 def validate(path: Path) -> None:
-    """Comprueba la estructura JSONL con el contrato de casos 0.1.0."""
+    """Comprueba la estructura JSONL y la coherencia mecánica de los casos."""
     try:
         count, issues = validate_jsonl(path)
     except (OSError, UnicodeError) as error:
@@ -40,4 +40,4 @@ def validate(path: Path) -> None:
         typer.echo(f"Validación fallida: {len(issues)} error(es) en {count} caso(s).", err=True)
         raise typer.Exit(code=1)
 
-    typer.echo(f"Estructura válida: {count} casos.")
+    typer.echo(f"Validación mecánica correcta: {count} casos.")
