@@ -10,7 +10,8 @@ from jsonschema import Draft202012Validator, FormatChecker
 from evalia.normalization import normalize_skill
 
 
-def _schema_validator() -> Draft202012Validator:
+def case_validator() -> Draft202012Validator:
+    """Construye el validador del único esquema de casos autoritativo."""
     packaged = resources.files("evalia").joinpath("schemas/evalia-case.schema.json")
     # El wheel incluye el esquema original. Esta ruta cubre la instalación editable.
     schema_file = (
@@ -23,6 +24,17 @@ def _schema_validator() -> Draft202012Validator:
     return Draft202012Validator(schema, format_checker=FormatChecker())
 
 
+def extraction_validator() -> Draft202012Validator:
+    """Deriva el contrato de predicción de `$defs/extraction` del caso."""
+    case_schema = case_validator().schema
+    extraction_schema = {
+        "$schema": case_schema["$schema"],
+        "$defs": case_schema["$defs"],
+        "$ref": "#/$defs/extraction",
+    }
+    return Draft202012Validator(extraction_schema, format_checker=FormatChecker())
+
+
 def _span_issues(text: str, span: dict, label: str) -> list[str]:
     start, end = span["start"], span["end"]
     if not 0 <= start < end <= len(text):
@@ -32,7 +44,8 @@ def _span_issues(text: str, span: dict, label: str) -> list[str]:
     return []
 
 
-def _case_issues(case: dict, label: str) -> list[str]:
+def case_issues(case: dict, label: str) -> list[str]:
+    """Comprueba relaciones mecánicas de un caso que ya pasó el esquema."""
     text = case["text"]
     evidence = case["evidence"]
     issues: list[str] = []
@@ -73,7 +86,7 @@ def _case_issues(case: dict, label: str) -> list[str]:
 
 def validate_jsonl(path: Path) -> tuple[int, list[str]]:
     """Devuelve número de casos y errores estructurales y mecánicos legibles."""
-    validator = _schema_validator()
+    validator = case_validator()
     count = 0
     issues: list[str] = []
     seen_ids: dict[str, int] = {}
@@ -118,7 +131,7 @@ def validate_jsonl(path: Path) -> tuple[int, list[str]]:
                     f"{label}: text: repetido; aparece primero en línea {first_text_line}"
                 )
 
-            issues.extend(_case_issues(case, label))
+            issues.extend(case_issues(case, label))
 
     if count == 0 and not issues:
         issues.append("Archivo JSONL vacío: se esperaba al menos un caso")
