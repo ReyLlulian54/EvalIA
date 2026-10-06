@@ -96,3 +96,19 @@ La prueba inicial detectó que Typer interpreta una aplicación con un solo coma
 Verificación: `python -m pytest -q` terminó con cuatro pruebas aprobadas y `ruff check .` sin errores. Se instaló el paquete sin extras de desarrollo en un entorno nuevo y aislado dentro de `work/`; `evalia --help` y `evalia version` funcionaron, y `pip --python ... check` no encontró dependencias rotas. Este equipo requirió crear el entorno sin `pip` y usar `pip --python` por la anomalía de `ensurepip` registrada en 1.1. No hubo llamadas a modelos ni uso de claves.
 
 Las subtareas 1.1 y 1.2 completan el paso 1. El siguiente trabajo es el validador del paso 2, comenzando por una subtarea concreta que consuma el esquema autoritativo.
+
+## 5 de octubre de 2026 — paso 2 en curso
+
+| Subtarea | Estado | Entregable |
+| --- | --- | --- |
+| 2.1. Lectura JSONL y contrato estructural | Completada | CLI `validate` con errores de línea, caso y campo; esquema 0.1.0 incluido en el paquete. |
+| 2.2. Coherencia de casos y citas | Pendiente | Identificadores y textos únicos, correspondencia y posiciones de evidencia. |
+| 2.3. Normalización documentada | Pendiente | Fechas y vocabulario de habilidades con reglas y pruebas. |
+
+### Entrega 2.1 — validador estructural
+
+`evalia validate <archivo.jsonl>` lee cada línea como un objeto JSON y aplica el esquema 0.1.0 con comprobación de formatos. El esquema en `schemas/evalia-case.schema.json` sigue siendo la fuente autoritativa; el wheel incorpora ese mismo archivo como recurso para que el comando funcione fuera del repositorio. Los errores incluyen línea, identificador del caso si está disponible y campo. Un archivo vacío falla; el comando devuelve un código distinto de cero cuando hay errores.
+
+Las pruebas cubren el conjunto inicial de diez casos, JSON mal formado en una segunda línea, fecha sin año, modalidad desconocida y la diferencia entre `student_required=false` con cita y `null` sin ella. Esta entrega no comprueba aún unicidad entre líneas, rangos de citas, correspondencia exacta de habilidades ni respaldo semántico; esas verificaciones quedan en 2.2. La normalización queda en 2.3.
+
+Verificación: once pruebas aprobadas con pytest y Ruff sin problemas; `evalia validate datasets/seed.jsonl` informó diez casos estructuralmente válidos. Se construyó un wheel y se comprobó que el esquema empaquetado es idéntico al archivo autoritativo. La instalación de ese wheel en un entorno aislado permitió ejecutar `evalia validate` desde `work/`, fuera de la raíz del repositorio. No hubo llamadas a modelos ni uso de claves. La siguiente subtarea es **2.2**, después de revisar e integrar esta entrega.

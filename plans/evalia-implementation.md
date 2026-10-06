@@ -151,7 +151,13 @@ Cada paso se divide en subtareas revisables. El usuario autorizó la creación d
 
 **1. Base instalable.** Contexto inicial: todavía no existía código. Subtarea 1.1: crear `pyproject.toml`, el paquete `src/evalia`, `tests/`, `.gitignore`, README y configuración de Ruff/pytest; verificar instalación editable, importación, pruebas y lint. Subtarea 1.2: añadir `src/evalia/cli.py` con una CLI mínima y comprobar `evalia --help` desde una instalación limpia. Salida: comandos funcionales sin red ni claves. Si una dependencia complica la instalación, retirarla antes de continuar.
 
-**2. Validador.** Contexto: consume el contrato del paso 0. Implementar lectura JSONL, mensajes de error con línea/caso, normalización de fechas y vocabulario de habilidades. Verificar `evalia validate datasets/seed.jsonl` y pruebas negativas para fecha sin año, valor desconocido, cita fuera de rango y `null` frente a `false`. Salida: el archivo correcto pasa y cada archivo malo falla por la razón prevista. Si cambia el contrato, actualizar guía y casos antes de tocar métricas.
+**2. Validador.** Contexto: consume el contrato del paso 0. Se divide en entregas verificables:
+
+- **2.1. Lectura y estructura:** incorporar el esquema autoritativo a la distribución, leer JSONL línea por línea y ofrecer `evalia validate` con errores de sintaxis o contrato que indiquen línea, caso y campo. Comprobar el conjunto inicial, fecha sin año, valor desconocido y la diferencia estructural entre `null` y `false`.
+- **2.2. Coherencia del conjunto y evidencia:** comprobar IDs y textos únicos, texto no vacío en contenido, correspondencia entre habilidades y sus citas, rangos y citas literales exactas en Unicode. Probar errores con línea/caso, incluida una cita fuera de rango. La coincidencia literal no se presentará como revisión del respaldo semántico.
+- **2.3. Normalización documentada:** añadir normalizadores deterministas de fechas y vocabulario de habilidades, con reglas versionadas, ejemplos y pruebas. Ejecutar la verificación completa del conjunto inicial y de casos negativos antes de cerrar el paso.
+
+Salida: el archivo correcto pasa y cada archivo malo falla por la razón prevista. Si cambia el contrato, actualizar guía y casos antes de tocar métricas.
 
 **3. Evaluadores.** Contexto: puntuar salidas validadas, sin dependencia de proveedor. Implementar métricas por campo, abstención, evidencia literal y una línea base por reglas; separar errores de formato de errores de contenido. Verificar `python -m pytest tests/graders` con casos conocidos y un reporte de la línea base. Salida: cada métrica muestra numerador, denominador y casos fallidos; cero divisiones se informan como no aplicables, no como 100 %. Si la rúbrica cambia, recalcular todas las ejecuciones comparadas.
 

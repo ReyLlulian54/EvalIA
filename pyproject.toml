@@ -8,7 +8,10 @@ version = "0.1.0"
 description = "Evaluación reproducible de modelos y prompts en español."
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = ["typer>=0.16,<1"]
+dependencies = [
+    "jsonschema>=4.23,<5",
+    "typer>=0.16,<1",
+]
 classifiers = [
     "Development Status :: 2 - Pre-Alpha",
     "Programming Language :: Python :: 3",
@@ -27,6 +30,9 @@ evalia = "evalia.cli:app"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/evalia"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"schemas/evalia-case.schema.json" = "evalia/schemas/evalia-case.schema.json"
 
 [tool.pytest.ini_options]
 addopts = ["--strict-config", "--strict-markers"]
