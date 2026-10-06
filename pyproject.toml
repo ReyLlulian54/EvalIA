@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "Evaluación reproducible de modelos y prompts en español."
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = []
+dependencies = ["typer>=0.16,<1"]
 classifiers = [
     "Development Status :: 2 - Pre-Alpha",
     "Programming Language :: Python :: 3",
@@ -21,6 +21,9 @@ dev = [
     "pytest>=8.3,<10",
     "ruff>=0.12,<1",
 ]
+
+[project.scripts]
+evalia = "evalia.cli:app"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/evalia"]
