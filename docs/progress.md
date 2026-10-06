@@ -73,7 +73,7 @@ La subtarea 0.3 y el paso 0 quedan completados. El siguiente trabajo planificado
 | Subtarea | Estado | Entregable |
 | --- | --- | --- |
 | 1.1. Crear el paquete y el contrato de herramientas | Completada | Paquete `src/evalia`, metadatos, entorno aislado, pytest, Ruff y exclusiones locales. |
-| 1.2. Añadir la CLI mínima y comprobar una instalación limpia | Pendiente | Comando `evalia --help` sin red ni claves. |
+| 1.2. Añadir la CLI mínima y comprobar una instalación limpia | Completada | Entrada `evalia`, ayuda y comando `version`, verificados en instalación normal aislada. |
 
 ### Entrega 1.1 — esqueleto del paquete
 
@@ -84,3 +84,15 @@ El entorno local usa Python 3.14.3. La creación inicial de `.venv` no pudo ejec
 Verificación: pytest 9.1.1 ejecutó una prueba satisfactoria; Ruff 0.16.10 no encontró problemas; la importación informó versión 0.1.0 tanto en ejecución como en metadatos; `pip check` no encontró dependencias rotas. No hubo llamadas a modelos, servicios externos de inferencia ni uso de claves.
 
 Siguiente subtarea: 1.2, definir la interfaz mínima de la CLI, añadir Typer cuando exista ese consumidor y comprobar `evalia --help`. El paso 1 permanece abierto.
+
+## 5 de octubre de 2026 — cierre del paso 1
+
+### Entrega 1.2 — CLI mínima
+
+Se declaró Typer como dependencia de ejecución y `evalia` como punto de entrada del paquete. La CLI muestra ayuda y ofrece `evalia version`, que usa la versión pública del paquete. Los comandos de validación y evaluación aún no están implementados y se rechazan como desconocidos.
+
+La prueba inicial detectó que Typer interpreta una aplicación con un solo comando como comando raíz. Se añadió un callback raíz para conservar la estructura de subcomandos prevista. Las pruebas comprobaron ayuda, versión y rechazo de un comando no implementado.
+
+Verificación: `python -m pytest -q` terminó con cuatro pruebas aprobadas y `ruff check .` sin errores. Se instaló el paquete sin extras de desarrollo en un entorno nuevo y aislado dentro de `work/`; `evalia --help` y `evalia version` funcionaron, y `pip --python ... check` no encontró dependencias rotas. Este equipo requirió crear el entorno sin `pip` y usar `pip --python` por la anomalía de `ensurepip` registrada en 1.1. No hubo llamadas a modelos ni uso de claves.
+
+Las subtareas 1.1 y 1.2 completan el paso 1. El siguiente trabajo es el validador del paso 2, comenzando por una subtarea concreta que consuma el esquema autoritativo.

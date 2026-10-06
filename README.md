@@ -4,7 +4,7 @@ Evaluación reproducible de modelos y prompts en español. El objetivo es compar
 
 ## Estado del proyecto
 
-Proyecto en etapa inicial. El paso 0 está completado: existe un contrato de datos y diez casos ficticios, nueve revisados y uno marcado para revisión por un conflicto deliberado. El paso 1 está en curso y ya cuenta con un paquete Python instalable y herramientas locales de prueba y calidad. Los comandos de evaluación y los paneles descritos en el plan son entregables futuros.
+Proyecto en etapa inicial. Los pasos 0 y 1 están completados: existe un contrato de datos, diez casos ficticios y un paquete Python instalable con una CLI mínima. Nueve casos están revisados y uno está marcado para revisión por un conflicto deliberado. Los comandos de evaluación y los paneles descritos en el plan son entregables futuros.
 
 La primera tarea será extraer fecha de cierre, modalidad, habilidades obligatorias y requisito de ser estudiante de fragmentos de convocatorias. La primera versión usará Ollama localmente, tendrá una interfaz web local para ejecutar experimentos y una demo pública de resultados precomputados.
 
@@ -31,14 +31,22 @@ python -m venv .venv
 .\.venv\Scripts\python -m pip install -e ".[dev]"
 ```
 
+Si `ensurepip` falla al crear `.venv` en Windows, usar la instalación de `pip` ya disponible para preparar ese entorno:
+
+```powershell
+python -m venv --without-pip .venv
+python -m pip --python .venv install -e ".[dev]"
+```
+
 Comprobar el paquete y la calidad del código:
 
 ```powershell
+.\.venv\Scripts\evalia --help
+.\.venv\Scripts\evalia version
 .\.venv\Scripts\python -m pytest
 .\.venv\Scripts\ruff check .
-.\.venv\Scripts\python -c "import evalia; print(evalia.__version__)"
 ```
 
-La subtarea 1.1 solo establece el paquete instalable y el contrato de herramientas. La CLI se añadirá en la siguiente subtarea.
+La CLI ofrece por ahora `version`. El comando `validate` se implementará en el paso 2; ejecutar `evalia validate` antes de ese paso produce un error de comando desconocido.
 
-La licencia de distribución se definirá en el paso de configuración del paquete. La publicación del repositorio no constituye una autorización de reutilización de textos de terceros.
+La licencia de distribución del código sigue pendiente de definición. La publicación del repositorio no constituye una autorización de reutilización de textos de terceros.
