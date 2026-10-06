@@ -103,7 +103,7 @@ Las subtareas 1.1 y 1.2 completan el paso 1. El siguiente trabajo es el validado
 | --- | --- | --- |
 | 2.1. Lectura JSONL y contrato estructural | Completada | CLI `validate` con errores de línea, caso y campo; esquema 0.1.0 incluido en el paquete. |
 | 2.2. Coherencia de casos y citas | Completada | Identificadores y textos únicos, correspondencia y posiciones de evidencia. |
-| 2.3. Normalización documentada | Pendiente | Fechas y vocabulario de habilidades con reglas y pruebas. |
+| 2.3. Normalización documentada | Completada | Fechas y vocabulario de habilidades con reglas versionadas y pruebas. |
 
 ### Entrega 2.1 — validador estructural
 
@@ -120,3 +120,11 @@ El validador genérico añade unicidad exacta de `id` y `text`, rechazo de texto
 La validación mecánica se aplica después del esquema autoritativo; los registros con errores estructurales conservan esos diagnósticos sin ejecutar reglas que requieren campos válidos. La composición mínima del conjunto inicial continúa en `scripts/check_seed_cases.py`, sin imponer sus diez casos ni su distribución de etiquetas a los conjuntos de terceros. La coincidencia literal de una cita no demuestra respaldo semántico, y la revisión humana registrada en el paso 0 conserva su significado.
 
 Verificación: 19 pruebas aprobadas con pytest, Ruff sin errores y formato comprobado en los archivos Python modificados. Ocho pruebas negativas nuevas cubren ID y texto repetidos, texto en blanco, rango fuera del texto, cita Unicode incorrecta, habilidad sin cita, cita duplicada y rango invertido de una cita de habilidad. `evalia validate datasets/seed.jsonl` acepta los diez casos iniciales; el comprobador específico del conjunto sigue informando 30 citas exactas y el hash `5fd3ffb891ccdca1b7cdf4642af2dc7b547438eda8d3e4766e0af5a26e3ea78e`, sin cambios en los datos. La siguiente subtarea es **2.3**, normalización documentada de fechas y habilidades; no se inició aquí.
+
+### Entrega 2.3 — normalización versionada
+
+Se añadieron funciones puras para normalizar fechas explícitas y habilidades. Las reglas de fechas 1.0.0 aceptan ISO, día/mes/año y fecha textual española con año; una fecha reconocible sin año queda en `None`, mientras que una fecha imposible o un formato no admitido falla explícitamente. El vocabulario de habilidades 1.0.0 vive en un único archivo JSON incluido en el paquete; registra equivalencias conservadoras y conserva términos desconocidos. La normalización de listas elimina duplicados equivalentes en orden estable.
+
+La CLI ahora señala nombres no canónicos en `expected.skills`, sin reescribir el JSONL ni las citas. El esquema de casos permanece en 0.1.0. [La documentación de normalización](normalization.md) registra formatos, ejemplos, límites y política de versión. Ni esta etapa ni las anteriores ejecutan modelos o atribuyen respaldo semántico automático a las citas.
+
+Verificación: 40 pruebas aprobadas con pytest; Ruff y formato de los archivos Python modificados sin errores. Las pruebas cubren formatos aceptados, años faltantes, fechas imposibles, equivalencias, términos desconocidos, deduplicación y el carácter canónico de los diez casos iniciales. `evalia validate datasets/seed.jsonl` acepta los diez casos; el comprobador del contrato acepta cuatro ejemplos válidos y rechaza catorce inválidos; el comprobador del conjunto mantiene 30 citas exactas y el hash anterior. El wheel contiene el esquema y el vocabulario idénticos a sus fuentes y sus funciones se ejecutaron desde un entorno aislado fuera de la raíz del repositorio. No hubo llamadas a modelos ni uso de claves. El paso 2 concluye aquí; el siguiente trabajo planificado es el paso 3, evaluadores deterministas, en una entrega separada.

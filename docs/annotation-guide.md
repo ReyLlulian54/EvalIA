@@ -6,7 +6,7 @@ Esta guía define cómo construir las respuestas de referencia que EvalIA compar
 
 Un caso contiene el fragmento original completo en `text`, su procedencia, permiso de publicación, división del conjunto, estado de revisión, valores esperados y evidencia. Se conserva el texto tal como se recibió: cambiar espacios, tildes o saltos de línea después de anotar invalidaría las posiciones de las citas.
 
-Los diez casos de arranque de la subtarea 0.2 están en `datasets/seed.jsonl` y son ejemplos ficticios identificados como tales. Su procedencia, inventario y fecha de revisión mínima están en [la documentación del conjunto](../datasets/README.md). Todavía no existe un conjunto aprobado mediante la revisión diferida.
+Los diez casos de arranque de la subtarea 0.2 están en `datasets/seed.jsonl` y son ejemplos ficticios identificados como tales. Su procedencia, inventario y revisión diferida están en [la documentación del conjunto](../datasets/README.md). Nueve casos están revisados y el caso contradictorio `seed-008` permanece en `review_required` y fuera de métricas finales.
 
 | Campo esperado | Significado | Ausencia |
 | --- | --- | --- |
@@ -39,7 +39,7 @@ Todas las claves se incluyen aunque no exista un valor. `null` representa inform
 - Incluir únicamente habilidades técnicas obligatorias expresas. Las deseables o recomendadas se excluyen de este primer contrato.
 - No completar habilidades a partir del título del cargo ni interpretar «conocimientos de informática» como Python, SQL u otra herramienta.
 - Anotar cada habilidad una sola vez. Mantener términos distintos aunque suelan usarse juntos.
-- El vocabulario de equivalencias será versionado antes de implementar la normalización: `Python 3`→`Python` y `sql`→`SQL` son equivalencias permitidas; `IA`→`Machine Learning` no lo es.
+- El [vocabulario versionado](../src/evalia/vocabularies/skills-v1.json) registra las equivalencias permitidas. `Python 3`→`Python` y `sql`→`SQL` están incluidas; `IA`→`Machine Learning` no lo está. Las [reglas de normalización](normalization.md) documentan sus límites.
 - Si una habilidad no tiene equivalencia documentada, conservar el término explícito, sin inventar una transformación tras observar resultados de modelos.
 - Una lista vacía significa que el fragmento no contiene una habilidad técnica obligatoria explícita. No demuestra que el puesto carezca de requisitos en su convocatoria completa.
 
@@ -73,6 +73,8 @@ Que una cita exista en el texto solo verifica su localización. La revisión hum
 El esquema comprueba claves, tipos, enumeraciones, listas sin duplicados y la relación de nulidad entre valores y evidencias escalares. La validación de `format=date` requiere activar comprobación de formatos.
 
 `evalia validate` comprueba identificadores y textos únicos entre líneas, texto no compuesto solo por espacios, límites y contenido literal de las citas, y correspondencia uno a uno entre habilidades y evidencias. Estas reglas entre valores no quedan garantizadas por JSON Schema. La composición específica del conjunto inicial se comprueba con `scripts/check_seed_cases.py`; el validador genérico no exige que todo conjunto tenga diez casos o la misma distribución de etiquetas.
+
+También exige nombres canónicos en `expected.skills` de acuerdo con el vocabulario versionado. Las funciones de normalización preparan candidatos, pero el validador no corrige silenciosamente casos de referencia ni altera posiciones de evidencia.
 
 La revisión humana comprobará interpretación, contradicciones, equivalencias, permiso de publicación y respaldo semántico. Esas comprobaciones no se presentarán como resueltas solo porque el archivo cumpla su esquema.
 
