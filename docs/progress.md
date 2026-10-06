@@ -128,3 +128,19 @@ Se añadieron funciones puras para normalizar fechas explícitas y habilidades. 
 La CLI ahora señala nombres no canónicos en `expected.skills`, sin reescribir el JSONL ni las citas. El esquema de casos permanece en 0.1.0. [La documentación de normalización](normalization.md) registra formatos, ejemplos, límites y política de versión. Ni esta etapa ni las anteriores ejecutan modelos o atribuyen respaldo semántico automático a las citas.
 
 Verificación: 40 pruebas aprobadas con pytest; Ruff y formato de los archivos Python modificados sin errores. Las pruebas cubren formatos aceptados, años faltantes, fechas imposibles, equivalencias, términos desconocidos, deduplicación y el carácter canónico de los diez casos iniciales. `evalia validate datasets/seed.jsonl` acepta los diez casos; el comprobador del contrato acepta cuatro ejemplos válidos y rechaza catorce inválidos; el comprobador del conjunto mantiene 30 citas exactas y el hash anterior. El wheel contiene el esquema y el vocabulario idénticos a sus fuentes y sus funciones se ejecutaron desde un entorno aislado fuera de la raíz del repositorio. No hubo llamadas a modelos ni uso de claves. El paso 2 concluye aquí; el siguiente trabajo planificado es el paso 3, evaluadores deterministas, en una entrega separada.
+
+## 6 de octubre de 2026 — paso 3 en curso
+
+| Subtarea | Estado | Entregable |
+| --- | --- | --- |
+| 3.1. Contrato y puntaje por caso | Completada | Extracción derivada del esquema, puntajes por campo y exclusión de casos no revisados. |
+| 3.2. Métricas del conjunto | Pendiente | Agregación, abstención, evidencia y clasificación de errores. |
+| 3.3. Línea base y reporte | Pendiente | Reglas deterministas y reporte del conjunto inicial. |
+
+### Entrega 3.1 — rúbrica y puntaje individual
+
+Se definió la [rúbrica](scoring.md) antes de implementar el evaluador. `grade_case` deriva la forma de la predicción de `$defs/extraction` del esquema 0.1.0, exige habilidades canónicas y valida la referencia mecánicamente. Devuelve conteos exactos por campo, `TP/FP/FN` y precisión, cobertura y F1 de habilidades. Las razones con denominador cero muestran `None` como no aplicable. `draft` y `review_required` producen una exclusión explícita sin puntuar; `false` y `null` son distintos.
+
+Verificación: 54 pruebas aprobadas con pytest, Ruff y formato sin errores en los archivos Python modificados. `evalia validate datasets/seed.jsonl` acepta los diez casos y el comprobador específico conserva 30 citas exactas y el mismo hash del conjunto. El wheel incluye el evaluador y una copia idéntica del esquema autoritativo; desde una instalación aislada fuera de la raíz, un caso revisado devolvió `skills_exact=1/1` y `seed-008` produjo `ExcludedCase`.
+
+Esta entrega solo puntúa un caso cada vez. No hay todavía agregación, evaluación de evidencia, línea base ni resultados de modelos. La siguiente subtarea es **3.2**.

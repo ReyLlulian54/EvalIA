@@ -2,7 +2,7 @@
 
 Estado: aprobado por el usuario el 3 de octubre de 2026; implementación iniciada por subtareas. Horizonte: 10 a 12 semanas. Presupuesto máximo: USD 30 en total. El avance se registra en `docs/progress.md`.
 
-Avance al 5 de octubre de 2026: los pasos 0, 1 y 2 están completados. El conjunto conserva nueve casos en `reviewed` y `seed-008` en `review_required`; el paquete es instalable, la CLI valida casos y existen normalizadores versionados de fechas y habilidades. Todavía no hay ejecuciones ni métricas de modelos. El siguiente paso es definir e implementar los evaluadores.
+Avance al 6 de octubre de 2026: los pasos 0, 1 y 2 están completados y el paso 3 comenzó por la rúbrica y el puntaje determinista de un caso revisado. El conjunto conserva nueve casos en `reviewed` y `seed-008` en `review_required`; el paquete valida casos y dispone de normalizadores versionados. Todavía no hay ejecuciones ni métricas de modelos.
 
 ## 1. Objetivo y usuario
 
@@ -159,7 +159,7 @@ Cada paso se divide en subtareas revisables. El usuario autorizó la creación d
 
 Salida: el archivo correcto pasa y cada archivo malo falla por la razón prevista. Si cambia el contrato, actualizar guía y casos antes de tocar métricas.
 
-**3. Evaluadores.** Contexto: puntuar salidas validadas, sin dependencia de proveedor. Implementar métricas por campo, abstención, evidencia literal y una línea base por reglas; separar errores de formato de errores de contenido. Verificar `python -m pytest tests/graders` con casos conocidos y un reporte de la línea base. Salida: cada métrica muestra numerador, denominador y casos fallidos; cero divisiones se informan como no aplicables, no como 100 %. Si la rúbrica cambia, recalcular todas las ejecuciones comparadas.
+**3. Evaluadores.** Contexto: puntuar salidas validadas, sin dependencia de proveedor. Subtarea 3.1: derivar el contrato de predicción del esquema autoritativo y puntuar un caso revisado por campo, con conteos auditables y exclusión de borradores o conflictos. Subtarea 3.2: agregar métricas del conjunto, abstención y evidencia literal; distinguir errores de formato y contenido e informar casos fallidos. Subtarea 3.3: implementar una línea base por reglas y producir un reporte verificable del conjunto inicial. Verificar `python -m pytest tests/graders` con casos conocidos y un reporte de la línea base. Salida: cada métrica muestra numerador, denominador y casos fallidos; cero divisiones se informan como no aplicables, no como 100 %. Si la rúbrica cambia, recalcular todas las ejecuciones comparadas. La [rúbrica](../docs/scoring.md) fija los detalles actuales.
 
 **4. Motor.** Contexto: conecta casos, prompt y proveedor, y deja rastro de cada solicitud. Implementar `ModelProvider`, proveedor simulado, `evalia run`, tiempo de espera, reintentos acotados, manifiesto y escritura incremental de resultados. Verificar `python -m pytest tests/runner` y una ejecución interrumpida simulada. Salida: los casos completados y fallidos siguen siendo auditables; no aparece ninguna variable secreta en logs. Si una ejecución falla, conservar el artefacto y corregir el motor antes de sumar proveedores.
 
