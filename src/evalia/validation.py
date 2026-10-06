@@ -7,6 +7,8 @@ from pathlib import Path
 
 from jsonschema import Draft202012Validator, FormatChecker
 
+from evalia.normalization import normalize_skill
+
 
 def _schema_validator() -> Draft202012Validator:
     packaged = resources.files("evalia").joinpath("schemas/evalia-case.schema.json")
@@ -45,6 +47,16 @@ def _case_issues(case: dict, label: str) -> list[str]:
 
     expected_skills = Counter(case["expected"]["skills"])
     cited_skills = Counter(span["skill"] for span in evidence["skills"])
+    for index, skill in enumerate(case["expected"]["skills"]):
+        try:
+            canonical = normalize_skill(skill)
+        except ValueError:
+            issues.append(f"{label}: expected.skills.{index}: habilidad vacía")
+        else:
+            if canonical != skill:
+                issues.append(
+                    f"{label}: expected.skills.{index}: valor no canónico; usar {canonical!r}"
+                )
     if cited_skills != expected_skills:
         missing = sorted((expected_skills - cited_skills).elements())
         surplus = sorted((cited_skills - expected_skills).elements())

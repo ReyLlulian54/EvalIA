@@ -226,3 +226,30 @@ def test_rejects_skill_quote_with_reversed_span(tmp_path: Path) -> None:
     assert result.exit_code == 1
     assert "evidence.skills.0" in result.output
     assert "rango inválido" in result.output
+
+
+def test_rejects_skill_alias_in_reference_values(tmp_path: Path) -> None:
+    case = seed_case()
+    case["expected"]["skills"][0] = "Python 3"
+    case["evidence"]["skills"][0]["skill"] = "Python 3"
+    path = tmp_path / "noncanonical-skill.jsonl"
+    write_case(path, case)
+
+    result = RUNNER.invoke(app, ["validate", str(path)])
+
+    assert result.exit_code == 1
+    assert "expected.skills.0" in result.output
+    assert "Python" in result.output
+
+
+def test_rejects_whitespace_only_skill_without_crashing(tmp_path: Path) -> None:
+    case = seed_case()
+    case["expected"]["skills"][0] = " "
+    case["evidence"]["skills"][0]["skill"] = " "
+    path = tmp_path / "empty-skill.jsonl"
+    write_case(path, case)
+
+    result = RUNNER.invoke(app, ["validate", str(path)])
+
+    assert result.exit_code == 1
+    assert "expected.skills.0: habilidad vacía" in result.output
