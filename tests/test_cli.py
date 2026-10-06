@@ -21,7 +21,7 @@ def test_version_reports_installed_package_version() -> None:
 
 
 def test_unknown_command_is_rejected() -> None:
-    result = runner.invoke(app, ["validate"])
+    result = runner.invoke(app, ["evaluate"])
 
     assert result.exit_code != 0
-    assert "validate" in result.output
+    assert "evaluate" in result.output

@@ -43,10 +43,11 @@ Comprobar el paquete y la calidad del código:
 ```powershell
 .\.venv\Scripts\evalia --help
 .\.venv\Scripts\evalia version
+.\.venv\Scripts\evalia validate datasets\seed.jsonl
 .\.venv\Scripts\python -m pytest
 .\.venv\Scripts\ruff check .
 ```
 
-La CLI ofrece por ahora `version`. El comando `validate` se implementará en el paso 2; ejecutar `evalia validate` antes de ese paso produce un error de comando desconocido.
+`evalia validate` comprueba por ahora la sintaxis JSONL y la estructura de cada caso con el esquema 0.1.0. Informa línea, caso y campo de los errores detectados. Las comprobaciones entre casos y de citas, junto con la normalización de fechas y habilidades, corresponden a las siguientes subtareas del paso 2; una estructura válida todavía no acredita esas propiedades ni el respaldo semántico de las citas.
 
 La licencia de distribución del código sigue pendiente de definición. La publicación del repositorio no constituye una autorización de reutilización de textos de terceros.
