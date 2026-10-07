@@ -2,7 +2,7 @@
 
 Estado: aprobado por el usuario el 3 de octubre de 2026; implementación iniciada por subtareas. Horizonte: 10 a 12 semanas. Presupuesto máximo: USD 30 en total. El avance se registra en `docs/progress.md`.
 
-Avance al 6 de octubre de 2026: los pasos 0, 1 y 2 están completados y el paso 3 comenzó por la rúbrica y el puntaje determinista de un caso revisado. El conjunto conserva nueve casos en `reviewed` y `seed-008` en `review_required`; el paquete valida casos y dispone de normalizadores versionados. Todavía no hay ejecuciones ni métricas de modelos.
+Avance al 6 de octubre de 2026: los pasos 0, 1 y 2 están completados; el paso 3 ya dispone de puntaje por caso y agregación determinista del conjunto, incluida abstención y evidencia literal. El conjunto conserva nueve casos en `reviewed` y `seed-008` en `review_required`; el paquete valida casos y dispone de normalizadores versionados. La línea base de 3.3 sigue pendiente. Todavía no hay ejecuciones ni métricas de modelos.
 
 ## 1. Objetivo y usuario
 
