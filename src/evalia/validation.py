@@ -2,6 +2,7 @@
 
 import json
 from collections import Counter
+from collections.abc import Iterable
 from importlib import resources
 from pathlib import Path
 
@@ -95,52 +96,55 @@ def case_issues(case: dict, label: str) -> list[str]:
 
 def validate_jsonl(path: Path) -> tuple[int, list[str]]:
     """Devuelve número de casos y errores estructurales y mecánicos legibles."""
+    with path.open(encoding="utf-8") as source:
+        return validate_jsonl_lines(source)
+
+
+def validate_jsonl_lines(lines: Iterable[str]) -> tuple[int, list[str]]:
+    """Valida líneas ya leídas para conservar el mismo contenido que se ejecutará."""
     validator = case_validator()
     count = 0
     issues: list[str] = []
     seen_ids: dict[str, int] = {}
     seen_texts: dict[str, int] = {}
 
-    with path.open(encoding="utf-8") as source:
-        for line_number, raw in enumerate(source, start=1):
-            if not raw.strip():
-                issues.append(f"línea {line_number}: línea vacía; se esperaba un objeto JSON")
-                continue
+    for line_number, raw in enumerate(lines, start=1):
+        if not raw.strip():
+            issues.append(f"línea {line_number}: línea vacía; se esperaba un objeto JSON")
+            continue
 
-            count += 1
-            try:
-                case = json.loads(raw)
-            except json.JSONDecodeError as error:
-                issues.append(f"línea {line_number}: JSON inválido: {error.msg}")
-                continue
+        count += 1
+        try:
+            case = json.loads(raw)
+        except json.JSONDecodeError as error:
+            issues.append(f"línea {line_number}: JSON inválido: {error.msg}")
+            continue
 
-            case_id = case.get("id") if isinstance(case, dict) else None
-            label = (
-                f"línea {line_number} (caso {case_id})"
-                if isinstance(case_id, str)
-                else (f"línea {line_number}")
-            )
-            errors = sorted(
-                validator.iter_errors(case),
-                key=lambda error: (list(map(str, error.path)), error.message),
-            )
-            for error in errors:
-                field = ".".join(map(str, error.path)) or "$"
-                issues.append(f"{label}: {field}: {error.message}")
-            if errors:
-                continue
+        case_id = case.get("id") if isinstance(case, dict) else None
+        label = (
+            f"línea {line_number} (caso {case_id})"
+            if isinstance(case_id, str)
+            else (f"línea {line_number}")
+        )
+        errors = sorted(
+            validator.iter_errors(case),
+            key=lambda error: (list(map(str, error.path)), error.message),
+        )
+        for error in errors:
+            field = ".".join(map(str, error.path)) or "$"
+            issues.append(f"{label}: {field}: {error.message}")
+        if errors:
+            continue
 
-            first_id_line = seen_ids.setdefault(case["id"], line_number)
-            if first_id_line != line_number:
-                issues.append(f"{label}: id: repetido; aparece primero en línea {first_id_line}")
+        first_id_line = seen_ids.setdefault(case["id"], line_number)
+        if first_id_line != line_number:
+            issues.append(f"{label}: id: repetido; aparece primero en línea {first_id_line}")
 
-            first_text_line = seen_texts.setdefault(case["text"], line_number)
-            if first_text_line != line_number:
-                issues.append(
-                    f"{label}: text: repetido; aparece primero en línea {first_text_line}"
-                )
+        first_text_line = seen_texts.setdefault(case["text"], line_number)
+        if first_text_line != line_number:
+            issues.append(f"{label}: text: repetido; aparece primero en línea {first_text_line}")
 
-            issues.extend(case_issues(case, label))
+        issues.extend(case_issues(case, label))
 
     if count == 0 and not issues:
         issues.append("Archivo JSONL vacío: se esperaba al menos un caso")

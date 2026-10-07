@@ -169,7 +169,7 @@ Verificación: 72 pruebas aprobadas con pytest, Ruff y formato sin errores, vali
 | --- | --- | --- |
 | 4.1. Contrato y simulador | Completada | Interfaz de proveedor, solicitud, respuesta cruda, fallo tipado y simulador sin red. |
 | 4.2. Persistencia incremental | Completada | Motor, manifiesto y respuestas/errores caso por caso. |
-| 4.3. CLI y control | Pendiente | Ejecución CLI, límites, reintentos e interrupción simulada. |
+| 4.3. CLI y control | Completada | Ejecución CLI sin red, límites, reintentos e interrupción simulada. |
 
 ### Entrega 4.1 — límite de proveedor y simulador
 
@@ -188,3 +188,15 @@ El nuevo [esquema de ejecución](../schemas/evalia-run.schema.json) 0.1.0 define
 Verificación: 94 pruebas aprobadas en la suite completa, incluidas 22 de motor y proveedores. Las pruebas simulan fallos del proveedor, error de escritura y línea parcial; comprueban que los casos previos persisten, que no se exponen mensajes privados y que los artefactos satisfacen el esquema. Ruff y el formato de los archivos Python modificados pasaron; la validación mecánica mantiene diez casos y el reporte versionado de la línea base sigue vigente. No se ejecutaron modelos ni se gastaron créditos de API. La construcción de un wheel independiente quedó sin comprobar en este entorno porque falta Hatchling localmente.
 
 La subtarea siguiente es **4.3**: comando `evalia run`, composición de prompts, reintentos y límites acotados, y prueba del recorrido interrumpido con el proveedor simulado. No se inició en esta entrega.
+
+## 7 de octubre de 2026 — cierre del paso 4
+
+### Entrega 4.3 — CLI y control de ejecución
+
+Se añadió `evalia run` para unir el conjunto validado, un prompt JSON versionado y respuestas prefijadas de un fixture. Los esquemas del [prompt](../schemas/evalia-prompt.schema.json) y [fixture](../schemas/evalia-fixture.schema.json) son los contratos de entrada. La CLI exige límite explícito de casos y solo envía casos `reviewed`; valida todo el conjunto antes de crear el directorio de salida. La plantilla inserta `{{text}}` una vez y conserva las llaves del texto original sin reinterpretarlas. Los fixtures de ejemplo son sintéticos y no se presentan como resultados de modelos.
+
+El contrato de artefactos subió a 0.2.0. El manifiesto añade identidad y versión del prompt, hashes de bytes exactos del conjunto, prompt y fixture, y política de reintentos. El commit del código se registra solo cuando el checkout está limpio; `null` sigue significando procedencia no verificada. Los errores reintentables tipados reciben como máximo dos reintentos, con pausas acotadas; los definitivos y los inesperados no se repiten. La CLI devuelve código distinto de cero si algún caso falla y no imprime mensajes de excepción de proveedores. Una interrupción deja el manifiesto en `interrupted` y conserva los casos anteriores.
+
+El tiempo de espera y los límites se validan y se incluyen en cada solicitud, pero el proveedor concreto es quien debe aplicar la cancelación de I/O. El fixture no prueba cancelación de una llamada de red. La [guía del motor](runner.md) documenta el comando, los artefactos y este límite. El paso 5 incorporará Ollama; todavía no hay ejecuciones de modelos reales ni métricas atribuibles a ellos.
+
+Verificación: 106 pruebas aprobadas en la suite completa; Ruff, formato, validación de los diez casos iniciales, reporte de línea base y un recorrido CLI simulado comprobados localmente. Las pruebas incluyen composición de prompt, hashes de entradas, límite y exclusión de casos no revisados, reintentos transitorios, fallos definitivos, interrupción y conservación de registros ante una línea parcial. No hubo llamadas pagadas. La construcción del wheel independiente continúa sin comprobarse porque Hatchling no está disponible en este entorno. La siguiente subtarea planificada es **5.1**, adaptador local de Ollama y primera prueba de humo controlada; no se inició aquí.

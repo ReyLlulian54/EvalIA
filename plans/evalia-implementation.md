@@ -2,7 +2,7 @@
 
 Estado: aprobado por el usuario el 3 de octubre de 2026; implementación iniciada por subtareas. Horizonte: 10 a 12 semanas. Presupuesto máximo: USD 30 en total. El avance se registra en `docs/progress.md`.
 
-Avance al 7 de octubre de 2026: los pasos 0, 1, 2 y 3 están completados; el paso 4 tiene contrato de proveedor, simulador sin red y persistencia incremental. El paso 3 incluye puntaje por caso, agregación determinista y una línea base por reglas con reporte reproducible del conjunto inicial. El conjunto conserva nueve casos en `reviewed` y `seed-008` en `review_required`. Todavía no hay ejecuciones ni métricas de modelos reales.
+Avance al 7 de octubre de 2026: los pasos 0, 1, 2, 3 y 4 están completados. El motor tiene contrato de proveedor, simulador sin red, persistencia incremental y `evalia run` con entradas versionadas, límites y reintentos acotados. El conjunto conserva nueve casos en `reviewed` y `seed-008` en `review_required`. Todavía no hay ejecuciones ni métricas de modelos reales; el paso 5 comenzará por Ollama local.
 
 ## 1. Objetivo y usuario
 

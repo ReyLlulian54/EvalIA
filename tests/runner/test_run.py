@@ -173,6 +173,35 @@ def test_partial_line_is_truncated_when_append_fails(tmp_path: Path) -> None:
     assert target.read_bytes() == b""
 
 
+def test_partial_line_is_truncated_on_keyboard_interrupt(tmp_path: Path) -> None:
+    import evalia.runner.core as runner
+
+    source = tmp_path / "source"
+    run_requests(
+        [request("case-1")],
+        FixtureProvider({"case-1": GenerationResponse(raw_text="{}")}),
+        source,
+    )
+    _, records = artifacts(source)
+
+    class InterruptWrite:
+        def __init__(self, stream):
+            self.stream = stream
+
+        def write(self, payload: bytes) -> int:
+            self.stream.write(payload[:5])
+            raise KeyboardInterrupt
+
+        def __getattr__(self, name):
+            return getattr(self.stream, name)
+
+    target = tmp_path / "partial-interrupt.jsonl"
+    with target.open("wb") as stream:
+        with pytest.raises(KeyboardInterrupt):
+            runner._append_record(InterruptWrite(stream), records[0])
+    assert target.read_bytes() == b""
+
+
 def test_unexpected_provider_error_is_generic_in_artifact(tmp_path: Path) -> None:
     class BrokenProvider:
         provider_id = "broken"

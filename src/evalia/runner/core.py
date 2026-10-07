@@ -4,9 +4,11 @@ import hashlib
 import json
 import os
 import platform
+import re
 import tempfile
 import time
 from collections.abc import Iterable
+from dataclasses import dataclass
 from datetime import UTC, datetime
 from decimal import Decimal
 from pathlib import Path
@@ -22,6 +24,43 @@ from evalia.providers.base import (
 from evalia.runner.schema import manifest_validator, record_validator, run_schema_version
 
 RUN_SCHEMA_VERSION = run_schema_version()
+MAX_RETRIES = 2
+
+
+@dataclass(frozen=True, slots=True)
+class RunProvenance:
+    """Hashes comprobados por quien compone las solicitudes; None significa desconocido."""
+
+    dataset_sha256: str | None = None
+    prompt_sha256: str | None = None
+    fixture_sha256: str | None = None
+    prompt_id: str | None = None
+    prompt_version: str | None = None
+    source_commit: str | None = None
+
+    def __post_init__(self) -> None:
+        for name in ("dataset_sha256", "prompt_sha256", "fixture_sha256"):
+            value = getattr(self, name)
+            if value is not None and (
+                not isinstance(value, str) or re.fullmatch(r"[0-9a-f]{64}", value) is None
+            ):
+                raise ValueError(f"{name} debe ser SHA-256 hexadecimal")
+        if self.source_commit is not None and (
+            not isinstance(self.source_commit, str)
+            or re.fullmatch(r"[0-9a-f]{40}", self.source_commit) is None
+        ):
+            raise ValueError("source_commit debe ser SHA-1 hexadecimal")
+        if (self.prompt_id is None) != (self.prompt_version is None):
+            raise ValueError("prompt_id y prompt_version deben conocerse juntos")
+        if self.prompt_id is not None and self.prompt_sha256 is None:
+            raise ValueError("un prompt versionado requiere prompt_sha256")
+        if self.prompt_id is not None and (
+            not isinstance(self.prompt_id, str)
+            or re.fullmatch(r"[a-z][a-z0-9_-]{2,63}", self.prompt_id) is None
+            or not isinstance(self.prompt_version, str)
+            or re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+", self.prompt_version) is None
+        ):
+            raise ValueError("identidad o versión de prompt inválida")
 
 
 def _now() -> str:
@@ -75,7 +114,13 @@ def _validate_requests(requests: tuple[GenerationRequest, ...]) -> None:
             raise ValueError("Todas las solicitudes deben usar el mismo modelo y límites")
 
 
-def _manifest(requests: tuple[GenerationRequest, ...], provider_id: str) -> dict:
+def _manifest(
+    requests: tuple[GenerationRequest, ...],
+    provider_id: str,
+    provenance: RunProvenance,
+    max_retries: int,
+    retry_delay_seconds: float,
+) -> dict:
     first = requests[0]
     timestamp = _now()
     return {
@@ -88,15 +133,20 @@ def _manifest(requests: tuple[GenerationRequest, ...], provider_id: str) -> dict
         "evalia_version": __version__,
         "python_version": platform.python_version(),
         "platform": platform.system(),
-        "source_commit": None,
+        "source_commit": provenance.source_commit,
         "provider_id": provider_id,
         "model_id": first.model_id,
         "temperature": first.temperature,
         "max_output_tokens": first.max_output_tokens,
         "timeout_seconds": first.timeout_seconds,
+        "max_retries": max_retries,
+        "retry_delay_seconds": retry_delay_seconds,
         "requests_sha256": _digest([_request_data(request) for request in requests]),
-        "dataset_sha256": None,
-        "prompt_sha256": None,
+        "dataset_sha256": provenance.dataset_sha256,
+        "prompt_sha256": provenance.prompt_sha256,
+        "fixture_sha256": provenance.fixture_sha256,
+        "prompt_id": provenance.prompt_id,
+        "prompt_version": provenance.prompt_version,
         "request_count": len(requests),
         "recorded_count": 0,
         "success_count": 0,
@@ -138,7 +188,7 @@ def _append_record(stream, record: dict) -> None:
             raise OSError("Escritura parcial de responses.jsonl")
         stream.flush()
         os.fsync(stream.fileno())
-    except Exception as error:
+    except BaseException as error:
         try:
             stream.seek(position)
             stream.truncate()
@@ -151,14 +201,14 @@ def _append_record(stream, record: dict) -> None:
         raise
 
 
-def _record_base(index: int, request: GenerationRequest, elapsed_ms: float) -> dict:
+def _record_base(index: int, request: GenerationRequest, elapsed_ms: float, attempts: int) -> dict:
     return {
         "schema_version": RUN_SCHEMA_VERSION,
         "index": index,
         "case_id": request.case_id,
         "request_sha256": _digest(_request_data(request)),
         "recorded_at": _now(),
-        "attempts": 1,
+        "attempts": attempts,
         "elapsed_ms": elapsed_ms,
         "raw_text": None,
         "reported_model_id": None,
@@ -183,15 +233,33 @@ def _persist(stream, path: Path, manifest: dict, record: dict) -> None:
 
 
 def run_requests(
-    requests: Iterable[GenerationRequest], provider: ModelProvider, output_dir: Path
+    requests: Iterable[GenerationRequest],
+    provider: ModelProvider,
+    output_dir: Path,
+    *,
+    provenance: RunProvenance | None = None,
+    max_retries: int = 0,
+    retry_delay_seconds: float = 0.1,
 ) -> Path:
-    """Ejecuta una vez por caso y conserva cada salida antes de pasar al siguiente."""
+    """Ejecuta cada caso con reintentos acotados y persiste su resultado."""
+    if type(max_retries) is not int or not 0 <= max_retries <= MAX_RETRIES:
+        raise ValueError(f"max_retries debe estar entre 0 y {MAX_RETRIES}")
+    if (
+        isinstance(retry_delay_seconds, bool)
+        or not isinstance(retry_delay_seconds, (int, float))
+        or not 0 <= retry_delay_seconds <= 5
+    ):
+        raise ValueError("retry_delay_seconds debe estar entre 0 y 5")
+    if provenance is not None and not isinstance(provenance, RunProvenance):
+        raise TypeError("provenance debe ser RunProvenance")
     batch = tuple(requests)
     _validate_requests(batch)
     provider_id = provider.provider_id
     if not isinstance(provider_id, str) or not provider_id.strip():
         raise ValueError("provider_id debe ser texto no vacío")
-    manifest = _manifest(batch, provider_id)
+    manifest = _manifest(
+        batch, provider_id, provenance or RunProvenance(), max_retries, retry_delay_seconds
+    )
     manifest_path = output_dir / "manifest.json"
     output_dir.mkdir(parents=True, exist_ok=False)
     _write_manifest(manifest_path, manifest)
@@ -200,19 +268,28 @@ def run_requests(
         with (output_dir / "responses.jsonl").open("xb") as stream:
             for index, request in enumerate(batch):
                 started = time.perf_counter()
+                attempts = 0
                 try:
-                    response = provider.generate(request)
-                    if not isinstance(response, GenerationResponse):
-                        raise TypeError("El proveedor devolvió una respuesta inválida")
+                    while True:
+                        attempts += 1
+                        try:
+                            response = provider.generate(request)
+                            if not isinstance(response, GenerationResponse):
+                                raise TypeError("El proveedor devolvió una respuesta inválida")
+                            break
+                        except ProviderFailure as failure:
+                            if not failure.retryable or attempts > max_retries:
+                                raise
+                            time.sleep(retry_delay_seconds * attempts)
                 except ProviderFailure as error:
                     elapsed = max(0.0, (time.perf_counter() - started) * 1000)
-                    record = _record_base(index, request, elapsed)
+                    record = _record_base(index, request, elapsed, attempts)
                     record.update(
                         status="provider_error", error_code=error.code, retryable=error.retryable
                     )
                 except Exception:
                     elapsed = max(0.0, (time.perf_counter() - started) * 1000)
-                    record = _record_base(index, request, elapsed)
+                    record = _record_base(index, request, elapsed, attempts)
                     record.update(
                         status="internal_error",
                         error_code="unexpected_provider_error",
@@ -222,7 +299,7 @@ def run_requests(
                     raise
                 else:
                     elapsed = max(0.0, (time.perf_counter() - started) * 1000)
-                    record = _record_base(index, request, elapsed)
+                    record = _record_base(index, request, elapsed, attempts)
                     record.update(
                         status="success",
                         raw_text=response.raw_text,

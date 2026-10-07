@@ -6,7 +6,7 @@ El paso 4 une casos, prompts y proveedores. Su implementación se divide en tres
 | --- | --- | --- |
 | 4.1 | Completada | Contrato Python de proveedor y simulador sin red. |
 | 4.2 | Completada | Motor que conserva manifiesto y respuestas de forma incremental. |
-| 4.3 | Pendiente | Comando de ejecución, límites, reintentos acotados y prueba de interrupción. |
+| 4.3 | Completada | Comando de ejecución con fixture, límites, reintentos acotados y prueba de interrupción. |
 
 ## Contrato de 4.1
 
@@ -55,3 +55,21 @@ Por caso, se guarda una respuesta cruda aunque no sea JSON válido, o un fallo t
 Cada línea se valida, se escribe y se sincroniza en disco antes de avanzar. Si la escritura de una línea es parcial, el motor intenta truncarla hasta la posición anterior. El manifiesto se reemplaza de forma atómica después de cada línea. Ante un fallo del proveedor, la ejecución continúa y registra el caso fallido; ante un error inesperado o de escritura, se detiene y marca `failed` o `interrupted`. Un manifiesto puede quedar atrasado si tampoco logra escribirse tras un fallo de disco: para auditarlo, leer las líneas completas de `responses.jsonl` y comparar sus índices y conteos con el manifiesto. La subtarea 4.2 conserva la evidencia; todavía no implementa reanudación automática.
 
 Los artefactos de ejecución pueden contener texto privado del modelo y deben permanecer en `runs/`, excluido por Git. Esta entrega se probó con el proveedor simulado, sin llamadas a modelos. La CLI, composición de prompts, reintentos y prueba de interrupción del recorrido completo corresponden a **4.3**.
+
+## Recorrido sin red de 4.3
+
+`evalia run` carga un conjunto JSONL, una [plantilla versionada](../schemas/evalia-prompt.schema.json) y [respuestas simuladas](../schemas/evalia-fixture.schema.json). Valida **todo** el conjunto con el contrato de casos antes de crear el directorio de salida; selecciona hasta `--max-cases` casos en estado `reviewed`, en el orden del archivo. Los casos en `draft` o `review_required` no se envían al proveedor. La plantilla debe contener exactamente un marcador `{{text}}`; se sustituye una sola vez por el texto del caso, sin interpretar las llaves que aparezcan dentro de él.
+
+Desde la raíz del repositorio, esta prueba técnica produce artefactos privados en un directorio nuevo:
+
+~~~powershell
+.\.venv\Scripts\evalia run --dataset datasets\seed.jsonl --prompt prompts\extraction-v1.json --fixture examples\fixtures\seed-two.json --output runs\prueba-4-3 --model-id simulado-v1 --max-cases 2
+~~~
+
+El fixture incluido contiene dos respuestas **simuladas** tomadas de casos ficticios conocidos; no representa resultados de un modelo ni una medida de calidad. `evalia run` informa éxitos y fallos; sale con código 1 si algún caso terminó con error. Cada ejecución exige un directorio inexistente para evitar sobrescrituras. `runs/` está excluido de Git. Las salidas crudas pueden contener material privado o incluso repetir el prompt, por lo que no deben publicarse sin revisión.
+
+El manifiesto y los registros usan ahora la versión **0.2.0** del [contrato de ejecución](../schemas/evalia-run.schema.json). Registran SHA-256 de los bytes exactos del conjunto, prompt y fixture; identificador y versión del prompt; modelo solicitado, límites y política de reintentos. `source_commit` solo se declara cuando el código se ejecuta desde un checkout Git limpio; en otros casos queda `null`. Un hash del conjunto completo no implica que se hayan enviado todos sus casos: `request_count`, los identificadores de los registros y `requests_sha256` describen el subconjunto ejecutado.
+
+La CLI exige un límite explícito de 1 a 100 casos; permite 1 a 2048 tokens de salida, 0.01 a 120 segundos de espera y 0 a 2 reintentos. El motor repite únicamente `ProviderFailure(retryable=True)`, con pausas acotadas de 0.1 y 0.2 segundos; otros fallos se registran sin repetir la solicitud. `attempts` guarda el número real de intentos y una interrupción conserva los casos previos con estado `interrupted`. El tiempo de espera se valida y se entrega en cada `GenerationRequest`; el proveedor concreto debe aplicarlo a su operación de red. El fixture no realiza I/O de red ni prueba cancelación forzada de proveedores arbitrarios. Esa integración corresponde al adaptador Ollama del paso 5.
+
+La CLI solo acepta fixtures en esta etapa. La ejecución guarda respuestas crudas y fallos, sin puntuarlas ni afirmar calidad de modelos. La comparación y publicación segura siguen en los pasos 5 y 6.

@@ -12,12 +12,13 @@
         "schema_version", "run_id", "created_at", "updated_at", "finished_at",
         "status", "evalia_version", "python_version", "platform", "source_commit",
         "provider_id", "model_id", "temperature", "max_output_tokens",
-        "timeout_seconds", "requests_sha256", "dataset_sha256", "prompt_sha256",
+        "timeout_seconds", "max_retries", "retry_delay_seconds", "requests_sha256",
+        "dataset_sha256", "prompt_sha256", "fixture_sha256", "prompt_id", "prompt_version",
         "request_count", "recorded_count", "success_count", "failure_count",
         "last_case_id"
       ],
       "properties": {
-        "schema_version": {"const": "0.1.0"},
+        "schema_version": {"const": "0.2.0"},
         "run_id": {"type": "string", "pattern": "^[0-9a-f]{32}$"},
         "created_at": {"type": "string", "format": "date-time"},
         "updated_at": {"type": "string", "format": "date-time"},
@@ -32,9 +33,14 @@
         "temperature": {"type": "number", "minimum": 0},
         "max_output_tokens": {"type": "integer", "minimum": 1},
         "timeout_seconds": {"type": "number", "exclusiveMinimum": 0},
+        "max_retries": {"type": "integer", "minimum": 0, "maximum": 2},
+        "retry_delay_seconds": {"type": "number", "minimum": 0, "maximum": 5},
         "requests_sha256": {"$ref": "#/$defs/sha256"},
         "dataset_sha256": {"anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
         "prompt_sha256": {"anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "fixture_sha256": {"anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "prompt_id": {"anyOf": [{"type": "string", "pattern": "^[a-z][a-z0-9_-]{2,63}$"}, {"type": "null"}]},
+        "prompt_version": {"anyOf": [{"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"}, {"type": "null"}]},
         "request_count": {"type": "integer", "minimum": 1},
         "recorded_count": {"type": "integer", "minimum": 0},
         "success_count": {"type": "integer", "minimum": 0},
@@ -46,6 +52,11 @@
           "if": {"properties": {"status": {"const": "running"}}},
           "then": {"properties": {"finished_at": {"type": "null"}}},
           "else": {"properties": {"finished_at": {"type": "string", "format": "date-time"}}}
+        },
+        {
+          "if": {"properties": {"prompt_id": {"type": "null"}}},
+          "then": {"properties": {"prompt_version": {"type": "null"}}},
+          "else": {"properties": {"prompt_version": {"type": "string"}, "prompt_sha256": {"$ref": "#/$defs/sha256"}}}
         }
       ]
     },
@@ -58,7 +69,7 @@
         "prompt_tokens", "completion_tokens", "cost_usd", "error_code", "retryable"
       ],
       "properties": {
-        "schema_version": {"const": "0.1.0"},
+        "schema_version": {"const": "0.2.0"},
         "index": {"type": "integer", "minimum": 0},
         "case_id": {"type": "string", "minLength": 1},
         "request_sha256": {"$ref": "#/$defs/sha256"},
