@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EvalIA run artifacts",
+  "description": "Contrato autoritativo del manifiesto y cada línea de responses.jsonl.",
+  "$ref": "#/$defs/manifest",
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "manifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version", "run_id", "created_at", "updated_at", "finished_at",
+        "status", "evalia_version", "python_version", "platform", "source_commit",
+        "provider_id", "model_id", "temperature", "max_output_tokens",
+        "timeout_seconds", "requests_sha256", "dataset_sha256", "prompt_sha256",
+        "request_count", "recorded_count", "success_count", "failure_count",
+        "last_case_id"
+      ],
+      "properties": {
+        "schema_version": {"const": "0.1.0"},
+        "run_id": {"type": "string", "pattern": "^[0-9a-f]{32}$"},
+        "created_at": {"type": "string", "format": "date-time"},
+        "updated_at": {"type": "string", "format": "date-time"},
+        "finished_at": {"anyOf": [{"type": "string", "format": "date-time"}, {"type": "null"}]},
+        "status": {"enum": ["running", "completed", "failed", "interrupted"]},
+        "evalia_version": {"type": "string", "minLength": 1},
+        "python_version": {"type": "string", "minLength": 1},
+        "platform": {"type": "string", "minLength": 1},
+        "source_commit": {"anyOf": [{"type": "string", "pattern": "^[0-9a-f]{40}$"}, {"type": "null"}]},
+        "provider_id": {"type": "string", "minLength": 1},
+        "model_id": {"type": "string", "minLength": 1},
+        "temperature": {"type": "number", "minimum": 0},
+        "max_output_tokens": {"type": "integer", "minimum": 1},
+        "timeout_seconds": {"type": "number", "exclusiveMinimum": 0},
+        "requests_sha256": {"$ref": "#/$defs/sha256"},
+        "dataset_sha256": {"anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "prompt_sha256": {"anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "request_count": {"type": "integer", "minimum": 1},
+        "recorded_count": {"type": "integer", "minimum": 0},
+        "success_count": {"type": "integer", "minimum": 0},
+        "failure_count": {"type": "integer", "minimum": 0},
+        "last_case_id": {"type": ["string", "null"]}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"status": {"const": "running"}}},
+          "then": {"properties": {"finished_at": {"type": "null"}}},
+          "else": {"properties": {"finished_at": {"type": "string", "format": "date-time"}}}
+        }
+      ]
+    },
+    "record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version", "index", "case_id", "request_sha256", "recorded_at",
+        "status", "attempts", "elapsed_ms", "raw_text", "reported_model_id",
+        "prompt_tokens", "completion_tokens", "cost_usd", "error_code", "retryable"
+      ],
+      "properties": {
+        "schema_version": {"const": "0.1.0"},
+        "index": {"type": "integer", "minimum": 0},
+        "case_id": {"type": "string", "minLength": 1},
+        "request_sha256": {"$ref": "#/$defs/sha256"},
+        "recorded_at": {"type": "string", "format": "date-time"},
+        "status": {"enum": ["success", "provider_error", "internal_error"]},
+        "attempts": {"type": "integer", "minimum": 1},
+        "elapsed_ms": {"type": "number", "minimum": 0},
+        "raw_text": {"type": ["string", "null"]},
+        "reported_model_id": {"type": ["string", "null"]},
+        "prompt_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "completion_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "cost_usd": {
+          "anyOf": [
+            {"type": "string", "pattern": "^(?:0|[1-9][0-9]*)(?:\\.[0-9]+)?$"},
+            {"type": "null"}
+          ]
+        },
+        "error_code": {
+          "anyOf": [
+            {"type": "string", "pattern": "^[a-z][a-z0-9_]{0,63}$"},
+            {"type": "null"}
+          ]
+        },
+        "retryable": {"type": ["boolean", "null"]}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"status": {"const": "success"}}},
+          "then": {
+            "properties": {
+              "raw_text": {"type": "string"},
+              "error_code": {"type": "null"},
+              "retryable": {"type": "null"}
+            }
+          },
+          "else": {
+            "properties": {
+              "raw_text": {"type": "null"},
+              "reported_model_id": {"type": "null"},
+              "prompt_tokens": {"type": "null"},
+              "completion_tokens": {"type": "null"},
+              "cost_usd": {"type": "null"},
+              "error_code": {"type": "string", "minLength": 1},
+              "retryable": {"type": "boolean"}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"status": {"const": "internal_error"}}},
+          "then": {"properties": {"retryable": {"const": false}}}
+        }
+      ]
+    }
+  }
+}

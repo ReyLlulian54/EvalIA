@@ -1,0 +1,249 @@
+"""Motor interno con registros durables por caso y manifiesto atómico."""
+
+import hashlib
+import json
+import os
+import platform
+import tempfile
+import time
+from collections.abc import Iterable
+from datetime import UTC, datetime
+from decimal import Decimal
+from pathlib import Path
+from uuid import uuid4
+
+from evalia import __version__
+from evalia.providers.base import (
+    GenerationRequest,
+    GenerationResponse,
+    ModelProvider,
+    ProviderFailure,
+)
+from evalia.runner.schema import manifest_validator, record_validator, run_schema_version
+
+RUN_SCHEMA_VERSION = run_schema_version()
+
+
+def _now() -> str:
+    return datetime.now(UTC).isoformat(timespec="seconds").replace("+00:00", "Z")
+
+
+def _json(value: object) -> str:
+    return json.dumps(
+        value, ensure_ascii=False, sort_keys=True, separators=(",", ":"), allow_nan=False
+    )
+
+
+def _digest(value: object) -> str:
+    return hashlib.sha256(_json(value).encode("utf-8")).hexdigest()
+
+
+def _cost_text(cost: Decimal | None) -> str | None:
+    if cost is None:
+        return None
+    return "0" if cost == 0 else format(cost, "f")
+
+
+def _request_data(request: GenerationRequest) -> dict:
+    return {
+        "case_id": request.case_id,
+        "prompt": request.prompt,
+        "model_id": request.model_id,
+        "temperature": request.temperature,
+        "max_output_tokens": request.max_output_tokens,
+        "timeout_seconds": request.timeout_seconds,
+    }
+
+
+def _validate_requests(requests: tuple[GenerationRequest, ...]) -> None:
+    if not requests:
+        raise ValueError("La ejecución requiere al menos una solicitud")
+    if any(not isinstance(request, GenerationRequest) for request in requests):
+        raise TypeError("Todas las solicitudes deben ser GenerationRequest")
+    ids = [request.case_id for request in requests]
+    if len(ids) != len(set(ids)):
+        raise ValueError("Los case_id de una ejecución deben ser únicos")
+    first = requests[0]
+    config = (first.model_id, first.temperature, first.max_output_tokens, first.timeout_seconds)
+    for request in requests[1:]:
+        if (
+            request.model_id,
+            request.temperature,
+            request.max_output_tokens,
+            request.timeout_seconds,
+        ) != config:
+            raise ValueError("Todas las solicitudes deben usar el mismo modelo y límites")
+
+
+def _manifest(requests: tuple[GenerationRequest, ...], provider_id: str) -> dict:
+    first = requests[0]
+    timestamp = _now()
+    return {
+        "schema_version": RUN_SCHEMA_VERSION,
+        "run_id": uuid4().hex,
+        "created_at": timestamp,
+        "updated_at": timestamp,
+        "finished_at": None,
+        "status": "running",
+        "evalia_version": __version__,
+        "python_version": platform.python_version(),
+        "platform": platform.system(),
+        "source_commit": None,
+        "provider_id": provider_id,
+        "model_id": first.model_id,
+        "temperature": first.temperature,
+        "max_output_tokens": first.max_output_tokens,
+        "timeout_seconds": first.timeout_seconds,
+        "requests_sha256": _digest([_request_data(request) for request in requests]),
+        "dataset_sha256": None,
+        "prompt_sha256": None,
+        "request_count": len(requests),
+        "recorded_count": 0,
+        "success_count": 0,
+        "failure_count": 0,
+        "last_case_id": None,
+    }
+
+
+def _write_manifest(path: Path, manifest: dict) -> None:
+    manifest_validator().validate(manifest)
+    temporary: Path | None = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="w",
+            encoding="utf-8",
+            newline="\n",
+            prefix="manifest-",
+            suffix=".tmp",
+            dir=path.parent,
+            delete=False,
+        ) as stream:
+            temporary = Path(stream.name)
+            stream.write(json.dumps(manifest, ensure_ascii=False, sort_keys=True, indent=2) + "\n")
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.replace(temporary, path)
+    finally:
+        if temporary is not None:
+            temporary.unlink(missing_ok=True)
+
+
+def _append_record(stream, record: dict) -> None:
+    record_validator().validate(record)
+    payload = (_json(record) + "\n").encode("utf-8")
+    position = stream.tell()
+    try:
+        written = stream.write(payload)
+        if written != len(payload):
+            raise OSError("Escritura parcial de responses.jsonl")
+        stream.flush()
+        os.fsync(stream.fileno())
+    except Exception as error:
+        try:
+            stream.seek(position)
+            stream.truncate()
+            stream.flush()
+            os.fsync(stream.fileno())
+        except OSError as rollback_error:
+            error.add_note(
+                f"No se pudo truncar el registro parcial: {type(rollback_error).__name__}"
+            )
+        raise
+
+
+def _record_base(index: int, request: GenerationRequest, elapsed_ms: float) -> dict:
+    return {
+        "schema_version": RUN_SCHEMA_VERSION,
+        "index": index,
+        "case_id": request.case_id,
+        "request_sha256": _digest(_request_data(request)),
+        "recorded_at": _now(),
+        "attempts": 1,
+        "elapsed_ms": elapsed_ms,
+        "raw_text": None,
+        "reported_model_id": None,
+        "prompt_tokens": None,
+        "completion_tokens": None,
+        "cost_usd": None,
+        "error_code": None,
+        "retryable": None,
+    }
+
+
+def _persist(stream, path: Path, manifest: dict, record: dict) -> None:
+    _append_record(stream, record)
+    manifest["recorded_count"] += 1
+    manifest["last_case_id"] = record["case_id"]
+    if record["status"] == "success":
+        manifest["success_count"] += 1
+    else:
+        manifest["failure_count"] += 1
+    manifest["updated_at"] = _now()
+    _write_manifest(path, manifest)
+
+
+def run_requests(
+    requests: Iterable[GenerationRequest], provider: ModelProvider, output_dir: Path
+) -> Path:
+    """Ejecuta una vez por caso y conserva cada salida antes de pasar al siguiente."""
+    batch = tuple(requests)
+    _validate_requests(batch)
+    provider_id = provider.provider_id
+    if not isinstance(provider_id, str) or not provider_id.strip():
+        raise ValueError("provider_id debe ser texto no vacío")
+    manifest = _manifest(batch, provider_id)
+    manifest_path = output_dir / "manifest.json"
+    output_dir.mkdir(parents=True, exist_ok=False)
+    _write_manifest(manifest_path, manifest)
+
+    try:
+        with (output_dir / "responses.jsonl").open("xb") as stream:
+            for index, request in enumerate(batch):
+                started = time.perf_counter()
+                try:
+                    response = provider.generate(request)
+                    if not isinstance(response, GenerationResponse):
+                        raise TypeError("El proveedor devolvió una respuesta inválida")
+                except ProviderFailure as error:
+                    elapsed = max(0.0, (time.perf_counter() - started) * 1000)
+                    record = _record_base(index, request, elapsed)
+                    record.update(
+                        status="provider_error", error_code=error.code, retryable=error.retryable
+                    )
+                except Exception:
+                    elapsed = max(0.0, (time.perf_counter() - started) * 1000)
+                    record = _record_base(index, request, elapsed)
+                    record.update(
+                        status="internal_error",
+                        error_code="unexpected_provider_error",
+                        retryable=False,
+                    )
+                    _persist(stream, manifest_path, manifest, record)
+                    raise
+                else:
+                    elapsed = max(0.0, (time.perf_counter() - started) * 1000)
+                    record = _record_base(index, request, elapsed)
+                    record.update(
+                        status="success",
+                        raw_text=response.raw_text,
+                        reported_model_id=response.reported_model_id,
+                        prompt_tokens=response.prompt_tokens,
+                        completion_tokens=response.completion_tokens,
+                        cost_usd=_cost_text(response.cost_usd),
+                    )
+                _persist(stream, manifest_path, manifest, record)
+    except BaseException as error:
+        manifest["status"] = "interrupted" if isinstance(error, KeyboardInterrupt) else "failed"
+        manifest["finished_at"] = _now()
+        manifest["updated_at"] = manifest["finished_at"]
+        try:
+            _write_manifest(manifest_path, manifest)
+        except OSError as manifest_error:
+            error.add_note(f"No se pudo actualizar manifest.json: {type(manifest_error).__name__}")
+        raise
+
+    manifest["status"] = "completed"
+    manifest["finished_at"] = _now()
+    manifest["updated_at"] = manifest["finished_at"]
+    _write_manifest(manifest_path, manifest)
+    return output_dir
