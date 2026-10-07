@@ -4,7 +4,7 @@ Evaluación reproducible de modelos y prompts en español. El objetivo es compar
 
 ## Estado del proyecto
 
-Proyecto en etapa inicial. Los pasos 0, 1, 2 y 3 están completados. Existen un contrato de datos, diez casos ficticios y un paquete Python instalable con validación, normalizadores, métricas deterministas y una línea base por reglas. Nueve casos están revisados y uno está marcado para revisión por un conflicto deliberado. Los comandos de ejecución y comparación, así como los paneles descritos en el plan, son entregables futuros.
+Proyecto en etapa inicial. Los pasos 0, 1, 2 y 3 están completados; el paso 4 comenzó con el contrato de proveedor y un simulador sin red. Existen un contrato de datos, diez casos ficticios y un paquete Python instalable con validación, normalizadores, métricas deterministas y una línea base por reglas. Nueve casos están revisados y uno está marcado para revisión por un conflicto deliberado. Los comandos de ejecución y comparación, así como los paneles descritos en el plan, son entregables futuros.
 
 La primera tarea será extraer fecha de cierre, modalidad, habilidades obligatorias y requisito de ser estudiante de fragmentos de convocatorias. La primera versión usará Ollama localmente, tendrá una interfaz web local para ejecutar experimentos y una demo pública de resultados precomputados.
 
@@ -17,6 +17,7 @@ La primera tarea será extraer fecha de cierre, modalidad, habilidades obligator
 - [Normalización](docs/normalization.md): fechas, vocabulario de habilidades, versiones y límites.
 - [Rúbrica de evaluación](docs/scoring.md): puntaje por campo, denominadores y exclusiones.
 - [Línea base y reporte](docs/baseline.md): reglas, resultados del conjunto inicial y reproducción.
+- [Motor y proveedores](docs/runner.md): contrato compartido, simulador y subtareas del paso 4.
 - [Contrato de casos](schemas/evalia-case.schema.json): estructura autoritativa del formato 0.1.0.
 - [Casos de arranque](datasets/README.md): diez ejemplos ficticios, decisiones de anotación y estado de revisión.
 - [Registro de revisión](docs/seed-review.md): procedimiento, decisiones y evidencia de la segunda lectura.
