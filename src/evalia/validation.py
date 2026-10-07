@@ -26,13 +26,22 @@ def case_validator() -> Draft202012Validator:
 
 def extraction_validator() -> Draft202012Validator:
     """Deriva el contrato de predicción de `$defs/extraction` del caso."""
+    return _definition_validator("extraction")
+
+
+def evidence_validator() -> Draft202012Validator:
+    """Deriva la forma de las citas de `$defs/evidence` del mismo esquema."""
+    return _definition_validator("evidence")
+
+
+def _definition_validator(name: str) -> Draft202012Validator:
     case_schema = case_validator().schema
-    extraction_schema = {
+    definition_schema = {
         "$schema": case_schema["$schema"],
         "$defs": case_schema["$defs"],
-        "$ref": "#/$defs/extraction",
+        "$ref": f"#/$defs/{name}",
     }
-    return Draft202012Validator(extraction_schema, format_checker=FormatChecker())
+    return Draft202012Validator(definition_schema, format_checker=FormatChecker())
 
 
 def _span_issues(text: str, span: dict, label: str) -> list[str]:
