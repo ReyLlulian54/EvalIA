@@ -162,3 +162,19 @@ El generador produce un reporte JSON determinista con predicciones, evidencia, m
 En el conjunto seed-0.1.1, nueve casos revisados recibieron predicción válida y seed-008 permaneció excluido. La exactitud de cada campo fue 9/9, la F1 micro de habilidades 20/20 y la coincidencia literal 27/27; no hubo errores de formato. Estas cifras corresponden a casos ficticios conocidos durante el desarrollo y solo comprueban el recorrido técnico. No miden generalización ni resultados de modelos.
 
 Verificación: 72 pruebas aprobadas con pytest, Ruff y formato sin errores, validación de los diez casos semilla y --check del reporte vigente. No se hicieron llamadas pagadas. El paso 3 concluye aquí. El siguiente trabajo planificado es el paso 4, motor de ejecución, en una entrega separada.
+
+## 6 de octubre de 2026 — paso 4 en curso
+
+| Subtarea | Estado | Entregable |
+| --- | --- | --- |
+| 4.1. Contrato y simulador | Completada | Interfaz de proveedor, solicitud, respuesta cruda, fallo tipado y simulador sin red. |
+| 4.2. Persistencia incremental | Pendiente | Motor, manifiesto y respuestas/errores caso por caso. |
+| 4.3. CLI y control | Pendiente | Ejecución CLI, límites, reintentos e interrupción simulada. |
+
+### Entrega 4.1 — límite de proveedor y simulador
+
+Se definió un protocolo Python único entre motor y adaptadores, con solicitud que contiene caso, prompt ya compuesto, modelo y límites explícitos. La respuesta conserva texto crudo aunque no sea JSON válido; identificador informado, tokens y costo permanecen desconocidos cuando el proveedor no los entrega. Los prompts y respuestas no aparecen en la representación automática de los objetos. Los fallos tienen código y señal de reintento, sin aplicar todavía una política.
+
+El proveedor simulado devuelve únicamente resultados prefijados por identificador y produce un fallo no reintentable cuando falta el caso. No usa red ni inventa tokens, costos o resultados de modelos. La [documentación del motor](runner.md) registra el contrato compartido y la división del paso 4. No se implementaron aún persistencia, CLI de ejecución ni adaptadores reales.
+
+Verificación: once pruebas nuevas de contrato y simulador aprobadas; 83 pruebas en la suite completa, Ruff y formato sin errores. El reporte de la línea base sigue vigente. La siguiente subtarea es **4.2**, persistencia incremental con manifiesto, en otra entrega.
