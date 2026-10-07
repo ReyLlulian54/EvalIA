@@ -4,7 +4,7 @@ Evaluación reproducible de modelos y prompts en español. El objetivo es compar
 
 ## Estado del proyecto
 
-Proyecto en etapa inicial. Los pasos 0, 1 y 2 están completados; el paso 3 comenzó con puntaje determinista por caso. Existen un contrato de datos, diez casos ficticios y un paquete Python instalable con validación mecánica y normalizadores. Nueve casos están revisados y uno está marcado para revisión por un conflicto deliberado. Los comandos de evaluación y los paneles descritos en el plan son entregables futuros.
+Proyecto en etapa inicial. Los pasos 0, 1, 2 y 3 están completados. Existen un contrato de datos, diez casos ficticios y un paquete Python instalable con validación, normalizadores, métricas deterministas y una línea base por reglas. Nueve casos están revisados y uno está marcado para revisión por un conflicto deliberado. Los comandos de ejecución y comparación, así como los paneles descritos en el plan, son entregables futuros.
 
 La primera tarea será extraer fecha de cierre, modalidad, habilidades obligatorias y requisito de ser estudiante de fragmentos de convocatorias. La primera versión usará Ollama localmente, tendrá una interfaz web local para ejecutar experimentos y una demo pública de resultados precomputados.
 
@@ -16,6 +16,7 @@ La primera tarea será extraer fecha de cierre, modalidad, habilidades obligator
 - [Guía de anotación](docs/annotation-guide.md): significado de los campos y reglas de evidencia.
 - [Normalización](docs/normalization.md): fechas, vocabulario de habilidades, versiones y límites.
 - [Rúbrica de evaluación](docs/scoring.md): puntaje por campo, denominadores y exclusiones.
+- [Línea base y reporte](docs/baseline.md): reglas, resultados del conjunto inicial y reproducción.
 - [Contrato de casos](schemas/evalia-case.schema.json): estructura autoritativa del formato 0.1.0.
 - [Casos de arranque](datasets/README.md): diez ejemplos ficticios, decisiones de anotación y estado de revisión.
 - [Registro de revisión](docs/seed-review.md): procedimiento, decisiones y evidencia de la segunda lectura.
@@ -48,6 +49,7 @@ Comprobar el paquete y la calidad del código:
 .\.venv\Scripts\evalia validate datasets\seed.jsonl
 .\.venv\Scripts\python -m pytest
 .\.venv\Scripts\ruff check .
+.\.venv\Scripts\python scripts\generate_seed_baseline.py --check
 ```
 
 `evalia validate` comprueba la sintaxis JSONL, el esquema 0.1.0, la unicidad de IDs y textos, las posiciones y el contenido literal de las citas, la correspondencia entre habilidades y evidencias, y el vocabulario canónico. Informa línea, caso y campo de los errores detectados. Las funciones de normalización convierten candidatos sin modificar el archivo de referencia. Una cita literal correcta no acredita por sí sola que respalde semánticamente el valor anotado; esa revisión sigue siendo humana.

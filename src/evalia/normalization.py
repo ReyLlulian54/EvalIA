@@ -75,6 +75,11 @@ def skill_vocabulary_version() -> str:
     return _skill_vocabulary()["version"]
 
 
+def skill_aliases() -> tuple[str, ...]:
+    """Expone los alias publicados para consumidores que buscan menciones literales."""
+    return tuple(sorted(_skill_vocabulary()["aliases"], key=lambda alias: (-len(alias), alias)))
+
+
 def normalize_skill(value: str) -> str:
     """Aplica solo equivalencias publicadas; conserva otros términos explícitos."""
     if not isinstance(value, str):

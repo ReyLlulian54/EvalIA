@@ -49,7 +49,7 @@ Solo los casos `reviewed` son elegibles. Una predicción ausente, duplicada o co
 
 Para evidencia, una forma inválida, una cita ausente para un valor predicho o una correspondencia de habilidades distinta de 1:1 se registra en `format_errors` y aporta cero aciertos de cita para ese caso; su extracción válida **sí** conserva el puntaje de contenido. Una cita bien formada con texto o rango incorrecto falla en `evidence_literal` sin convertirse en error de formato. Los `null` y listas vacías no exigen cita. El rango usa índices Unicode de Python. Una coincidencia literal solo prueba trazabilidad de caracteres: no verifica que el fragmento respalde semánticamente el valor ni que la extracción sea correcta. Esa revisión seguirá siendo humana en la comparación final.
 
-Cada métrica conserva `Ratio(numerator, denominator)` y `failed_case_ids`; con denominador cero, `value=None` significa **no aplicable**. No se calcula una puntuación compuesta ni se atribuyen los ejemplos sintéticos a modelos. La línea base y su reporte siguen en **3.3**.
+Cada métrica conserva `Ratio(numerator, denominator)` y `failed_case_ids`; con denominador cero, `value=None` significa **no aplicable**. No se calcula una puntuación compuesta ni se atribuyen los ejemplos sintéticos a modelos.
 
 ```python
 from evalia.graders.dataset import evaluate_dataset
@@ -60,3 +60,9 @@ report = evaluate_dataset(
 )
 print(report.metric("coverage").ratio)
 ```
+
+## Reglas de 3.3
+
+La [línea base por reglas](baseline.md) usa exclusivamente el texto y el identificador de cada caso revisado; su salida entra a `evaluate_dataset` con el mismo contrato de predicción y los mismos denominadores. El [reporte JSON versionado](../examples/results/seed-baseline-v1.json) registra predicciones, citas, métricas, casos fallidos, exclusiones y hashes de insumos. La comprobación `python scripts/generate_seed_baseline.py --check` falla si el reporte no coincide con el código o los datos actuales.
+
+El conjunto inicial es ficticio, pequeño y visible durante el desarrollo. Sus resultados sirven para comprobar el flujo de evaluación, no para estimar rendimiento de modelos ni generalización.

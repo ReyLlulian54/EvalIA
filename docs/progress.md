@@ -135,7 +135,7 @@ Verificación: 40 pruebas aprobadas con pytest; Ruff y formato de los archivos P
 | --- | --- | --- |
 | 3.1. Contrato y puntaje por caso | Completada | Extracción derivada del esquema, puntajes por campo y exclusión de casos no revisados. |
 | 3.2. Métricas del conjunto | Completada | Agregación auditable, abstención, evidencia literal y clasificación de errores. |
-| 3.3. Línea base y reporte | Pendiente | Reglas deterministas y reporte del conjunto inicial. |
+| 3.3. Línea base y reporte | Completada | Reglas conservadoras y reporte reproducible del conjunto inicial. |
 
 ### Entrega 3.1 — rúbrica y puntaje individual
 
@@ -152,3 +152,13 @@ Esta entrega solo puntúa un caso cada vez. No hay todavía agregación, evaluac
 Las extracciones ausentes, duplicadas o inválidas se registran como errores de formato y reducen la cobertura sin contaminar los denominadores de contenido. Una evidencia estructuralmente inválida conserva el puntaje de extracción válida, pero recibe cero aciertos literales para los valores que afirmó; una cita bien formada pero incorrecta falla como evidencia literal. La forma de extracción y citas se deriva del esquema autoritativo. Las pruebas usan predicciones sintéticas y cubren `null` frente a `false`, errores de formato, correspondencia 1:1, conteos micro y denominadores nulos. La coincidencia de caracteres no demuestra respaldo semántico.
 
 Verificación: 64 pruebas aprobadas con pytest, Ruff sin errores y `evalia validate datasets/seed.jsonl` acepta los diez casos sin modificar el conjunto. No se llamaron modelos ni proveedores pagados, y no hay métricas atribuibles a modelos. La siguiente subtarea es **3.3**, línea base por reglas y reporte verificable del conjunto inicial; no se inició en esta entrega.
+
+### Entrega 3.3 — línea base por reglas y reporte verificable
+
+La línea base 0.1.0 recibe solo identificador y texto. Busca fechas de cierre explícitas, modalidad declarada, habilidades obligatorias del vocabulario versionado y requisito explícito de ser estudiante. Se abstiene ante ausencia o conflicto y genera citas literales con posiciones Unicode. Las pruebas se fijaron antes de implementarla y cubren fechas ajenas al cierre, habilidades recomendadas, negación, modalidades incompatibles, ampliaciones y textos con emoji.
+
+El generador produce un reporte JSON determinista con predicciones, evidencia, métricas, exclusiones, errores de formato y hashes del conjunto, las reglas, el esquema y el vocabulario. La opción --check reconstruye y compara el archivo versionado; una prueba automatizada detecta si está obsoleto. El generador rechaza casos sin permiso de redistribución. La [documentación de la línea base](baseline.md) explica reglas, límites y reproducción.
+
+En el conjunto seed-0.1.1, nueve casos revisados recibieron predicción válida y seed-008 permaneció excluido. La exactitud de cada campo fue 9/9, la F1 micro de habilidades 20/20 y la coincidencia literal 27/27; no hubo errores de formato. Estas cifras corresponden a casos ficticios conocidos durante el desarrollo y solo comprueban el recorrido técnico. No miden generalización ni resultados de modelos.
+
+Verificación: 72 pruebas aprobadas con pytest, Ruff y formato sin errores, validación de los diez casos semilla y --check del reporte vigente. No se hicieron llamadas pagadas. El paso 3 concluye aquí. El siguiente trabajo planificado es el paso 4, motor de ejecución, en una entrega separada.
