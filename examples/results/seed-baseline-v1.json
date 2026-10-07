@@ -1,0 +1,395 @@
+{
+  "baseline_version": "0.1.0",
+  "case_count": 10,
+  "date_rules_version": "1.0.0",
+  "evaluation_scope": "development_smoke_not_held_out",
+  "excluded": [
+    {
+      "case_id": "seed-008",
+      "reason": "review_required"
+    }
+  ],
+  "format_errors": [],
+  "inputs": {
+    "baseline_code_sha256": "35111fbf7ea98f6538314930d1f5d4e3ce3b7c1d09448c369a7e17d299686d99",
+    "case_schema_sha256": "c20a644950b4bc8b9e4ce42e9bdca83adbac4ebbbe9cc8292d7257f79e55586b",
+    "dataset": "datasets/seed.jsonl",
+    "dataset_sha256": "5fd3ffb891ccdca1b7cdf4642af2dc7b547438eda8d3e4766e0af5a26e3ea78e",
+    "skill_vocabulary_sha256": "0a151c6fceba78110b437619e86c579d48876ee0a6d88fdcde26ac9dfc6506c9"
+  },
+  "kind": "rule_baseline_seed",
+  "metrics": {
+    "abstention.closing_date": {
+      "denominator": 4,
+      "failed_case_ids": [],
+      "numerator": 4,
+      "value": 1.0
+    },
+    "abstention.modality": {
+      "denominator": 3,
+      "failed_case_ids": [],
+      "numerator": 3,
+      "value": 1.0
+    },
+    "abstention.student_required": {
+      "denominator": 3,
+      "failed_case_ids": [],
+      "numerator": 3,
+      "value": 1.0
+    },
+    "closing_date": {
+      "denominator": 9,
+      "failed_case_ids": [],
+      "numerator": 9,
+      "value": 1.0
+    },
+    "coverage": {
+      "denominator": 9,
+      "failed_case_ids": [],
+      "numerator": 9,
+      "value": 1.0
+    },
+    "evidence_literal": {
+      "denominator": 27,
+      "failed_case_ids": [],
+      "numerator": 27,
+      "value": 1.0
+    },
+    "modality": {
+      "denominator": 9,
+      "failed_case_ids": [],
+      "numerator": 9,
+      "value": 1.0
+    },
+    "skills_exact": {
+      "denominator": 9,
+      "failed_case_ids": [],
+      "numerator": 9,
+      "value": 1.0
+    },
+    "skills_f1": {
+      "denominator": 20,
+      "failed_case_ids": [],
+      "numerator": 20,
+      "value": 1.0
+    },
+    "skills_precision": {
+      "denominator": 10,
+      "failed_case_ids": [],
+      "numerator": 10,
+      "value": 1.0
+    },
+    "skills_recall": {
+      "denominator": 10,
+      "failed_case_ids": [],
+      "numerator": 10,
+      "value": 1.0
+    },
+    "student_required": {
+      "denominator": 9,
+      "failed_case_ids": [],
+      "numerator": 9,
+      "value": 1.0
+    }
+  },
+  "predictions": [
+    {
+      "case_id": "seed-001",
+      "evidence": {
+        "closing_date": {
+          "end": 102,
+          "quote": "Las postulaciones cierran el 15 de noviembre de 2026",
+          "start": 50
+        },
+        "modality": {
+          "end": 126,
+          "quote": "La modalidad es remota",
+          "start": 104
+        },
+        "skills": [
+          {
+            "end": 165,
+            "quote": "Es obligatorio dominar Python 3 y SQL",
+            "skill": "Python",
+            "start": 128
+          },
+          {
+            "end": 165,
+            "quote": "Es obligatorio dominar Python 3 y SQL",
+            "skill": "SQL",
+            "start": 128
+          }
+        ],
+        "student_required": {
+          "end": 204,
+          "quote": "Es obligatorio ser estudiante regular",
+          "start": 167
+        }
+      },
+      "extraction": {
+        "closing_date": "2026-11-15",
+        "modality": "remota",
+        "skills": [
+          "Python",
+          "SQL"
+        ],
+        "student_required": true
+      }
+    },
+    {
+      "case_id": "seed-002",
+      "evidence": {
+        "closing_date": null,
+        "modality": {
+          "end": 68,
+          "quote": "La modalidad es híbrida",
+          "start": 45
+        },
+        "skills": [
+          {
+            "end": 104,
+            "quote": "Se requiere manejo de Python y Git",
+            "skill": "Python",
+            "start": 70
+          },
+          {
+            "end": 104,
+            "quote": "Se requiere manejo de Python y Git",
+            "skill": "Git",
+            "start": 70
+          }
+        ],
+        "student_required": {
+          "end": 163,
+          "quote": "Es obligatorio ser estudiante regular",
+          "start": 126
+        }
+      },
+      "extraction": {
+        "closing_date": null,
+        "modality": "hibrida",
+        "skills": [
+          "Python",
+          "Git"
+        ],
+        "student_required": true
+      }
+    },
+    {
+      "case_id": "seed-003",
+      "evidence": {
+        "closing_date": null,
+        "modality": {
+          "end": 63,
+          "quote": "El trabajo es presencial",
+          "start": 39
+        },
+        "skills": [
+          {
+            "end": 77,
+            "quote": "Se exige SQL",
+            "skill": "SQL",
+            "start": 65
+          }
+        ],
+        "student_required": {
+          "end": 148,
+          "quote": "No es necesario ser estudiante",
+          "start": 118
+        }
+      },
+      "extraction": {
+        "closing_date": null,
+        "modality": "presencial",
+        "skills": [
+          "SQL"
+        ],
+        "student_required": false
+      }
+    },
+    {
+      "case_id": "seed-004",
+      "evidence": {
+        "closing_date": null,
+        "modality": {
+          "end": 131,
+          "quote": "Las clases se realizan a distancia",
+          "start": 97
+        },
+        "skills": [],
+        "student_required": null
+      },
+      "extraction": {
+        "closing_date": null,
+        "modality": "remota",
+        "skills": [],
+        "student_required": null
+      }
+    },
+    {
+      "case_id": "seed-005",
+      "evidence": {
+        "closing_date": {
+          "end": 92,
+          "quote": "Fecha límite para postular: 2028-02-29",
+          "start": 54
+        },
+        "modality": null,
+        "skills": [
+          {
+            "end": 193,
+            "quote": "Es obligatorio conocer Docker y sql",
+            "skill": "Docker",
+            "start": 158
+          },
+          {
+            "end": 193,
+            "quote": "Es obligatorio conocer Docker y sql",
+            "skill": "SQL",
+            "start": 158
+          }
+        ],
+        "student_required": {
+          "end": 225,
+          "quote": "No es necesario ser estudiante",
+          "start": 195
+        }
+      },
+      "extraction": {
+        "closing_date": "2028-02-29",
+        "modality": null,
+        "skills": [
+          "Docker",
+          "SQL"
+        ],
+        "student_required": false
+      }
+    },
+    {
+      "case_id": "seed-006",
+      "evidence": {
+        "closing_date": {
+          "end": 78,
+          "quote": "Postula hasta el 05 de diciembre de 2026",
+          "start": 38
+        },
+        "modality": {
+          "end": 98,
+          "quote": "Modalidad: híbrida",
+          "start": 80
+        },
+        "skills": [
+          {
+            "end": 139,
+            "quote": "Requisitos obligatorios: Python 3 y Git",
+            "skill": "Python",
+            "start": 100
+          },
+          {
+            "end": 139,
+            "quote": "Requisitos obligatorios: Python 3 y Git",
+            "skill": "Git",
+            "start": 100
+          }
+        ],
+        "student_required": {
+          "end": 227,
+          "quote": "Es obligatorio ser estudiante regular",
+          "start": 190
+        }
+      },
+      "extraction": {
+        "closing_date": "2026-12-05",
+        "modality": "hibrida",
+        "skills": [
+          "Python",
+          "Git"
+        ],
+        "student_required": true
+      }
+    },
+    {
+      "case_id": "seed-007",
+      "evidence": {
+        "closing_date": {
+          "end": 206,
+          "quote": "Actualización: se amplía el plazo de postulaciones hasta el 20 de diciembre de 2026",
+          "start": 123
+        },
+        "modality": {
+          "end": 250,
+          "quote": "El trabajo es remoto, con modalidad remota",
+          "start": 208
+        },
+        "skills": [
+          {
+            "end": 267,
+            "quote": "Se exige Python",
+            "skill": "Python",
+            "start": 252
+          }
+        ],
+        "student_required": null
+      },
+      "extraction": {
+        "closing_date": "2026-12-20",
+        "modality": "remota",
+        "skills": [
+          "Python"
+        ],
+        "student_required": null
+      }
+    },
+    {
+      "case_id": "seed-009",
+      "evidence": {
+        "closing_date": {
+          "end": 103,
+          "quote": "Las postulaciones cierran el 10 de enero de 2027",
+          "start": 55
+        },
+        "modality": null,
+        "skills": [],
+        "student_required": {
+          "end": 248,
+          "quote": "No es necesario ser estudiante",
+          "start": 218
+        }
+      },
+      "extraction": {
+        "closing_date": "2027-01-10",
+        "modality": null,
+        "skills": [],
+        "student_required": false
+      }
+    },
+    {
+      "case_id": "seed-010",
+      "evidence": {
+        "closing_date": null,
+        "modality": null,
+        "skills": [],
+        "student_required": null
+      },
+      "extraction": {
+        "closing_date": null,
+        "modality": null,
+        "skills": [],
+        "student_required": null
+      }
+    }
+  ],
+  "report_version": "1.0.0",
+  "scored_case_ids": [
+    "seed-001",
+    "seed-002",
+    "seed-003",
+    "seed-004",
+    "seed-005",
+    "seed-006",
+    "seed-007",
+    "seed-009",
+    "seed-010"
+  ],
+  "skill_vocabulary_version": "1.0.0"
+}
