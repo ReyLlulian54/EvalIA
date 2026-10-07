@@ -168,7 +168,7 @@ Verificación: 72 pruebas aprobadas con pytest, Ruff y formato sin errores, vali
 | Subtarea | Estado | Entregable |
 | --- | --- | --- |
 | 4.1. Contrato y simulador | Completada | Interfaz de proveedor, solicitud, respuesta cruda, fallo tipado y simulador sin red. |
-| 4.2. Persistencia incremental | Pendiente | Motor, manifiesto y respuestas/errores caso por caso. |
+| 4.2. Persistencia incremental | Completada | Motor, manifiesto y respuestas/errores caso por caso. |
 | 4.3. CLI y control | Pendiente | Ejecución CLI, límites, reintentos e interrupción simulada. |
 
 ### Entrega 4.1 — límite de proveedor y simulador
@@ -178,3 +178,13 @@ Se definió un protocolo Python único entre motor y adaptadores, con solicitud 
 El proveedor simulado devuelve únicamente resultados prefijados por identificador y produce un fallo no reintentable cuando falta el caso. No usa red ni inventa tokens, costos o resultados de modelos. La [documentación del motor](runner.md) registra el contrato compartido y la división del paso 4. No se implementaron aún persistencia, CLI de ejecución ni adaptadores reales.
 
 Verificación: once pruebas nuevas de contrato y simulador aprobadas; 83 pruebas en la suite completa, Ruff y formato sin errores. El reporte de la línea base sigue vigente. La siguiente subtarea es **4.2**, persistencia incremental con manifiesto, en otra entrega.
+
+### Entrega 4.2 — persistencia incremental
+
+El motor recibe solicitudes ya compuestas y un proveedor que cumple el contrato de 4.1. Valida un lote homogéneo antes de crear archivos y exige un directorio nuevo. Por caso conserva la respuesta cruda o un fallo clasificado, con un solo intento y tiempo medido. Una respuesta puede ser JSON inválido sin perderse; los valores de uso desconocidos siguen en `null` y el costo informado se conserva como texto decimal. Los mensajes de excepción no se guardan en los artefactos.
+
+El nuevo [esquema de ejecución](../schemas/evalia-run.schema.json) 0.1.0 define `manifest.json` y cada registro de `responses.jsonl`. El manifiesto documenta versión, entorno, proveedor, modelo, parámetros, estado y conteos; guarda el hash de las solicitudes reales y cada registro guarda el hash de su solicitud. El commit y los hashes del conjunto y prompt permanecen en `null` hasta que un ensamblador pueda verificarlos. La escritura de cada línea se sincroniza antes de la siguiente solicitud y el manifiesto se reemplaza tras cada registro. Ante error de escritura o fallo inesperado se conservan las líneas anteriores y se marca el estado fallido cuando el manifiesto puede actualizarse. No hay reanudación automática.
+
+Verificación: 94 pruebas aprobadas en la suite completa, incluidas 22 de motor y proveedores. Las pruebas simulan fallos del proveedor, error de escritura y línea parcial; comprueban que los casos previos persisten, que no se exponen mensajes privados y que los artefactos satisfacen el esquema. Ruff y el formato de los archivos Python modificados pasaron; la validación mecánica mantiene diez casos y el reporte versionado de la línea base sigue vigente. No se ejecutaron modelos ni se gastaron créditos de API. La construcción de un wheel independiente quedó sin comprobar en este entorno porque falta Hatchling localmente.
+
+La subtarea siguiente es **4.3**: comando `evalia run`, composición de prompts, reintentos y límites acotados, y prueba del recorrido interrumpido con el proveedor simulado. No se inició en esta entrega.

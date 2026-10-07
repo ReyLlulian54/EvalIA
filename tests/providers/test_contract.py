@@ -107,3 +107,8 @@ def test_fixture_provider_surfaces_typed_failure_and_missing_fixture() -> None:
         provider.generate(request("seed-999"))
     assert missing.value.code == "fixture_missing"
     assert missing.value.retryable is False
+
+
+def test_failure_code_cannot_be_a_raw_provider_message() -> None:
+    with pytest.raises(ValueError, match="code"):
+        ProviderFailure("token=PRIVATE", retryable=False, message="fallo")

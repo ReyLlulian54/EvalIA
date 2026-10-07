@@ -1,6 +1,7 @@
 """Contrato Python compartido por el motor y sus adaptadores."""
 
 import math
+import re
 from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import Protocol
@@ -81,7 +82,8 @@ class ProviderFailure(Exception):
     """Fallo tipado; el motor decidirá después si corresponde reintentar."""
 
     def __init__(self, code: str, *, retryable: bool, message: str) -> None:
-        _nonblank(code, "code")
+        if not isinstance(code, str) or re.fullmatch(r"[a-z][a-z0-9_]{0,63}", code) is None:
+            raise ValueError("code debe ser un identificador estable en minúsculas")
         _nonblank(message, "message")
         if not isinstance(retryable, bool):
             raise ValueError("retryable debe ser booleano")
