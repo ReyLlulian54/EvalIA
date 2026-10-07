@@ -34,6 +34,8 @@ packages = ["src/evalia"]
 [tool.hatch.build.targets.wheel.force-include]
 "schemas/evalia-case.schema.json" = "evalia/schemas/evalia-case.schema.json"
 "schemas/evalia-run.schema.json" = "evalia/schemas/evalia-run.schema.json"
+"schemas/evalia-prompt.schema.json" = "evalia/schemas/evalia-prompt.schema.json"
+"schemas/evalia-fixture.schema.json" = "evalia/schemas/evalia-fixture.schema.json"
 
 [tool.pytest.ini_options]
 addopts = ["--strict-config", "--strict-markers"]
