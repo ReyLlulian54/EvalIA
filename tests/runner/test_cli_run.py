@@ -75,7 +75,7 @@ def test_cli_completes_offline_run_with_verified_input_hashes(tmp_path: Path) ->
     assert [record["case_id"] for record in records] == ["seed-001", "seed-002"]
     assert [record["attempts"] for record in records] == [1, 1]
     assert all(record["status"] == "success" for record in records)
-    assert "simuladas" in result.output.lower()
+    assert "fixture" in result.output.lower()
 
 
 def test_cli_limits_selected_reviewed_cases(tmp_path: Path) -> None:
@@ -96,6 +96,56 @@ def test_cli_reports_case_failures_with_nonzero_exit(tmp_path: Path) -> None:
     assert manifest["failure_count"] == 1
     assert records[-1]["error_code"] == "fixture_missing"
     assert "1 fallo(s)" in result.output
+
+
+def test_cli_ollama_path_records_verified_digest_without_real_network(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    class FakeOllama:
+        provider_id = "ollama"
+
+        def __init__(self, base_url: str) -> None:
+            assert base_url == "http://127.0.0.1:11434"
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, exc_type, exc_value, traceback) -> None:
+            pass
+
+        def model_digest(self, model_id: str) -> str:
+            assert model_id == "qwen3:8b"
+            return "a" * 64
+
+        def generate(self, request: GenerationRequest) -> GenerationResponse:
+            assert request.model_id == "qwen3:8b"
+            return GenerationResponse(raw_text="{}", reported_model_id="qwen3:8b")
+
+    monkeypatch.setattr("evalia.runner.inputs.OllamaProvider", FakeOllama)
+    target = tmp_path / "ollama"
+    command = _command(target, max_cases=1)
+    fixture_index = command.index("--fixture")
+    del command[fixture_index : fixture_index + 2]
+    command[command.index("--model-id") + 1] = "qwen3:8b"
+    command.extend(["--provider", "ollama"])
+    result = CLI.invoke(app, command)
+    assert result.exit_code == 0, result.output
+    manifest, records = _artifacts(target)
+    assert manifest["provider_id"] == "ollama"
+    assert manifest["model_digest"] == "a" * 64
+    assert manifest["fixture_sha256"] is None
+    assert records[0]["reported_model_id"] == "qwen3:8b"
+
+
+def test_cli_requires_exact_model_for_ollama_before_creating_files(tmp_path: Path) -> None:
+    target = tmp_path / "missing-model"
+    command = _command(target)
+    fixture_index = command.index("--fixture")
+    del command[fixture_index : fixture_index + 2]
+    command.extend(["--provider", "ollama"])
+    result = CLI.invoke(app, command)
+    assert result.exit_code == 2
+    assert not target.exists()
 
 
 def test_bad_input_does_not_create_run_directory(tmp_path: Path) -> None:

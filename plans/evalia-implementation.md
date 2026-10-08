@@ -2,7 +2,7 @@
 
 Estado: aprobado por el usuario el 3 de octubre de 2026; implementación iniciada por subtareas. Horizonte: 10 a 12 semanas. Presupuesto máximo: USD 30 en total. El avance se registra en `docs/progress.md`.
 
-Avance al 7 de octubre de 2026: los pasos 0, 1, 2, 3 y 4 están completados. El motor tiene contrato de proveedor, simulador sin red, persistencia incremental y `evalia run` con entradas versionadas, límites y reintentos acotados. El conjunto conserva nueve casos en `reviewed` y `seed-008` en `review_required`. Todavía no hay ejecuciones ni métricas de modelos reales; el paso 5 comenzará por Ollama local.
+Avance al 8 de octubre de 2026: los pasos 0 a 4 y la subtarea 5.1 están completados. El motor tiene contrato de proveedor, simulador sin red, persistencia incremental y `evalia run` con entradas versionadas, límites y reintentos acotados. El adaptador Ollama pasó una prueba de humo local con nueve casos revisados; el décimo (`seed-008`) permanece en `review_required` y no se envió. No hay todavía puntuaciones comparativas de modelos. La siguiente subtarea es 5.2, ampliación y revisión del conjunto.
 
 ## 1. Objetivo y usuario
 
@@ -168,6 +168,9 @@ Salida: el archivo correcto pasa y cada archivo malo falla por la razón previst
 - **4.3. CLI y control de ejecución:** añadir `evalia run`, composición de prompts versionados, límites, tiempos de espera, reintentos acotados solo para errores transitorios y prueba de interrupción. Verificar el recorrido completo con el simulador antes de incorporar Ollama.
 
 **5. Ollama y conjunto inicial.** Contexto: primer recorrido real de costo cero. Implementar el adaptador Ollama y una prueba de humo de 10 casos; registrar modelo exacto, memoria disponible y tiempos. Ampliar a 30–40 casos siguiendo la guía; reservar aproximadamente 25 % como prueba final congelada y revisar de nuevo al menos 20 % del conjunto tras 24 horas. Verificar `evalia validate datasets/benchmark-v1.jsonl` y dos ejecuciones con modelos o configuraciones locales. Salida: resultados comparables y ninguna llamada remota obligatoria. Si el hardware no permite dos modelos, comparar dos versiones de prompt con el mismo modelo y declarar esa limitación.
+
+- **5.1. Adaptador y prueba de humo:** integrar Ollama en el contrato de proveedor, registrar el digest exacto del modelo y ejecutar los casos revisados con límites locales. El objetivo de diez casos se reduce provisionalmente a nueve porque `seed-008` requiere revisión y el motor lo excluye. No se atribuye calidad del modelo a esta prueba de transporte y formato.
+- **5.2. Conjunto inicial:** ampliar a 30–40 casos siguiendo la guía, congelar una partición de prueba final de aproximadamente 25 % y efectuar la segunda revisión diferida del porcentaje indicado. Las comparaciones de modelos o prompts quedan para una entrega posterior del paso 5, una vez aprobado el conjunto.
 
 **6. Comparar y publicar datos seguros.** Contexto: las ejecuciones del paso 5 deben convertirse en decisiones legibles. Implementar `evalia compare`, lista de regresiones/mejoras y `evalia export-public`. Verificar pruebas de comparación y una prueba que intente exportar un caso con `redistribution_allowed=false` y sea rechazada. Revisar manualmente el JSON exportado. Salida: informe por campo y por caso sin secretos ni textos restringidos. Si cambia el gold set, invalidar comparaciones anteriores o indicar claramente la versión distinta.
 

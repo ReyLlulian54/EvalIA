@@ -34,12 +34,13 @@ class RunProvenance:
     dataset_sha256: str | None = None
     prompt_sha256: str | None = None
     fixture_sha256: str | None = None
+    model_digest: str | None = None
     prompt_id: str | None = None
     prompt_version: str | None = None
     source_commit: str | None = None
 
     def __post_init__(self) -> None:
-        for name in ("dataset_sha256", "prompt_sha256", "fixture_sha256"):
+        for name in ("dataset_sha256", "prompt_sha256", "fixture_sha256", "model_digest"):
             value = getattr(self, name)
             if value is not None and (
                 not isinstance(value, str) or re.fullmatch(r"[0-9a-f]{64}", value) is None
@@ -136,6 +137,7 @@ def _manifest(
         "source_commit": provenance.source_commit,
         "provider_id": provider_id,
         "model_id": first.model_id,
+        "model_digest": provenance.model_digest,
         "temperature": first.temperature,
         "max_output_tokens": first.max_output_tokens,
         "timeout_seconds": first.timeout_seconds,

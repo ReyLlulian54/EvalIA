@@ -3,6 +3,7 @@
 - Consultar `plans/evalia-implementation.md` y `docs/progress.md` antes de continuar.
 - Usar las guías pertinentes del plugin ECC disponible en el entorno. Para Git y documentación de contratos, aplicar `git-workflow` y `contract-first`; para implementar evaluaciones, aplicar `eval-harness`.
 - Avanzar una subtarea concreta por entrega. Registrar qué quedó terminado y qué sigue; no implementar etapas posteriores por iniciativa propia.
+- Actualizar el README raíz en cada entrega con el avance comprobado y la siguiente subtarea. Avisar antes de avanzar si la persona usuaria debe hacer alguna configuración.
 - Mantener commits Conventional Commits en español y ramas cortas con pull requests. Revisar cambios y evidencias antes de integrar.
 - Mantener una fuente autoritativa para el contrato de datos. Los consumidores y ejemplos deben cumplirla.
 - Distinguir valores desconocidos (`null`) de negativas explícitas (`false`), y citas literales de respaldo semántico.

@@ -12,6 +12,7 @@ from jsonschema import Draft202012Validator
 
 from evalia.providers.base import GenerationRequest, GenerationResponse, ProviderFailure
 from evalia.providers.fixture import FixtureProvider
+from evalia.providers.ollama import DEFAULT_OLLAMA_URL, OllamaProvider
 from evalia.runner.core import RunProvenance, run_requests
 from evalia.validation import validate_jsonl_lines
 
@@ -162,7 +163,7 @@ def run_dataset(
     *,
     dataset_path: Path,
     prompt_path: Path,
-    fixture_path: Path,
+    fixture_path: Path | None,
     output_dir: Path,
     model_id: str,
     max_cases: int,
@@ -170,11 +171,20 @@ def run_dataset(
     max_output_tokens: int,
     timeout_seconds: float,
     max_retries: int,
+    provider_kind: str = "fixture",
+    ollama_url: str = DEFAULT_OLLAMA_URL,
 ) -> Path:
-    """Recorrido completo de 4.3 con proveedor simulado y procedencia comprobada."""
+    """Ejecuta el mismo contrato con fixture o un modelo Ollama local."""
+    if provider_kind not in {"fixture", "ollama"}:
+        raise RunInputError("Proveedor desconocido; use fixture u ollama")
+    if provider_kind == "fixture" and fixture_path is None:
+        raise RunInputError("El proveedor fixture requiere --fixture")
+    if provider_kind == "ollama" and fixture_path is not None:
+        raise RunInputError("El proveedor ollama no acepta --fixture")
+    if provider_kind == "ollama" and model_id == "simulado-v1":
+        raise RunInputError("Indique --model-id con el nombre exacto del modelo local")
     cases, dataset_sha256 = load_reviewed_cases(dataset_path, max_cases)
     prompt = load_prompt(prompt_path)
-    provider, fixture_sha256 = load_fixture(fixture_path)
     requests = compose_requests(
         cases,
         prompt,
@@ -183,17 +193,31 @@ def run_dataset(
         max_output_tokens=max_output_tokens,
         timeout_seconds=timeout_seconds,
     )
-    return run_requests(
-        requests,
-        provider,
-        output_dir,
-        provenance=RunProvenance(
-            dataset_sha256=dataset_sha256,
-            prompt_sha256=prompt.sha256,
-            fixture_sha256=fixture_sha256,
-            prompt_id=prompt.prompt_id,
-            prompt_version=prompt.version,
-            source_commit=_source_commit(),
-        ),
-        max_retries=max_retries,
-    )
+
+    def execute(provider, fixture_sha256: str | None, model_digest: str | None) -> Path:
+        return run_requests(
+            requests,
+            provider,
+            output_dir,
+            provenance=RunProvenance(
+                dataset_sha256=dataset_sha256,
+                prompt_sha256=prompt.sha256,
+                fixture_sha256=fixture_sha256,
+                model_digest=model_digest,
+                prompt_id=prompt.prompt_id,
+                prompt_version=prompt.version,
+                source_commit=_source_commit(),
+            ),
+            max_retries=max_retries,
+        )
+
+    if provider_kind == "fixture":
+        provider, fixture_sha256 = load_fixture(fixture_path)
+        return execute(provider, fixture_sha256, None)
+    try:
+        local_provider = OllamaProvider(base_url=ollama_url)
+    except ValueError as error:
+        raise RunInputError(str(error)) from error
+    with local_provider as provider:
+        model_digest = provider.model_digest(model_id)
+        return execute(provider, None, model_digest)

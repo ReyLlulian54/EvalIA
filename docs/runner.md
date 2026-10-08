@@ -72,4 +72,14 @@ El manifiesto y los registros usan ahora la versión **0.2.0** del [contrato de 
 
 La CLI exige un límite explícito de 1 a 100 casos; permite 1 a 2048 tokens de salida, 0.01 a 120 segundos de espera y 0 a 2 reintentos. El motor repite únicamente `ProviderFailure(retryable=True)`, con pausas acotadas de 0.1 y 0.2 segundos; otros fallos se registran sin repetir la solicitud. `attempts` guarda el número real de intentos y una interrupción conserva los casos previos con estado `interrupted`. El tiempo de espera se valida y se entrega en cada `GenerationRequest`; el proveedor concreto debe aplicarlo a su operación de red. El fixture no realiza I/O de red ni prueba cancelación forzada de proveedores arbitrarios. Esa integración corresponde al adaptador Ollama del paso 5.
 
-La CLI solo acepta fixtures en esta etapa. La ejecución guarda respuestas crudas y fallos, sin puntuarlas ni afirmar calidad de modelos. La comparación y publicación segura siguen en los pasos 5 y 6.
+La ejecución guarda respuestas crudas y fallos, sin puntuarlas ni afirmar calidad de modelos. La comparación y publicación segura corresponden al paso 6.
+
+## Adaptador Ollama de 5.1
+
+`--provider ollama` usa la API HTTP de Ollama en `http://127.0.0.1:11434` de forma predeterminada. `--ollama-url` solo admite HTTP en `127.0.0.1`, `localhost` o `::1`, sin credenciales ni ruta adicional. El adaptador no toma `OLLAMA_HOST` como destino implícito. Antes de crear archivos consulta `/api/tags`, exige el nombre exacto de `--model-id` y registra el digest SHA-256 informado para ese modelo. Si no puede verificarlo, falla antes de iniciar el lote.
+
+Cada solicitud usa `/api/chat` sin streaming, con temperatura y máximo de tokens explícitos, `think=false` y `format=json`. La configuración evita que un modelo de razonamiento consuma todo el límite de salida sin entregar contenido y pide un objeto JSON sin envoltura Markdown. El adaptador conserva el contenido original, exige que el modelo informado coincida con el solicitado y registra los conteos de tokens cuando Ollama los devuelve. El costo queda en `null`, no en cero. Un HTTP 200 con texto vacío o JSON semánticamente incorrecto sigue siendo una respuesta cruda exitosa para el motor; la validación y puntuación posteriores determinarán su utilidad.
+
+Los fallos de conexión, espera y servidor se clasifican sin copiar cuerpos HTTP ni excepciones al artefacto. La espera se aplica a operaciones de I/O de `httpx`; no es un límite absoluto de tiempo para toda la evaluación. Los reintentos del motor siguen acotados por `--max-retries`. Las pruebas automáticas usan transporte simulado y no envían solicitudes ni consumen créditos.
+
+El [contrato de ejecución](../schemas/evalia-run.schema.json) es ahora **0.3.0**: el manifiesto exige `model_digest`, que es el hash informado por Ollama o `null` para un proveedor que no pueda verificarlo. Esta versión cambia el manifiesto y los registros; los artefactos 0.2.0 conservan su versión anterior. `source_commit` permanece en `null` si la ejecución se realiza con cambios locales sin confirmar.
