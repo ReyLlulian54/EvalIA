@@ -4,7 +4,7 @@ Evaluación reproducible de modelos y prompts en español. El objetivo es compar
 
 ## Estado del proyecto
 
-Proyecto en desarrollo. Los pasos 0 a 4 y la subtarea 5.1 están completados. Existen un contrato de datos, diez casos ficticios, validación, normalizadores, métricas deterministas, una línea base por reglas y un motor de ejecución incremental con proveedor simulado y adaptador Ollama local. Nueve casos están `reviewed`; `seed-008` conserva el estado `review_required` por un conflicto deliberado y no se ejecuta ni puntúa.
+Proyecto en desarrollo. Los pasos 0 a 4 y la subtarea 5.1 están completados. Existen un contrato de datos, diez casos ficticios de arranque, validación, normalizadores, métricas deterministas, una línea base por reglas y un motor de ejecución incremental con proveedor simulado y adaptador Ollama local. Nueve casos `seed` están `reviewed`; `seed-008` conserva `review_required` por un conflicto deliberado. El conjunto ampliado de 36 casos está en `draft` y todavía no constituye una referencia revisada.
 
 La primera tarea es extraer fecha de cierre, modalidad, habilidades obligatorias y requisito de ser estudiante de fragmentos de convocatorias. La primera versión tendrá una interfaz web local para ejecutar experimentos y una demo pública de resultados precomputados.
 
@@ -16,7 +16,7 @@ La primera tarea es extraer fecha de cierre, modalidad, habilidades obligatorias
 | 3. Evaluación | Completa | Métricas auditables y línea base por reglas, sin resultados atribuidos a modelos. |
 | 4. Motor | Completa | Proveedor simulado, artefactos incrementales, límites y reintentos. |
 | 5.1. Ollama local | Completa | Adaptador HTTP de loopback y prueba de humo de los nueve casos revisados. |
-| 5.2. Conjunto inicial | Siguiente | Ampliar a 30–40 casos revisados y separar desarrollo/prueba final. |
+| 5.2. Conjunto inicial | En curso | 36 borradores creados, 27 `dev` y 9 `test`; sigue la revisión semántica y diferida. |
 | 6–8. Comparación y paneles | Pendiente | Comparación, exportación segura, panel local y demo pública. |
 | 9. OpenRouter | Optativa | Solo tras comprobar costo, seguridad y utilidad del recorrido local. |
 
@@ -37,6 +37,7 @@ La [bitácora](docs/progress.md) contiene las verificaciones y el [plan](plans/e
 - [Contrato de casos](schemas/evalia-case.schema.json): estructura autoritativa del formato 0.1.0.
 - [Casos de arranque](datasets/README.md): diez ejemplos ficticios, decisiones de anotación y estado de revisión.
 - [Registro de revisión](docs/seed-review.md): procedimiento, decisiones y evidencia de la segunda lectura.
+- [Benchmark v1 en borrador](docs/benchmark-v1.md): diseño de 36 casos, partición fijada, integridad y revisión pendiente.
 
 ## Desarrollo
 
@@ -64,6 +65,8 @@ Comprobar el paquete y la calidad del código:
 .\.venv\Scripts\evalia --help
 .\.venv\Scripts\evalia version
 .\.venv\Scripts\evalia validate datasets\seed.jsonl
+.\.venv\Scripts\evalia validate datasets\benchmark-v1.jsonl
+.\.venv\Scripts\python scripts\check_benchmark_v1.py
 .\.venv\Scripts\evalia run --dataset datasets\seed.jsonl --prompt prompts\extraction-v1.json --fixture examples\fixtures\seed-two.json --output runs\prueba-local --max-cases 2
 .\.venv\Scripts\python -m pytest
 .\.venv\Scripts\ruff check .
@@ -83,5 +86,9 @@ Se necesita Ollama en ejecución y un modelo ya descargado. Comprueba los nombre
 `--output` debe señalar un directorio que aún no exista. Aunque el límite sea diez, el conjunto actual envía **nueve** casos: `seed-008` sigue pendiente de revisión. El adaptador solicita JSON sin razonamiento visible, conserva la respuesta cruda, registra el digest local del modelo y deja el costo en `null` porque Ollama no informa un costo de API. Los artefactos de `runs/` son privados y Git los ignora. La salida exitosa del proveedor no demuestra que una extracción sea correcta; el paso 6 incorporará comparación y reportes de ejecuciones.
 
 El 8 de octubre de 2026, una prueba local con `qwen3:8b` completó nueve solicitudes, sin fallos de transporte; las nueve respuestas fueron objetos JSON con las cuatro claves solicitadas. La mediana de tiempo por solicitud fue 782 ms con el modelo ya cargado. Se registraron el digest y las condiciones del equipo en la [bitácora](docs/progress.md); estas cifras son de una única máquina y no son una evaluación de calidad ni un benchmark general.
+
+### Próxima revisión del conjunto ampliado
+
+Los 36 casos de `datasets/benchmark-v1.jsonl` son anotaciones iniciales. La partición `test` quedó fijada antes de cualquier ejecución de modelos sobre ellos, pero sus respuestas esperadas aún necesitan revisión humana. La segunda lectura de al menos nueve casos puede comenzar **desde el 9 de octubre de 2026 a las 23:26 en America/Santiago**, siempre que no se modifique el borrador. El [procedimiento](docs/benchmark-v1.md) registra la muestra y los criterios. Ningún caso nuevo se marcará `reviewed` hasta completar la lectura correspondiente y confirmar sus decisiones. No necesitas instalar ni configurar nada para continuar esa revisión.
 
 La licencia de distribución del código sigue pendiente de definición. La publicación del repositorio no constituye una autorización de reutilización de textos de terceros.
