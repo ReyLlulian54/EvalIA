@@ -16,7 +16,7 @@ La primera tarea es extraer fecha de cierre, modalidad, habilidades obligatorias
 | 3. Evaluación | Completa | Métricas auditables y línea base por reglas, sin resultados atribuidos a modelos. |
 | 4. Motor | Completa | Proveedor simulado, artefactos incrementales, límites y reintentos. |
 | 5.1. Ollama local | Completa | Adaptador HTTP de loopback y prueba de humo de los nueve casos revisados. |
-| 5.2. Conjunto inicial | En curso | 36 borradores creados, 27 `dev` y 9 `test`; sigue la revisión semántica y diferida. |
+| 5.2. Conjunto inicial | En curso | 36 borradores; lectura asistida de 144 campos y 113 citas, segunda lectura 7/9; faltan dos lecturas diferidas y confirmación humana. |
 | 6–8. Comparación y paneles | Pendiente | Comparación, exportación segura, panel local y demo pública. |
 | 9. OpenRouter | Optativa | Solo tras comprobar costo, seguridad y utilidad del recorrido local. |
 
@@ -38,6 +38,7 @@ La [bitácora](docs/progress.md) contiene las verificaciones y el [plan](plans/e
 - [Casos de arranque](datasets/README.md): diez ejemplos ficticios, decisiones de anotación y estado de revisión.
 - [Registro de revisión](docs/seed-review.md): procedimiento, decisiones y evidencia de la segunda lectura.
 - [Benchmark v1 en borrador](docs/benchmark-v1.md): diseño de 36 casos, partición fijada, integridad y revisión pendiente.
+- [Registro de revisión del benchmark](docs/benchmark-v1-review.md): lectura asistida, correcciones, muestra diferida y decisiones pendientes.
 
 ## Desarrollo
 
@@ -89,6 +90,6 @@ El 8 de octubre de 2026, una prueba local con `qwen3:8b` completó nueve solicit
 
 ### Próxima revisión del conjunto ampliado
 
-Los 36 casos de `datasets/benchmark-v1.jsonl` son anotaciones iniciales. La partición `test` quedó fijada antes de cualquier ejecución de modelos sobre ellos, pero sus respuestas esperadas aún necesitan revisión humana. La segunda lectura de al menos nueve casos puede comenzar **desde el 9 de octubre de 2026 a las 23:26 en America/Santiago**, siempre que no se modifique el borrador. El [procedimiento](docs/benchmark-v1.md) registra la muestra y los criterios. Ningún caso nuevo se marcará `reviewed` hasta completar la lectura correspondiente y confirmar sus decisiones. No necesitas instalar ni configurar nada para continuar esa revisión.
+Los 36 casos de `datasets/benchmark-v1.jsonl` son anotaciones iniciales. La partición `test` quedó fijada antes de cualquier ejecución de modelos sobre ellos. Una lectura asistida reconstruyó 144 valores esperados sin discrepancias y examinó 113 citas; dos textos recibieron correcciones editoriales, sin cambiar las etiquetas. De la muestra diferida de nueve casos, siete ya se releyeron. Los dos textos corregidos (`bench-014` y `bench-033`) podrán releerse **desde el 11 de octubre de 2026 a las 19:02 en America/Santiago**. El [registro](docs/benchmark-v1-review.md) documenta la evidencia y las tareas pendientes. La revisión humana de los 36 casos y su confirmación siguen pendientes; todos permanecen en `draft`. No necesitas instalar ni configurar nada para continuar esa revisión.
 
 La licencia de distribución del código sigue pendiente de definición. La publicación del repositorio no constituye una autorización de reutilización de textos de terceros.

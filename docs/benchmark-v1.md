@@ -1,6 +1,6 @@
 # Benchmark v1 — borrador de casos y revisión pendiente
 
-El archivo [benchmark-v1.jsonl](../datasets/benchmark-v1.jsonl) contiene **36 convocatorias ficticias originales** redactadas para EvalIA, con anotaciones iniciales y evidencia literal. No corresponden a becas, prácticas ni empleos reales. Todos los registros están en `draft`: el conjunto todavía **no es una referencia revisada** ni respalda comparaciones de calidad de modelos.
+El archivo [benchmark-v1.jsonl](../datasets/benchmark-v1.jsonl) contiene **36 convocatorias ficticias originales** redactadas para EvalIA, con anotaciones iniciales y evidencia literal. No corresponden a becas, prácticas ni empleos reales. Todos los registros están en `draft`: el conjunto todavía **no es una referencia revisada** ni respalda comparaciones de calidad de modelos. La [revisión asistida](benchmark-v1-review.md) comprobó las etiquetas, corrigió dos frases y mantiene pendiente la segunda lectura de esos casos y la confirmación humana.
 
 La estructura de cada línea procede únicamente del [esquema de casos 0.1.0](../schemas/evalia-case.schema.json); la [guía de anotación](annotation-guide.md) define el significado de los campos. El [manifiesto](../datasets/benchmark-v1-manifest.json) fija el hash del borrador y los identificadores de la partición `test`; no duplica las respuestas esperadas.
 
@@ -28,7 +28,7 @@ Estas situaciones son deliberadas y sintéticas. La diversidad de redacción y l
 
 ## Registro de creación e integridad
 
-El borrador con la partición fijada se escribió el **2026-10-09T02:26:36Z** (8 de octubre a las 23:26 en America/Santiago). Hash SHA-256 del JSONL UTF-8 con saltos normalizados a LF: `aac3b05a1b67ada1a9db66d703c00ee6df60a91cd9bb8865eef8954f863aad34`. Se usa la forma LF para que la comprobación sea estable en Windows y otros sistemas; el motor de ejecución, en cambio, registra el hash de los bytes exactos que recibe.
+El borrador con la partición fijada se escribió el **2026-10-09T02:26:36Z** (8 de octubre a las 23:26 en America/Santiago), con hash LF `aac3b05a1b67ada1a9db66d703c00ee6df60a91cd9bb8865eef8954f863aad34`. Tras dos correcciones editoriales el **2026-10-10T22:02:58Z**, la versión actual es `benchmark-v1-draft-0.1.1`, con SHA-256 del JSONL UTF-8 normalizado a LF `b4ee52f0c16ea937a87c112540a37d2ca5424c6792c9a2e1cdd88856c35e8b0d`. Se usa la forma LF para que la comprobación sea estable en Windows y otros sistemas; el motor de ejecución, en cambio, registra el hash de los bytes exactos que recibe.
 
 Desde la raíz del repositorio, con el entorno de desarrollo instalado:
 
@@ -42,7 +42,7 @@ El primer comando consume el contrato autoritativo y comprueba sintaxis, forma, 
 ## Revisión requerida antes de usar el conjunto
 
 1. **Primera lectura de los 36 casos:** reconstruir fecha, modalidad, habilidades y requisito de estudiante desde cada `text`, sin mirar primero `expected`; comparar después cada valor y su cita. Comprobar en especial que `false` contenga negación explícita, que las habilidades sean obligatorias y que la fecha citada sea el cierre vigente. Registrar correcciones y responsable de la revisión. La creación asistida y la validación mecánica no sustituyen esta lectura humana.
-2. **Segunda lectura tras al menos 24 horas:** no empezar antes de **2026-10-10T02:26:36Z** (9 de octubre a las 23:26 en America/Santiago), siempre que el contenido no haya cambiado. Revisar de nuevo al menos 9 casos, uno por estrato: `bench-001`, `bench-006`, `bench-011`, `bench-014`, `bench-017`, `bench-022`, `bench-027`, `bench-029` y `bench-033`. Nueve de 36 equivalen al 25 %, por encima del mínimo del plan de 20 %. Si cambia un caso, contar 24 horas desde su última anotación para su segunda lectura.
+2. **Segunda lectura tras al menos 24 horas:** la muestra fijada es `bench-001`, `bench-006`, `bench-011`, `bench-014`, `bench-017`, `bench-022`, `bench-027`, `bench-029` y `bench-033`. Nueve de 36 equivalen al 25 %, por encima del mínimo del plan de 20 %. La revisión asistida ya releyó siete casos no modificados. Para `bench-014` y `bench-033`, corregidos el 10 de octubre, esperar hasta **2026-10-11T22:02:58Z** (11 de octubre a las 19:02 en America/Santiago) y registrar una lectura nueva de sus textos actuales.
 3. **Cierre:** documentar por caso cualquier discrepancia y su corrección, confirmar la revisión humana, pasar a `reviewed` solo los casos efectivamente aprobados y crear una versión nueva del conjunto. No ejecutar ni comparar el `test` final hasta congelar el conjunto revisado. El estado `draft` actual permanece mientras falte cualquiera de estas acciones.
 
-La revisión diferida y la confirmación humana **no se han realizado** en esta entrega. El siguiente trabajo es la lectura semántica documentada después del plazo, seguida de la aprobación del conjunto antes de comparar modelos o prompts.
+La segunda lectura está **7/9** y la confirmación humana **no se ha realizado**. El [registro de revisión](benchmark-v1-review.md) separa la evidencia asistida de las acciones pendientes. El conjunto no se usará para comparar modelos o prompts hasta su aprobación.

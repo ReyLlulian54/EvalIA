@@ -24,7 +24,7 @@ def main() -> None:
     cases = [json.loads(line) for line in DATASET.read_text(encoding="utf-8").splitlines()]
     manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
     require(
-        set(manifest) == {"version", "phase", "created_at", "sha256_lf", "test_ids"},
+        set(manifest) == {"version", "phase", "created_at", "updated_at", "sha256_lf", "test_ids"},
         "manifiesto incompleto o con claves desconocidas",
     )
     canonical = DATASET.read_text(encoding="utf-8").encode("utf-8")
