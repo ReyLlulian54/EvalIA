@@ -226,3 +226,15 @@ Creación del borrador y partición final registrada: `2026-10-09T02:26:36Z`, eq
 Verificación de preparación: `evalia validate datasets/benchmark-v1.jsonl` acepta los 36 casos; `scripts/check_benchmark_v1.py` confirma hash, procedencia, partición, estados y cobertura. El conjunto semilla conserva diez casos conformes y 30 citas exactas. La suite completa aprobó **126 pruebas**; Ruff lint y formato del nuevo script pasaron. No se llamaron modelos ni proveedores pagados sobre el nuevo conjunto. La validación mecánica no prueba que las 113 citas respalden semánticamente sus etiquetas.
 
 La 5.2 **sigue abierta**. El siguiente trabajo concreto, 5.2.b, es reconstruir y contrastar semánticamente los 36 casos, repetir la lectura de al menos nueve tras 24 horas y registrar la confirmación humana. No se marcó ningún caso nuevo como `reviewed` ni se congeló el contenido final de `test`.
+
+## 10 de octubre de 2026 — revisión asistida parcial 5.2.b
+
+Se reconstruyeron desde los textos los cuatro campos de los 36 casos, antes de comparar esa lectura con `expected`: **144 valores comparados y cero discrepancias de etiqueta**. Se inspeccionaron en contexto las 113 citas no nulas. Esta revisión fue asistida por Codex y no equivale a una confirmación humana independiente. El [registro detallado](benchmark-v1-review.md) describe el método, los casos y las decisiones.
+
+Dos frases se corrigieron por naturalidad en `bench-014` y `bench-033`; se mantuvieron todos los valores esperados y la partición. La cita de Docker de `bench-014` se ajustó al texto nuevo. El borrador pasó a `benchmark-v1-draft-0.1.1`, actualizado el `2026-10-10T22:02:58Z`, con hash LF `b4ee52f0c16ea937a87c112540a37d2ca5424c6792c9a2e1cdd88856c35e8b0d` en el manifiesto. Los 36 estados siguen en `draft` y no se ejecutó ningún modelo sobre ellos.
+
+La segunda lectura asistida se realizó para siete casos no modificados de la muestra predefinida de nueve, más de 43 horas después de la creación. Resultaron concordantes. Para los dos casos corregidos se reinicia el plazo: `bench-014` y `bench-033` solo pueden releerse desde **2026-10-11T22:02:58Z**, equivalente al 11 de octubre a las 19:02 en America/Santiago. La revisión diferida está **7/9**, por lo que aún no se declara completa.
+
+Verificación de esta entrega: `evalia validate` aceptó 36 casos, el comprobador del benchmark confirmó hash, partición y 24 casos con alguna ausencia o valor no determinable, y la suite completa aprobó **126 pruebas**. Ruff lint, formato del script modificado y `git diff --check` pasaron. Estas comprobaciones mecánicas no sustituyen la revisión semántica humana. No hubo llamadas pagadas ni ejecuciones de modelos sobre el benchmark.
+
+La subtarea **5.2 sigue abierta**. El siguiente trabajo es releer esos dos textos después del plazo, registrar cualquier nueva corrección, obtener la comprobación y confirmación humana de los 36 casos y entonces actualizar estados, versión y hash y congelar el contenido final de `test`. No se requiere configuración nueva por parte de la persona usuaria.

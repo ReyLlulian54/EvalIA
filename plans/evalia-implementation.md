@@ -2,7 +2,7 @@
 
 Estado: aprobado por el usuario el 3 de octubre de 2026; implementación iniciada por subtareas. Horizonte: 10 a 12 semanas. Presupuesto máximo: USD 30 en total. El avance se registra en `docs/progress.md`.
 
-Avance al 8 de octubre de 2026: los pasos 0 a 4 y la subtarea 5.1 están completados. El motor tiene contrato de proveedor, simulador sin red, persistencia incremental y `evalia run` con entradas versionadas, límites y reintentos acotados. El adaptador Ollama pasó una prueba de humo local con nueve casos `seed` revisados; el décimo (`seed-008`) permanece en `review_required` y no se envió. La subtarea 5.2 inició con 36 casos nuevos en `draft`, una partición 27 `dev` / 9 `test` fijada y una revisión pendiente. No hay todavía puntuaciones comparativas de modelos.
+Avance al 10 de octubre de 2026: los pasos 0 a 4 y la subtarea 5.1 están completados. El motor tiene contrato de proveedor, simulador sin red, persistencia incremental y `evalia run` con entradas versionadas, límites y reintentos acotados. El adaptador Ollama pasó una prueba de humo local con nueve casos `seed` revisados; el décimo (`seed-008`) permanece en `review_required` y no se envió. La subtarea 5.2 tiene 36 casos nuevos en `draft`, una partición 27 `dev` / 9 `test` fijada, una lectura asistida de todos los casos y siete de nueve segundas lecturas. Faltan las dos lecturas diferidas de textos corregidos y la confirmación humana. No hay todavía puntuaciones comparativas de modelos.
 
 ## 1. Objetivo y usuario
 

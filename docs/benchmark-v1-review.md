@@ -1,0 +1,43 @@
+# Revisión asistida del benchmark v1
+
+## Estado de la revisión
+
+La revisión semántica asistida de los 36 borradores se realizó el **10 de octubre de 2026**. Se reconstruyeron los cuatro campos de cada texto antes de consultar `expected` en esa pasada: **144 valores comparados, sin discrepancias de etiqueta**. También se examinaron las citas de los valores no nulos para comprobar obligatoriedad, negación, fecha de cierre y modalidad, además de su coincidencia literal validada por `evalia validate`. Esta lectura fue realizada por Codex, que también preparó el borrador inicial; **no sustituye una revisión humana independiente**.
+
+El esquema autoritativo sigue siendo [evalia-case.schema.json](../schemas/evalia-case.schema.json). La partición de 27 `dev` y 9 `test` y sus IDs no cambiaron. No se ejecutaron modelos sobre el conjunto. Todos los casos permanecen en `draft`.
+
+## Método y decisiones
+
+1. Se comprobó que el borrador inicial correspondía al hash LF `aac3b05a1b67ada1a9db66d703c00ee6df60a91cd9bb8865eef8954f863aad34` registrado en la entrega 5.2.a, antes de editarlo. La revisión comenzó después del plazo mínimo indicado en el plan.
+2. Se leyeron los 36 textos sin mostrar sus `expected`, se reconstruyeron fecha, modalidad, lista de habilidades obligatorias y requisito de estudiante y se compararon los 144 valores con las anotaciones. No hubo diferencias de valor.
+3. Se examinaron las 113 citas del borrador y los campos `null` o `[]` en contexto. Las citas de las habilidades afirmadas incluyen la obligatoriedad; las de `student_required=false` incluyen la negación. Las fechas de publicación, entrevista e inicio no se tomaron como cierre, y las ampliaciones explícitas usan el nuevo plazo. La coincidencia literal y los índices Unicode volvieron a pasar el validador.
+4. Se detectaron dos frases poco naturales. Se corrigieron de forma editorial, sin cambiar `expected` ni `split`, y se recalcularon las posiciones de evidencia afectadas. La versión actual del borrador es `benchmark-v1-draft-0.1.1`, con hash LF `b4ee52f0c16ea937a87c112540a37d2ca5424c6792c9a2e1cdd88856c35e8b0d`.
+
+| Caso | Cambio editorial | Efecto en la referencia |
+| --- | --- | --- |
+| `bench-014` | «Es obligatorio Docker» → «Docker es obligatorio». | Mantiene `skills=["Docker"]`; cita y posiciones actualizadas. |
+| `bench-033` | «No se publicó cierre» → «No se informa fecha de cierre». | Mantiene los cuatro valores ausentes o no determinables; no había citas que desplazar. |
+
+La corrección se registró el **2026-10-10T22:02:58Z** (10 de octubre a las 19:02 en America/Santiago). La segunda lectura de estos dos casos no debe realizarse antes de **2026-10-11T22:02:58Z** (11 de octubre a las 19:02 en America/Santiago).
+
+## Muestra de segunda lectura
+
+El 10 de octubre a las **22:03 UTC** se volvió a leer, más de 43 horas después de la anotación inicial, siete casos de la muestra fijada. En cada uno se reconstruyeron los campos desde el texto y se revisaron las citas correspondientes.
+
+| Caso | Foco de segunda lectura | Resultado asistido |
+| --- | --- | --- |
+| `bench-001` | Cierre completo, dos habilidades obligatorias y estudiante `true`. | Concordante; las citas respaldan los cuatro campos. |
+| `bench-006` | Plazo sin año y ausencia de requisito de estudiante. | Concordante; fecha y estudiante siguen `null`. |
+| `bench-011` | Fecha de entrevista frente a cierre. | Concordante; la entrevista no se anotó como cierre. |
+| `bench-017` | Python y SQL recomendados. | Concordante; `skills=[]` conserva solo lo obligatorio. |
+| `bench-022` | Negación expresa de condición de estudiante. | Concordante; `false` se distingue de `null`. |
+| `bench-027` | Corrección del plazo inicial. | Concordante; la cita del nuevo cierre incluye la corrección. |
+| `bench-029` | Texto multilínea con emojis. | Concordante; valores y rangos Unicode siguen válidos. |
+
+`bench-014` y `bench-033` completan la muestra de nueve, pero **su segunda lectura sigue pendiente** por la corrección editorial del 10 de octubre. Siete de nueve no satisfacen aún el mínimo final fijado para esta muestra. Si aparece otra corrección, deberá registrarse una nueva versión, hash y plazo del caso afectado.
+
+## Trabajo pendiente para cerrar 5.2
+
+- Desde el 11 de octubre a las 19:02 en America/Santiago, volver a leer `bench-014` y `bench-033` desde sus textos corregidos y registrar la decisión y hora real.
+- Solicitar a la persona responsable la comprobación humana de las anotaciones y citas de los 36 casos, usando [el conjunto](../datasets/benchmark-v1.jsonl) y la [guía](annotation-guide.md). La lectura asistida y el validador no se presentan como aprobación humana.
+- Solo tras resolver cualquier discrepancia y registrar esa confirmación, cambiar los casos aprobados a `reviewed`, actualizar versión y hash, comprobar de nuevo el contrato y congelar el contenido final de `test`. Hasta entonces no se compararán modelos ni prompts con este conjunto.
