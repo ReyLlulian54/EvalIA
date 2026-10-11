@@ -3,6 +3,8 @@
 import json
 from pathlib import Path
 
+import pytest
+
 from evalia.graders.baseline import BASELINE_VERSION, baseline_prediction
 from evalia.graders.dataset import evaluate_dataset
 from evalia.validation import evidence_validator, extraction_validator
@@ -64,6 +66,27 @@ def test_negated_skill_requirement_does_not_become_mandatory() -> None:
     result = baseline_prediction("ejemplo-2b", text)
     assert result["extraction"]["skills"] == ["Git"]
     assert result["evidence"]["skills"][0]["quote"] == "Se requiere Git para el puesto"
+
+
+@pytest.mark.parametrize(
+    ("text", "expected"),
+    [
+        ("Se requiere Python y Docker es deseable.", ["Python"]),
+        ("No se requiere Python, pero se exige Git.", ["Git"]),
+        ("No se requiere Python y se exige Git.", ["Git"]),
+        ("Python es deseable y Docker es obligatorio.", ["Docker"]),
+        ("Se exige Python y SQL.", ["Python", "SQL"]),
+        ("Se exige Python y no se requiere Git.", ["Python"]),
+        ("Se exige Python y Docker no es obligatorio.", ["Python"]),
+        ("No es obligatorio Python, pero se exige Git.", ["Git"]),
+    ],
+)
+def test_skill_requirements_are_classified_per_mention(text: str, expected: list[str]) -> None:
+    result = baseline_prediction("clausulas-mixtas", text)
+
+    assert result["extraction"]["skills"] == expected
+    assert [item["skill"] for item in result["evidence"]["skills"]] == expected
+    assert_literal_evidence(text, result["evidence"])
 
 
 def test_conflicting_dates_and_modalities_abstain() -> None:

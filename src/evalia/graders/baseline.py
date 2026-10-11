@@ -5,7 +5,7 @@ from functools import cache
 
 from evalia.normalization import normalize_date, normalize_skill, skill_aliases
 
-BASELINE_VERSION = "0.1.0"
+BASELINE_VERSION = "0.1.1"
 
 _CLAUSE = re.compile(r"[^.!?;\n]+")
 _DATE = re.compile(
@@ -28,7 +28,15 @@ _MANDATORY = re.compile(
     r"\b(?:exig(?:e|ir)|requiere|obligatori[oa]s?|debe(?:n)?\s+(?:conocer|dominar))\b",
     re.IGNORECASE,
 )
-_NEGATED_MANDATORY = re.compile(r"\bno\s+(?:se\s+)?(?:exige|requiere)\b", re.I)
+_NEGATED_MANDATORY = re.compile(
+    r"\bno\s+(?:(?:se\s+)?(?:exige|requiere)|(?:es|son)\s+obligatori[oa]s?)\b",
+    re.I,
+)
+_OPTIONAL_SKILL = re.compile(
+    r"\b(?:deseables?|recomendad[oa]s?|preferid[oa]s?|se\s+(?:recomienda|prefiere))\b",
+    re.I,
+)
+_SKILL_BOUNDARY = re.compile(r"\b(?:y|pero|aunque)\b|,", re.I)
 _STUDENT_NO = re.compile(
     r"\bno\s+(?:es\s+necesario|se\s+(?:exige|requiere))\s+ser\s+estudiante\b",
     re.IGNORECASE,
@@ -104,14 +112,45 @@ def _skill_pattern() -> re.Pattern[str]:
     return re.compile(rf"(?<!\w)(?:{alternatives})(?!\w)", re.IGNORECASE)
 
 
+def _cue_distance(
+    clause: str, skill: re.Match[str], cue_start: int, cue_end: int
+) -> tuple[int, int]:
+    if cue_end <= skill.start():
+        between = clause[cue_end : skill.start()]
+    elif skill.end() <= cue_start:
+        between = clause[skill.end() : cue_start]
+    else:
+        between = ""
+    return len(_SKILL_BOUNDARY.findall(between)), len(between)
+
+
 def _skills(clauses: list[tuple[str, int, int]], text: str) -> tuple[list[str], list[dict]]:
     skills: list[str] = []
     evidence: list[dict] = []
     seen: set[str] = set()
     for clause, start, end in clauses:
-        if not _MANDATORY.search(clause) or _NEGATED_MANDATORY.search(clause):
+        negations = list(_NEGATED_MANDATORY.finditer(clause))
+        cues = [(match.start(), match.end(), False) for match in negations]
+        cues.extend(
+            (match.start(), match.end(), False) for match in _OPTIONAL_SKILL.finditer(clause)
+        )
+        cues.extend(
+            (match.start(), match.end(), True)
+            for match in _MANDATORY.finditer(clause)
+            if not any(negative.start() <= match.start() < negative.end() for negative in negations)
+        )
+        if not any(mandatory for _, _, mandatory in cues):
             continue
         for match in _skill_pattern().finditer(clause):
+            # Una cláusula puede mezclar exigencias y excepciones. Priorizar
+            # la señal del mismo segmento; los empates ambiguos se omiten.
+            distances = [
+                (_cue_distance(clause, match, cue_start, cue_end), mandatory)
+                for cue_start, cue_end, mandatory in cues
+            ]
+            nearest = min(distance for distance, _ in distances)
+            if {mandatory for distance, mandatory in distances if distance == nearest} != {True}:
+                continue
             skill = normalize_skill(match.group())
             if skill not in seen:
                 seen.add(skill)
