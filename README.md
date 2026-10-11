@@ -25,6 +25,8 @@ La [bitácora](docs/progress.md) contiene las verificaciones y el [plan](plans/e
 
 La revisión del código corrigió dos casos límite: la línea base 0.1.1 clasifica cada habilidad en frases que mezclan requisitos obligatorios, deseables y negaciones, y `evalia run` informa de forma específica si el directorio de salida ya existe, sin alterar su contenido. El reporte público `seed` se regeneró con el hash del código actualizado; sus predicciones y métricas no cambiaron. La [documentación de la línea base](docs/baseline.md) describe el alcance de esta heurística.
 
+Una revisión posterior de rendimiento y seguridad reutilizó en memoria los validadores del esquema de casos durante cada proceso, siguiendo el patrón que ya usaba el contrato de ejecuciones. La suite de 138 pruebas y la validación de los 36 casos conservan el comportamiento. El [registro de decisiones](docs/progress.md) explica qué propuestas adicionales se evaluaron y en qué etapa correspondería retomarlas. La siguiente subtarea funcional sigue siendo **5.3, comparación local controlada de dos configuraciones**; no se requiere configuración nueva para este ajuste.
+
 ## Documentación
 
 - [Plan de implementación](plans/evalia-implementation.md): alcance, secuencia, dependencias y criterios de cierre.

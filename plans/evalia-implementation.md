@@ -105,7 +105,8 @@ EvalIA/
     cli.py
   datasets/           # ejemplos y conjunto de referencia versionado
   prompts/            # prompts versionados
-  app/                # panel Streamlit de solo lectura
+  app/public_app.py   # demo de solo lectura, sin importar proveedor ni motor
+  app/local_app.py    # panel de ejecución ligado a loopback
   tests/              # unitarias e integración con proveedor simulado
   examples/results/   # ejecuciones públicas seleccionadas
   docs/               # método, arquitectura, límites y tutorial
@@ -120,7 +121,7 @@ EvalIA/
 | `httpx` | Adaptadores HTTP | Control directo de tiempo de espera y errores. |
 | JSONL | Casos y respuestas crudas | Fácil de revisar, versionar y procesar. |
 | DuckDB | Consultas para reportes | Análisis local sin base de datos administrada. No se requiere para el primer recorrido completo. |
-| Streamlit | Demo pública y panel web local | Un mismo código con modo público de lectura y modo local de ejecución; el modo público no importa ni instancia proveedores. |
+| Streamlit | Demo pública y panel web local | Dos puntos de entrada separados: el público solo lee exportaciones permitidas; el local puede usar el motor y se liga a loopback. |
 | pytest y Ruff | Pruebas y calidad | Verificación repetible en local y CI. |
 | GitHub Actions | Validación del repositorio | Ejecuta pruebas con proveedor simulado; nunca gasta créditos de OpenRouter en PRs. |
 
@@ -175,9 +176,9 @@ Salida: el archivo correcto pasa y cada archivo malo falla por la razón previst
 
 **6. Comparar y publicar datos seguros.** Contexto: las ejecuciones del paso 5 deben convertirse en decisiones legibles. Implementar `evalia compare`, lista de regresiones/mejoras y `evalia export-public`. Verificar pruebas de comparación y una prueba que intente exportar un caso con `redistribution_allowed=false` y sea rechazada. Revisar manualmente el JSON exportado. Salida: informe por campo y por caso sin secretos ni textos restringidos. Si cambia el gold set, invalidar comparaciones anteriores o indicar claramente la versión distinta.
 
-**7. Panel web local.** Contexto: reutiliza el motor; no crea lógica de evaluación nueva. Añadir modo local de Streamlit con selección de datos, prompt, modelo y límite de casos, más botón explícito para ejecutar. Enlazar solo a `localhost`; un rerun de Streamlit no debe repetir solicitudes. Verificar manualmente una ejecución de 10 casos y una prueba automática del controlador de ejecución. Salida: resultados consultables desde navegador local, incluso si no hay OpenRouter. Si la interfaz retrasa la entrega, reducir gráficos antes de tocar el motor.
+**7. Panel web local.** Contexto: reutiliza el motor; no crea lógica de evaluación nueva. Añadir `app/local_app.py` con selección de datos, prompt, modelo y límite de casos, más botón explícito para ejecutar. Enlazar solo a `127.0.0.1`; un rerun de Streamlit no debe repetir solicitudes. El panel resolverá rutas bajo directorios locales permitidos antes de pasarlas al motor y no expondrá un puerto de Ollama personalizado sin aceptación explícita. Verificar manualmente una ejecución de 10 casos y una prueba automática del controlador de ejecución. Salida: resultados consultables desde navegador local, incluso si no hay OpenRouter. Si la interfaz retrasa la entrega, reducir gráficos antes de tocar el motor.
 
-**8. Demo pública e integración.** Contexto: usa únicamente exportaciones del paso 6. Añadir modo público que no importe ni instancie proveedores y no acepte claves; seleccionar dos ejecuciones comparables, mostrar filtros y casos fallidos, documentar instalación y límites, y configurar CI sin llamadas pagadas. Verificar instalación limpia, `python -m pytest`, `ruff check .`, prueba que bloquea ejecución en modo público y revisión manual de enlaces/artefactos. Publicar solo tras comprobar derechos de reutilización de cada caso. Salida: URL de demo y release inicial reproducible. Si Streamlit Cloud resulta insuficiente, exportar un reporte estático.
+**8. Demo pública e integración.** Contexto: usa únicamente exportaciones del paso 6. Añadir `app/public_app.py` como punto de entrada separado que no importe ni instancie proveedores ni el motor, no acepte claves y lea solo artefactos precomputados permitidos; seleccionar dos ejecuciones comparables, mostrar filtros y casos fallidos, documentar instalación y límites, y configurar CI sin llamadas pagadas. Verificar instalación limpia, `python -m pytest`, `ruff check .`, prueba que bloquea ejecución en modo público y revisión manual de enlaces/artefactos. Publicar solo tras comprobar derechos de reutilización de cada caso. Salida: URL de demo y release inicial reproducible. Si Streamlit Cloud resulta insuficiente, exportar un reporte estático.
 
 **9. OpenRouter optativo.** Contexto: una comparación remota puede enriquecer el portafolio, pero no determina si EvalIA funciona. Antes de activar llamadas, estimar tokens/costo por caso, fijar número máximo de casos y salida, límites de reintentos y tope acumulado de clave sin reinicio. Implementar adaptador y pruebas con respuestas simuladas; correr primero 3 casos y revisar uso real. Salida: comparación adicional dentro del presupuesto. Si el costo o el plazo no pasan la puerta, registrar la decisión y mantener la versión local.
 
