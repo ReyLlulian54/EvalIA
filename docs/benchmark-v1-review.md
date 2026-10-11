@@ -4,7 +4,7 @@
 
 La revisión semántica asistida de los 36 borradores se realizó el **10 de octubre de 2026**. Se reconstruyeron los cuatro campos de cada texto antes de consultar `expected` en esa pasada: **144 valores comparados, sin discrepancias de etiqueta**. También se examinaron las citas de los valores no nulos para comprobar obligatoriedad, negación, fecha de cierre y modalidad, además de su coincidencia literal validada por `evalia validate`. Esta lectura fue realizada por Codex, que también preparó el borrador inicial; **no sustituye una revisión humana independiente**.
 
-El esquema autoritativo sigue siendo [evalia-case.schema.json](../schemas/evalia-case.schema.json). La partición de 27 `dev` y 9 `test` y sus IDs no cambiaron. No se ejecutaron modelos sobre el conjunto. Todos los casos permanecen en `draft`.
+El esquema autoritativo sigue siendo [evalia-case.schema.json](../schemas/evalia-case.schema.json). La partición de 27 `dev` y 9 `test` y sus IDs no cambiaron. No se ejecutaron modelos sobre el conjunto. La muestra de segunda lectura asistida se completó el 11 de octubre (**9/9**); la [hoja de revisión humana](benchmark-v1-human-review.md) permite comprobar los 36 casos. Todos permanecen en `draft`.
 
 ## Método y decisiones
 
@@ -34,10 +34,20 @@ El 10 de octubre a las **22:03 UTC** se volvió a leer, más de 43 horas despué
 | `bench-027` | Corrección del plazo inicial. | Concordante; la cita del nuevo cierre incluye la corrección. |
 | `bench-029` | Texto multilínea con emojis. | Concordante; valores y rangos Unicode siguen válidos. |
 
-`bench-014` y `bench-033` completan la muestra de nueve, pero **su segunda lectura sigue pendiente** por la corrección editorial del 10 de octubre. Siete de nueve no satisfacen aún el mínimo final fijado para esta muestra. Si aparece otra corrección, deberá registrarse una nueva versión, hash y plazo del caso afectado.
+Al registrar esta primera tanda, `bench-014` y `bench-033` quedaron pendientes por la corrección editorial del 10 de octubre. La sección siguiente registra su lectura posterior al plazo. Si aparece otra corrección, deberá registrarse una nueva versión, hash y plazo del caso afectado.
+
+## 11 de octubre de 2026 — cierre de la segunda lectura asistida
+
+La lectura de los dos textos corregidos concluyó a las **2026-10-11T22:37:50Z** (19:37:50 en America/Santiago), más de 24 horas después de la corrección registrada a las `2026-10-10T22:02:58Z`. Se leyó primero cada `text` sin consultar `expected`; luego se contrastaron las etiquetas y citas del JSONL actual.
+
+| Caso | Reconstrucción desde el texto corregido | Contraste de etiquetas y citas |
+| --- | --- | --- |
+| `bench-014` | Cierre `2027-12-03`; modalidad `null` porque horario flexible y oficina de contacto no fijan modalidad; `skills=["Docker"]` por «Docker es obligatorio»; estudiante `false` por negación expresa. | Concordante. Las tres citas incluyen el cierre, la obligatoriedad de Docker y la negación sobre estudiantes; sus rangos siguen dentro del texto. |
+| `bench-033` | Cierre `null` porque no se informa; modalidad `null` porque remota y presencial son alternativas sin elección; `skills=[]` porque Docker es deseable; estudiante `null` porque dirigirse a jóvenes no exige estar estudiando. | Concordante. Los cuatro campos sin valor no tienen citas; no se infirió una negativa explícita. |
+
+La muestra diferida asistida queda **9/9**, sin nuevas correcciones. El contenido y el hash `b4ee52f0c16ea937a87c112540a37d2ca5424c6792c9a2e1cdd88856c35e8b0d` no cambian. Esta comprobación de Codex no constituye la confirmación humana de los 36 casos.
 
 ## Trabajo pendiente para cerrar 5.2
 
-- Desde el 11 de octubre a las 19:02 en America/Santiago, volver a leer `bench-014` y `bench-033` desde sus textos corregidos y registrar la decisión y hora real.
-- Solicitar a la persona responsable la comprobación humana de las anotaciones y citas de los 36 casos, usando [el conjunto](../datasets/benchmark-v1.jsonl) y la [guía](annotation-guide.md). La lectura asistida y el validador no se presentan como aprobación humana.
+- Solicitar a la persona responsable la comprobación humana de las anotaciones y citas de los 36 casos, usando la [hoja de revisión](benchmark-v1-human-review.md), [el conjunto](../datasets/benchmark-v1.jsonl) y la [guía](annotation-guide.md). La lectura asistida y el validador no se presentan como aprobación humana.
 - Solo tras resolver cualquier discrepancia y registrar esa confirmación, cambiar los casos aprobados a `reviewed`, actualizar versión y hash, comprobar de nuevo el contrato y congelar el contenido final de `test`. Hasta entonces no se compararán modelos ni prompts con este conjunto.
