@@ -4,7 +4,7 @@ Evaluación reproducible de modelos y prompts en español. El objetivo es compar
 
 ## Estado del proyecto
 
-Proyecto en desarrollo. Los pasos 0 a 4 y la subtarea 5.1 están completados. Existen un contrato de datos, diez casos ficticios de arranque, validación, normalizadores, métricas deterministas, una línea base por reglas y un motor de ejecución incremental con proveedor simulado y adaptador Ollama local. Nueve casos `seed` están `reviewed`; `seed-008` conserva `review_required` por un conflicto deliberado. El conjunto ampliado de 36 casos está en `draft` y todavía no constituye una referencia revisada.
+Proyecto en desarrollo. Los pasos 0 a 4 y las subtareas 5.1 y 5.2 están completados. Existen un contrato de datos, diez casos ficticios de arranque, validación, normalizadores, métricas deterministas, una línea base por reglas y un motor de ejecución incremental con proveedor simulado y adaptador Ollama local. Nueve casos `seed` están `reviewed`; `seed-008` conserva `review_required` por un conflicto deliberado. Los 36 casos ficticios de `benchmark-v1` están `reviewed` y sus nueve casos `test` tienen una huella independiente. Aún no hay resultados comparativos de modelos.
 
 La primera tarea es extraer fecha de cierre, modalidad, habilidades obligatorias y requisito de ser estudiante de fragmentos de convocatorias. La primera versión tendrá una interfaz web local para ejecutar experimentos y una demo pública de resultados precomputados.
 
@@ -16,7 +16,8 @@ La primera tarea es extraer fecha de cierre, modalidad, habilidades obligatorias
 | 3. Evaluación | Completa | Métricas auditables y línea base por reglas, sin resultados atribuidos a modelos. |
 | 4. Motor | Completa | Proveedor simulado, artefactos incrementales, límites y reintentos. |
 | 5.1. Ollama local | Completa | Adaptador HTTP de loopback y prueba de humo de los nueve casos revisados. |
-| 5.2. Conjunto inicial | En curso | 36 borradores; lectura asistida de 144 campos y 113 citas, segunda lectura asistida 9/9; falta la confirmación humana. |
+| 5.2. Conjunto inicial | Completa | 36 casos revisados, segunda lectura asistida 9/9 y partición `test` de nueve casos congelada con SHA-256. |
+| 5.3. Comparación local | Siguiente | Dos ejecuciones controladas con modelos o configuraciones locales sobre la referencia revisada. |
 | 6–8. Comparación y paneles | Pendiente | Comparación, exportación segura, panel local y demo pública. |
 | 9. OpenRouter | Optativa | Solo tras comprobar costo, seguridad y utilidad del recorrido local. |
 
@@ -39,9 +40,9 @@ La revisión del código corrigió dos casos límite: la línea base 0.1.1 clasi
 - [Contrato de casos](schemas/evalia-case.schema.json): estructura autoritativa del formato 0.1.0.
 - [Casos de arranque](datasets/README.md): diez ejemplos ficticios, decisiones de anotación y estado de revisión.
 - [Registro de revisión](docs/seed-review.md): procedimiento, decisiones y evidencia de la segunda lectura.
-- [Benchmark v1 en borrador](docs/benchmark-v1.md): diseño de 36 casos, partición fijada, integridad y revisión pendiente.
-- [Registro de revisión del benchmark](docs/benchmark-v1-review.md): lectura asistida, correcciones, muestra diferida y decisiones pendientes.
-- [Hoja de revisión humana](docs/benchmark-v1-human-review.md): enlaces a los 36 casos y pasos para confirmar etiquetas, citas y procedencia.
+- [Benchmark v1](docs/benchmark-v1.md): diseño de 36 casos revisados, partición `test` congelada e integridad.
+- [Registro de revisión del benchmark](docs/benchmark-v1-review.md): lectura asistida, correcciones, muestra diferida y confirmación humana.
+- [Hoja de revisión humana](docs/benchmark-v1-human-review.md): enlaces a los 36 casos y registro de conformidad.
 
 ## Desarrollo
 
@@ -91,8 +92,8 @@ Se necesita Ollama en ejecución y un modelo ya descargado. Comprueba los nombre
 
 El 8 de octubre de 2026, una prueba local con `qwen3:8b` completó nueve solicitudes, sin fallos de transporte; las nueve respuestas fueron objetos JSON con las cuatro claves solicitadas. La mediana de tiempo por solicitud fue 782 ms con el modelo ya cargado. Se registraron el digest y las condiciones del equipo en la [bitácora](docs/progress.md); estas cifras son de una única máquina y no son una evaluación de calidad ni un benchmark general.
 
-### Próxima revisión del conjunto ampliado
+### Conjunto ampliado revisado
 
-Los 36 casos de `datasets/benchmark-v1.jsonl` son anotaciones iniciales. La partición `test` quedó fijada antes de cualquier ejecución de modelos sobre ellos. Una lectura asistida reconstruyó 144 valores esperados sin discrepancias y examinó 113 citas; dos textos recibieron correcciones editoriales, sin cambiar las etiquetas. La muestra diferida de nueve casos se completó después del plazo correspondiente a los textos corregidos. El [registro](docs/benchmark-v1-review.md) conserva hora, decisiones y límites; la [hoja de revisión humana](docs/benchmark-v1-human-review.md) enlaza cada caso. Falta tu comprobación y confirmación de las anotaciones y citas de los 36 casos. Hasta entonces todos permanecen en `draft` y no se ejecutan modelos sobre `test`. No necesitas instalar ni configurar nada para esa revisión.
+Los 36 casos de `datasets/benchmark-v1.jsonl` son convocatorias ficticias. La partición `test` quedó fijada antes de cualquier ejecución de modelos sobre ellos. Una lectura asistida reconstruyó 144 valores esperados sin discrepancias y examinó 113 citas; dos textos recibieron correcciones editoriales, sin cambiar las etiquetas. La muestra diferida de nueve casos se completó después del plazo correspondiente a los textos corregidos. La persona responsable confirmó explícitamente como conformes los 36 casos de la versión borrador con hash LF `b4ee52f0c16ea937a87c112540a37d2ca5424c6792c9a2e1cdd88856c35e8b0d`; solo entonces cambiaron a `reviewed`. La versión final es `benchmark-v1-1.0.0`, con hash LF `598740b54573749e6c7eb9007117f39d9fc971c7a1ee93550a44243d22c0926c` y hash `test` `86dca1777e7b3dbb4dd523d3204f797f2ed5b2f6b42d4cb7d92334ec87b40e34`. El [registro](docs/benchmark-v1-review.md) conserva decisiones y límites; la [hoja de revisión humana](docs/benchmark-v1-human-review.md) enlaza los casos. La siguiente subtarea es comparar dos configuraciones locales bajo condiciones documentadas. No se requiere configuración adicional para el cierre 5.2; antes de ejecutar modelos habrá que disponer de Ollama y del modelo local elegido.
 
 La licencia de distribución del código sigue pendiente de definición. La publicación del repositorio no constituye una autorización de reutilización de textos de terceros.

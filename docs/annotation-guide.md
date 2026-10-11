@@ -8,7 +8,7 @@ Un caso contiene el fragmento original completo en `text`, su procedencia, permi
 
 Los diez casos de arranque de la subtarea 0.2 están en `datasets/seed.jsonl` y son ejemplos ficticios identificados como tales. Su procedencia, inventario y revisión diferida están en [la documentación del conjunto](../datasets/README.md). Nueve casos están revisados y el caso contradictorio `seed-008` permanece en `review_required` y fuera de métricas finales.
 
-El [borrador benchmark-v1](benchmark-v1.md) añade 36 ejemplos ficticios en `draft`, separados en `dev` y `test`. La validación mecánica de sus citas no equivale a la primera lectura humana ni a la segunda revisión diferida; solo podrán tratarse como referencia final tras completar y registrar ambas.
+El [benchmark-v1](benchmark-v1.md) añade 36 ejemplos ficticios en `reviewed`, separados en `dev` y `test`. La lectura asistida, la segunda revisión diferida y la confirmación humana están registradas. La validación mecánica de citas, por sí sola, no equivale a una revisión semántica.
 
 | Campo esperado | Significado | Ausencia |
 | --- | --- | --- |
