@@ -1,4 +1,4 @@
-"""Comprueba la integridad del borrador y la partición fijada de benchmark-v1."""
+"""Comprueba la integridad del benchmark y la partición test congelada."""
 
 import hashlib
 import json
@@ -21,13 +21,20 @@ def require(condition: bool, message: str) -> None:
 def main() -> None:
     count, issues = validate_jsonl(DATASET)
     require(not issues, f"{len(issues)} problema(s) de contrato; ejecute evalia validate")
-    cases = [json.loads(line) for line in DATASET.read_text(encoding="utf-8").splitlines()]
+    content = DATASET.read_text(encoding="utf-8")
+    lines = content.splitlines()
+    cases = [json.loads(line) for line in lines]
     manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    phase = manifest.get("phase")
+    require(phase in {"draft", "reviewed"}, "fase desconocida")
+    expected_keys = {"version", "phase", "created_at", "updated_at", "sha256_lf", "test_ids"}
+    if phase == "reviewed":
+        expected_keys.add("test_sha256_lf")
     require(
-        set(manifest) == {"version", "phase", "created_at", "updated_at", "sha256_lf", "test_ids"},
+        set(manifest) == expected_keys,
         "manifiesto incompleto o con claves desconocidas",
     )
-    canonical = DATASET.read_text(encoding="utf-8").encode("utf-8")
+    canonical = content.encode("utf-8")
     require(
         hashlib.sha256(canonical).hexdigest() == manifest["sha256_lf"],
         "el hash del JSONL con saltos LF no coincide con el manifiesto",
@@ -41,6 +48,15 @@ def main() -> None:
     require(test_ids == manifest["test_ids"], "la partición test cambió")
     require(len(test_ids) == 9 and count == 36, "la partición inicial debe ser 27 dev / 9 test")
     require(Counter(case["split"] for case in cases) == {"dev": 27, "test": 9}, "división inválida")
+    if phase == "reviewed":
+        test_lines = [
+            line for line, case in zip(lines, cases, strict=True) if case["split"] == "test"
+        ]
+        test_content = "\n".join(test_lines) + "\n"
+        require(
+            hashlib.sha256(test_content.encode("utf-8")).hexdigest() == manifest["test_sha256_lf"],
+            "la partición test congelada cambió",
+        )
     test_cases = [case for case in cases if case["split"] == "test"]
     require(
         Counter(case["expected"]["student_required"] for case in test_cases)
@@ -55,8 +71,7 @@ def main() -> None:
         any(case["expected"]["modality"] is None for case in test_cases),
         "test requiere al menos una modalidad no determinable",
     )
-    require(manifest["phase"] in {"draft", "reviewed"}, "fase desconocida")
-    if manifest["phase"] == "draft":
+    if phase == "draft":
         require(
             all(case["review_status"] == "draft" for case in cases),
             "la fase draft no puede declarar casos revisados",

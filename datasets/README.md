@@ -1,6 +1,6 @@
 # Casos de arranque — seed 0.1.1
 
-El borrador del conjunto ampliado está en [benchmark-v1.jsonl](benchmark-v1.jsonl); su [diseño y revisión pendiente](../docs/benchmark-v1.md) se documentan por separado. Sus 36 casos siguen en `draft` y no deben confundirse con los nueve casos `seed` ya revisados.
+El conjunto ampliado está en [benchmark-v1.jsonl](benchmark-v1.jsonl); su [diseño, revisión y congelación de `test`](../docs/benchmark-v1.md) se documentan por separado. Sus 36 casos están en `reviewed` tras la confirmación humana registrada; son distintos de los nueve casos `seed` revisados.
 
 [seed.jsonl](seed.jsonl) contiene diez convocatorias ficticias en español, redactadas con asistencia de IA específicamente para EvalIA. No corresponden a oportunidades reales y no se copiaron de sitios externos. Sirven para comprobar el contrato y comenzar el desarrollo; no permiten concluir qué modelo es mejor para convocatorias reales.
 
