@@ -1,4 +1,4 @@
-# Línea base por reglas — versión 0.1.0
+# Línea base por reglas — versión 0.1.1
 
 La [línea base](../src/evalia/graders/baseline.py) recibe únicamente **case_id** y **text**. No lee respuestas esperadas, evidencia, estado de revisión ni metadatos de procedencia. Devuelve una extracción con las cuatro claves del contrato y citas literales con índices Unicode de Python. La [rúbrica](scoring.md) puntúa esas salidas sin distinguir su origen.
 
@@ -6,10 +6,10 @@ La [línea base](../src/evalia/graders/baseline.py) recibe únicamente **case_id
 
 - **Fecha de cierre:** busca fechas completas ISO, numéricas o textuales en cláusulas con una señal de postulación o cierre y las normaliza con las reglas 1.0.0. Si hay fechas distintas, se abstiene salvo que una cláusula indique explícitamente una ampliación. No usa fechas de publicación o inicio ni infiere años ausentes.
 - **Modalidad:** reconoce menciones explícitas de remota, híbrida, presencial o «a distancia». Ante categorías distintas en el mismo texto devuelve null. Una dirección u horario flexible no bastan.
-- **Habilidades:** busca alias del [vocabulario versionado](../src/evalia/vocabularies/skills-v1.json) solo en cláusulas con señales de obligatoriedad. Conserva una cita por habilidad canónica y descarta repeticiones. No convierte términos deseables o recomendados en requisitos.
+- **Habilidades:** busca alias del [vocabulario versionado](../src/evalia/vocabularies/skills-v1.json) junto a señales de obligatoriedad. Clasifica cada mención según la señal obligatoria, deseable o negada más cercana, dando prioridad al mismo segmento de la frase. Conserva una cita por habilidad canónica y descarta repeticiones. Omite empates ambiguos; no convierte términos deseables o recomendados en requisitos.
 - **Estudiante:** reconoce exigencia explícita como true y negación explícita como false; si no hay una declaración clara o hay conflicto, devuelve null.
 
-Las cláusulas se separan por puntuación fuerte, punto y coma o salto de línea. Estas reglas tienen cobertura limitada: por ejemplo, «se solicita experiencia en Python» no coincide con las señales de obligatoriedad actuales. Las citas muestran dónde aparece el texto, pero no prueban por sí solas que la interpretación sea correcta. No se añadió aprendizaje automático ni llamadas a proveedores.
+Las cláusulas se separan por puntuación fuerte, punto y coma o salto de línea. La separación interna de habilidades reconoce «y», «pero», «aunque» y comas; sigue siendo una heurística léxica y puede abstenerse o equivocarse ante redacciones más complejas. Por ejemplo, «se solicita experiencia en Python» no coincide con las señales de obligatoriedad actuales. Las citas muestran dónde aparece el texto, pero no prueban por sí solas que la interpretación sea correcta. No se añadió aprendizaje automático ni llamadas a proveedores.
 
 ## Reporte del conjunto inicial
 

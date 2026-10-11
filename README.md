@@ -22,6 +22,8 @@ La primera tarea es extraer fecha de cierre, modalidad, habilidades obligatorias
 
 La [bitácora](docs/progress.md) contiene las verificaciones y el [plan](plans/evalia-implementation.md) fija el alcance de cada entrega. Esta tabla se actualizará con cada subtarea.
 
+La revisión del código corrigió dos casos límite: la línea base 0.1.1 clasifica cada habilidad en frases que mezclan requisitos obligatorios, deseables y negaciones, y `evalia run` informa de forma específica si el directorio de salida ya existe, sin alterar su contenido. El reporte público `seed` se regeneró con el hash del código actualizado; sus predicciones y métricas no cambiaron. La [documentación de la línea base](docs/baseline.md) describe el alcance de esta heurística.
+
 ## Documentación
 
 - [Plan de implementación](plans/evalia-implementation.md): alcance, secuencia, dependencias y criterios de cierre.

@@ -99,6 +99,9 @@ def run(
     except RunInputError as error:
         typer.echo(str(error), err=True)
         raise typer.Exit(code=2) from error
+    except FileExistsError as error:
+        typer.echo("El directorio de salida ya existe; elija una ruta nueva.", err=True)
+        raise typer.Exit(code=2) from error
     except ProviderFailure as error:
         typer.echo(f"Ollama: {error.code}", err=True)
         raise typer.Exit(code=2) from error

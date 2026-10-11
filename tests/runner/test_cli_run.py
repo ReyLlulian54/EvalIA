@@ -159,6 +159,21 @@ def test_bad_input_does_not_create_run_directory(tmp_path: Path) -> None:
     assert not target.exists()
 
 
+def test_existing_output_directory_has_specific_error_and_is_preserved(tmp_path: Path) -> None:
+    target = tmp_path / "run"
+    target.mkdir()
+    sentinel = target / "keep.txt"
+    sentinel.write_text("contenido previo", encoding="utf-8")
+
+    result = CLI.invoke(app, _command(target))
+
+    assert result.exit_code == 2
+    assert "directorio de salida ya existe" in result.output.lower()
+    assert "revise el manifiesto" not in result.output.lower()
+    assert sentinel.read_text(encoding="utf-8") == "contenido previo"
+    assert not (target / "manifest.json").exists()
+
+
 def test_prompt_must_have_exactly_one_text_placeholder(tmp_path: Path) -> None:
     prompt = tmp_path / "bad-prompt.json"
     prompt.write_text(

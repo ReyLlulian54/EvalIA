@@ -1,5 +1,5 @@
 {
-  "baseline_version": "0.1.0",
+  "baseline_version": "0.1.1",
   "case_count": 10,
   "date_rules_version": "1.0.0",
   "evaluation_scope": "development_smoke_not_held_out",
@@ -11,7 +11,7 @@
   ],
   "format_errors": [],
   "inputs": {
-    "baseline_code_sha256": "35111fbf7ea98f6538314930d1f5d4e3ce3b7c1d09448c369a7e17d299686d99",
+    "baseline_code_sha256": "d3842bfc4570b41465c0c2d785d79ac7ab73bec9ff636fd88c8bc3a475750791",
     "case_schema_sha256": "c20a644950b4bc8b9e4ce42e9bdca83adbac4ebbbe9cc8292d7257f79e55586b",
     "dataset": "datasets/seed.jsonl",
     "dataset_sha256": "5fd3ffb891ccdca1b7cdf4642af2dc7b547438eda8d3e4766e0af5a26e3ea78e",
