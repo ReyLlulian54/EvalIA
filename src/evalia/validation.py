@@ -3,6 +3,7 @@
 import json
 from collections import Counter
 from collections.abc import Iterable
+from functools import cache
 from importlib import resources
 from pathlib import Path
 
@@ -11,8 +12,9 @@ from jsonschema import Draft202012Validator, FormatChecker
 from evalia.normalization import normalize_skill
 
 
+@cache
 def case_validator() -> Draft202012Validator:
-    """Construye el validador del único esquema de casos autoritativo."""
+    """Reutiliza el validador del único esquema de casos autoritativo."""
     packaged = resources.files("evalia").joinpath("schemas/evalia-case.schema.json")
     # El wheel incluye el esquema original. Esta ruta cubre la instalación editable.
     schema_file = (
@@ -35,6 +37,7 @@ def evidence_validator() -> Draft202012Validator:
     return _definition_validator("evidence")
 
 
+@cache
 def _definition_validator(name: str) -> Draft202012Validator:
     case_schema = case_validator().schema
     definition_schema = {
