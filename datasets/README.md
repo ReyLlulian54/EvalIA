@@ -1,5 +1,7 @@
 # Casos de arranque — seed 0.1.1
 
+El borrador del conjunto ampliado está en [benchmark-v1.jsonl](benchmark-v1.jsonl); su [diseño y revisión pendiente](../docs/benchmark-v1.md) se documentan por separado. Sus 36 casos siguen en `draft` y no deben confundirse con los nueve casos `seed` ya revisados.
+
 [seed.jsonl](seed.jsonl) contiene diez convocatorias ficticias en español, redactadas con asistencia de IA específicamente para EvalIA. No corresponden a oportunidades reales y no se copiaron de sitios externos. Sirven para comprobar el contrato y comenzar el desarrollo; no permiten concluir qué modelo es mejor para convocatorias reales.
 
 Cada línea sigue [el contrato 0.1.0](../schemas/evalia-case.schema.json) y [la guía de anotación](../docs/annotation-guide.md). Se incluyen valores esperados y citas literales con índices de puntos de código Unicode de Python. No se cambió el contrato para acomodar los ejemplos.

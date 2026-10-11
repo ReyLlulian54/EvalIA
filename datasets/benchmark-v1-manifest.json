@@ -1,0 +1,11 @@
+{
+  "version": "benchmark-v1-draft-0.1.1",
+  "phase": "draft",
+  "created_at": "2026-10-09T02:26:36Z",
+  "updated_at": "2026-10-10T22:02:58Z",
+  "sha256_lf": "b4ee52f0c16ea937a87c112540a37d2ca5424c6792c9a2e1cdd88856c35e8b0d",
+  "test_ids": [
+    "bench-001", "bench-007", "bench-011", "bench-015", "bench-017",
+    "bench-022", "bench-027", "bench-031", "bench-033"
+  ]
+}

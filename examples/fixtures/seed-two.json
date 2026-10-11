@@ -1,0 +1,7 @@
+{
+  "schema_version": "0.1.0",
+  "outcomes": {
+    "seed-001": {"raw_text": "{\"closing_date\":\"2026-11-15\",\"modality\":\"remota\",\"skills\":[\"Python\",\"SQL\"],\"student_required\":true}"},
+    "seed-002": {"raw_text": "{\"closing_date\":null,\"modality\":\"hibrida\",\"skills\":[\"Python\",\"Git\"],\"student_required\":true}"}
+  }
+}

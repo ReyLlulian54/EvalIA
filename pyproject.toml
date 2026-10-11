@@ -1,0 +1,50 @@
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "evalia"
+version = "0.1.0"
+description = "Evaluación reproducible de modelos y prompts en español."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "httpx>=0.27,<1",
+    "jsonschema>=4.23,<5",
+    "typer>=0.16,<1",
+]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Typing :: Typed",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3,<10",
+    "ruff>=0.12,<1",
+]
+
+[project.scripts]
+evalia = "evalia.cli:app"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/evalia"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"schemas/evalia-case.schema.json" = "evalia/schemas/evalia-case.schema.json"
+"schemas/evalia-run.schema.json" = "evalia/schemas/evalia-run.schema.json"
+"schemas/evalia-prompt.schema.json" = "evalia/schemas/evalia-prompt.schema.json"
+"schemas/evalia-fixture.schema.json" = "evalia/schemas/evalia-fixture.schema.json"
+
+[tool.pytest.ini_options]
+addopts = ["--strict-config", "--strict-markers"]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I", "UP", "B", "RUF"]

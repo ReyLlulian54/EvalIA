@@ -1,0 +1,11 @@
+{
+  "version": "1.0.0",
+  "aliases": {
+    "python": "Python",
+    "python 3": "Python",
+    "python3": "Python",
+    "sql": "SQL",
+    "git": "Git",
+    "docker": "Docker"
+  }
+}
