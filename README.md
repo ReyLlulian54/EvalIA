@@ -17,7 +17,8 @@ La primera tarea es extraer fecha de cierre, modalidad, habilidades obligatorias
 | 4. Motor | Completa | Proveedor simulado, artefactos incrementales, límites y reintentos. |
 | 5.1. Ollama local | Completa | Adaptador HTTP de loopback y prueba de humo de los nueve casos revisados. |
 | 5.2. Conjunto inicial | Completa | 36 casos revisados, segunda lectura asistida 9/9 y partición `test` de nueve casos congelada con SHA-256. |
-| 5.3. Comparación local | Siguiente | Dos ejecuciones controladas con modelos o configuraciones locales sobre la referencia revisada. |
+| 5.3.a. Protocolo local | Completa | Dos modelos instalados, entradas y parámetros fijados antes de inferir; Ollama aún sin servidor activo. |
+| 5.3.b–d. Corridas y auditoría | Siguiente | Dos corridas de 36 casos y repeticiones de una muestra `dev` con artefactos privados. |
 | 6–8. Comparación y paneles | Pendiente | Comparación, exportación segura, panel local y demo pública. |
 | 9. OpenRouter | Optativa | Solo tras comprobar costo, seguridad y utilidad del recorrido local. |
 
@@ -25,7 +26,9 @@ La [bitácora](docs/progress.md) contiene las verificaciones y el [plan](plans/e
 
 La revisión del código corrigió dos casos límite: la línea base 0.1.1 clasifica cada habilidad en frases que mezclan requisitos obligatorios, deseables y negaciones, y `evalia run` informa de forma específica si el directorio de salida ya existe, sin alterar su contenido. El reporte público `seed` se regeneró con el hash del código actualizado; sus predicciones y métricas no cambiaron. La [documentación de la línea base](docs/baseline.md) describe el alcance de esta heurística.
 
-Una revisión posterior de rendimiento y seguridad reutilizó en memoria los validadores del esquema de casos durante cada proceso, siguiendo el patrón que ya usaba el contrato de ejecuciones. La suite de 138 pruebas y la validación de los 36 casos conservan el comportamiento. El [registro de decisiones](docs/progress.md) explica qué propuestas adicionales se evaluaron y en qué etapa correspondería retomarlas. La siguiente subtarea funcional sigue siendo **5.3, comparación local controlada de dos configuraciones**; no se requiere configuración nueva para este ajuste.
+Una revisión posterior de rendimiento y seguridad reutilizó en memoria los validadores del esquema de casos durante cada proceso, siguiendo el patrón que ya usaba el contrato de ejecuciones. La suite de 138 pruebas y la validación de los 36 casos conservan el comportamiento. El [registro de decisiones](docs/progress.md) explica qué propuestas adicionales se evaluaron y en qué etapa correspondería retomarlas.
+
+La **5.3.a** dejó un [protocolo de comparación local](docs/local-comparison-protocol.md) antes de ejecutar el benchmark con modelos: `qwen3:8b` frente a `qwen2.5-coder:7b`, el mismo prompt y límites, 36 casos revisados y una muestra `dev` preseleccionada para estabilidad. El cliente y los archivos de ambos modelos están instalados, pero el servidor Ollama no estaba activo. La siguiente entrega será **5.3.b**, primera corrida, una vez comprobado que el servidor está ligado a `127.0.0.1`; la variable de entorno actual `OLLAMA_HOST=0.0.0.0` no se usará para iniciarlo.
 
 ## Documentación
 
@@ -45,6 +48,7 @@ Una revisión posterior de rendimiento y seguridad reutilizó en memoria los val
 - [Benchmark v1](docs/benchmark-v1.md): diseño de 36 casos revisados, partición `test` congelada e integridad.
 - [Registro de revisión del benchmark](docs/benchmark-v1-review.md): lectura asistida, correcciones, muestra diferida y confirmación humana.
 - [Hoja de revisión humana](docs/benchmark-v1-human-review.md): enlaces a los 36 casos y registro de conformidad.
+- [Protocolo de comparación local 5.3](docs/local-comparison-protocol.md): modelos, entradas, parámetros, estabilidad, puertas y límites antes de las corridas.
 
 ## Desarrollo
 
