@@ -17,8 +17,10 @@ La primera tarea es extraer fecha de cierre, modalidad, habilidades obligatorias
 | 4. Motor | Completa | Proveedor simulado, artefactos incrementales, límites y reintentos. |
 | 5.1. Ollama local | Completa | Adaptador HTTP de loopback y prueba de humo de los nueve casos revisados. |
 | 5.2. Conjunto inicial | Completa | 36 casos revisados, segunda lectura asistida 9/9 y partición `test` de nueve casos congelada con SHA-256. |
-| 5.3.a. Protocolo local | Completa | Dos modelos instalados, entradas y parámetros fijados antes de inferir; Ollama aún sin servidor activo. |
-| 5.3.b–d. Corridas y auditoría | Siguiente | Dos corridas de 36 casos y repeticiones de una muestra `dev` con artefactos privados. |
+| 5.3.a. Protocolo local | Completa | Entradas, modelos, parámetros y criterios fijados antes de inferir. |
+| 5.3.b. Primera corrida | Completa | `qwen3:8b`: 36 registros privados, 36 éxitos de proveedor, cero errores y auditoría técnica del manifiesto. |
+| 5.3.c. Segunda corrida | Siguiente | `qwen2.5-coder:7b` con el mismo benchmark, prompt y límites, tras comprobar Ollama en loopback. |
+| 5.3.d. Estabilidad y cierre | Pendiente | Repeticiones de la muestra `dev` preseleccionada y auditoría técnica pareada. |
 | 6–8. Comparación y paneles | Pendiente | Comparación, exportación segura, panel local y demo pública. |
 | 9. OpenRouter | Optativa | Solo tras comprobar costo, seguridad y utilidad del recorrido local. |
 
@@ -28,7 +30,7 @@ La revisión del código corrigió dos casos límite: la línea base 0.1.1 clasi
 
 Una revisión posterior de rendimiento y seguridad reutilizó en memoria los validadores del esquema de casos durante cada proceso, siguiendo el patrón que ya usaba el contrato de ejecuciones. La suite de 138 pruebas y la validación de los 36 casos conservan el comportamiento. El [registro de decisiones](docs/progress.md) explica qué propuestas adicionales se evaluaron y en qué etapa correspondería retomarlas.
 
-La **5.3.a** dejó un [protocolo de comparación local](docs/local-comparison-protocol.md) antes de ejecutar el benchmark con modelos: `qwen3:8b` frente a `qwen2.5-coder:7b`, el mismo prompt y límites, 36 casos revisados y una muestra `dev` preseleccionada para estabilidad. El cliente y los archivos de ambos modelos están instalados, pero el servidor Ollama no estaba activo. La siguiente entrega será **5.3.b**, primera corrida, una vez comprobado que el servidor está ligado a `127.0.0.1`; la variable de entorno actual `OLLAMA_HOST=0.0.0.0` no se usará para iniciarlo.
+La **5.3.a** dejó un [protocolo de comparación local](docs/local-comparison-protocol.md) antes de ejecutar el benchmark con modelos: dos modelos, el mismo prompt y límites, 36 casos revisados y una muestra `dev` preseleccionada para estabilidad. En la **5.3.b**, Ollama se inició temporalmente en `127.0.0.1:11434` y `qwen3:8b` procesó los 36 casos con cero errores de proveedor. La [bitácora](docs/progress.md) registra la auditoría técnica y la ruta de los artefactos privados. Esto no mide la calidad de extracción. La siguiente entrega es **5.3.c**; antes de ejecutarla se comprobarán de nuevo la dirección de escucha, los hashes y el digest del segundo modelo.
 
 ## Documentación
 
