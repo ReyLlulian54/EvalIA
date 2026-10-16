@@ -4,7 +4,7 @@ Evaluación reproducible de modelos y prompts en español. El objetivo es compar
 
 ## Estado del proyecto
 
-Proyecto en desarrollo. Los pasos 0 a 4 y las subtareas 5.1, 5.2 y 5.3.a–c están completados. Existen un contrato de datos, diez casos ficticios de arranque, validación, normalizadores, métricas deterministas, una línea base por reglas y un motor de ejecución incremental con proveedor simulado y adaptador Ollama local. Nueve casos `seed` están `reviewed`; `seed-008` conserva `review_required` por un conflicto deliberado. Los 36 casos ficticios de `benchmark-v1` están `reviewed` y sus nueve casos `test` tienen una huella independiente. Las dos corridas principales están guardadas en privado; aún no hay puntuaciones comparativas de modelos.
+Proyecto en desarrollo. Los pasos 0 a 4 y las subtareas 5.1, 5.2 y 5.3.a–d están completados. Existen un contrato de datos, diez casos ficticios de arranque, validación, normalizadores, métricas deterministas, una línea base por reglas y un motor de ejecución incremental con proveedor simulado y adaptador Ollama local. Nueve casos `seed` están `reviewed`; `seed-008` conserva `review_required` por un conflicto deliberado. Los 36 casos ficticios de `benchmark-v1` están `reviewed` y sus nueve casos `test` tienen una huella independiente. Las dos corridas principales y cuatro repeticiones de la muestra `dev` están guardadas en privado; aún no hay puntuaciones comparativas de modelos.
 
 La primera tarea es extraer fecha de cierre, modalidad, habilidades obligatorias y requisito de ser estudiante de fragmentos de convocatorias. La primera versión tendrá una interfaz web local para ejecutar experimentos y una demo pública de resultados precomputados.
 
@@ -20,7 +20,7 @@ La primera tarea es extraer fecha de cierre, modalidad, habilidades obligatorias
 | 5.3.a. Protocolo local | Completa | Entradas, modelos, parámetros y criterios fijados antes de inferir. |
 | 5.3.b. Primera corrida | Completa | `qwen3:8b`: 36 registros privados, 36 éxitos de proveedor, cero errores y auditoría técnica del manifiesto. |
 | 5.3.c. Segunda corrida | Completa | `qwen2.5-coder:7b`: 36 registros privados, 36 éxitos de proveedor, cero errores y auditoría técnica del manifiesto. |
-| 5.3.d. Estabilidad y cierre | Siguiente | Dos repeticiones por modelo de la muestra `dev` preseleccionada y auditoría técnica pareada. |
+| 5.3.d. Estabilidad y cierre | Completa | Cuatro repeticiones privadas de nueve casos `dev`; auditoría de seis corridas y respuestas crudas idénticas en 9/9 casos por modelo. |
 | 6–8. Comparación y paneles | Pendiente | Comparación, exportación segura, panel local y demo pública. |
 | 9. OpenRouter | Optativa | Solo tras comprobar costo, seguridad y utilidad del recorrido local. |
 
@@ -30,7 +30,7 @@ La revisión del código corrigió dos casos límite: la línea base 0.1.1 clasi
 
 Una revisión posterior de rendimiento y seguridad reutilizó en memoria los validadores del esquema de casos durante cada proceso, siguiendo el patrón que ya usaba el contrato de ejecuciones. La suite de 138 pruebas y la validación de los 36 casos conservan el comportamiento. El [registro de decisiones](docs/progress.md) explica qué propuestas adicionales se evaluaron y en qué etapa correspondería retomarlas.
 
-La **5.3.a** dejó un [protocolo de comparación local](docs/local-comparison-protocol.md) antes de ejecutar el benchmark con modelos: dos modelos, el mismo prompt y límites, 36 casos revisados y una muestra `dev` preseleccionada para estabilidad. En **5.3.b** y **5.3.c**, `qwen3:8b` y `qwen2.5-coder:7b` procesaron por separado los mismos 36 casos con cero errores de proveedor. La [bitácora](docs/progress.md) registra sus auditorías técnicas, rutas privadas y diferencias de entorno. Esto no mide calidad de extracción. La siguiente entrega es **5.3.d**: dos repeticiones adicionales por modelo de la muestra `dev` fijada y auditoría técnica pareada.
+La **5.3.a** dejó un [protocolo de comparación local](docs/local-comparison-protocol.md) antes de ejecutar el benchmark con modelos: dos modelos, el mismo prompt y límites, 36 casos revisados y una muestra `dev` preseleccionada para estabilidad. En **5.3.b** y **5.3.c**, `qwen3:8b` y `qwen2.5-coder:7b` procesaron por separado los mismos 36 casos con cero errores de proveedor. La **5.3.d** añadió dos repeticiones por modelo de los nueve casos `dev` fijados: la auditoría de las seis corridas pasó y las tres respuestas crudas de cada caso coincidieron dentro de cada modelo. La [bitácora](docs/progress.md) registra artefactos privados, condiciones y límites. Esto no mide calidad de extracción. La siguiente entrega es el **paso 6**, comparación por campo y exportación pública segura.
 
 ## Documentación
 
