@@ -1,0 +1,209 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EvalIA private run score report",
+  "description": "Contrato privado de una corrida. Las extracciones y citas siguen definidas solo en evalia-case.schema.json.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "created_at", "run", "evidence_literal", "splits", "cases"],
+  "properties": {
+    "schema_version": {"const": "0.1.0"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "run": {"$ref": "#/$defs/run"},
+    "evidence_literal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "reason"],
+      "properties": {
+        "status": {"const": "not_observed"},
+        "reason": {"const": "prompt_did_not_request_evidence"}
+      }
+    },
+    "splits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dev", "test"],
+      "properties": {
+        "dev": {"$ref": "#/$defs/split"},
+        "test": {"$ref": "#/$defs/split"}
+      }
+    },
+    "cases": {"type": "array", "items": {"$ref": "#/$defs/case_result"}}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_id", "provider_id", "model_id", "model_digest", "source_commit",
+        "manifest_sha256", "responses_sha256", "dataset_sha256", "prompt_sha256",
+        "request_count", "recorded_count", "success_count", "failure_count",
+        "temperature", "max_output_tokens", "timeout_seconds", "max_retries"
+      ],
+      "properties": {
+        "run_id": {"type": "string", "pattern": "^[0-9a-f]{32}$"},
+        "provider_id": {"type": "string", "minLength": 1},
+        "model_id": {"type": "string", "minLength": 1},
+        "model_digest": {"anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "source_commit": {"anyOf": [{"type": "string", "pattern": "^[0-9a-f]{40}$"}, {"type": "null"}]},
+        "manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "responses_sha256": {"$ref": "#/$defs/sha256"},
+        "dataset_sha256": {"$ref": "#/$defs/sha256"},
+        "prompt_sha256": {"$ref": "#/$defs/sha256"},
+        "request_count": {"type": "integer", "minimum": 1},
+        "recorded_count": {"type": "integer", "minimum": 0},
+        "success_count": {"type": "integer", "minimum": 0},
+        "failure_count": {"type": "integer", "minimum": 0},
+        "temperature": {"type": "number", "minimum": 0},
+        "max_output_tokens": {"type": "integer", "minimum": 1},
+        "timeout_seconds": {"type": "number", "exclusiveMinimum": 0},
+        "max_retries": {"type": "integer", "minimum": 0}
+      }
+    },
+    "ratio": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["numerator", "denominator", "value", "failed_case_ids"],
+      "properties": {
+        "numerator": {"type": "integer", "minimum": 0},
+        "denominator": {"type": "integer", "minimum": 0},
+        "value": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "failed_case_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}
+      }
+    },
+    "split": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "eligible_count", "scored_count", "provider_error_count", "internal_error_count",
+        "format_error_count", "skills_counts", "metrics", "telemetry"
+      ],
+      "properties": {
+        "eligible_count": {"type": "integer", "minimum": 0},
+        "scored_count": {"type": "integer", "minimum": 0},
+        "provider_error_count": {"type": "integer", "minimum": 0},
+        "internal_error_count": {"type": "integer", "minimum": 0},
+        "format_error_count": {"type": "integer", "minimum": 0},
+        "skills_counts": {"$ref": "#/$defs/skills_counts"},
+        "telemetry": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["elapsed_ms", "prompt_tokens", "completion_tokens", "cost_usd"],
+          "properties": {
+            "elapsed_ms": {"$ref": "#/$defs/elapsed"},
+            "prompt_tokens": {"$ref": "#/$defs/token_usage"},
+            "completion_tokens": {"$ref": "#/$defs/token_usage"},
+            "cost_usd": {"$ref": "#/$defs/cost_usage"}
+          }
+        },
+        "metrics": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "coverage", "closing_date", "modality", "student_required", "skills_exact",
+            "skills_precision", "skills_recall", "skills_f1", "abstention"
+          ],
+          "properties": {
+            "coverage": {"$ref": "#/$defs/ratio"},
+            "closing_date": {"$ref": "#/$defs/ratio"},
+            "modality": {"$ref": "#/$defs/ratio"},
+            "student_required": {"$ref": "#/$defs/ratio"},
+            "skills_exact": {"$ref": "#/$defs/ratio"},
+            "skills_precision": {"$ref": "#/$defs/ratio"},
+            "skills_recall": {"$ref": "#/$defs/ratio"},
+            "skills_f1": {"$ref": "#/$defs/ratio"},
+            "abstention": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["closing_date", "modality", "student_required"],
+              "properties": {
+                "closing_date": {"$ref": "#/$defs/ratio"},
+                "modality": {"$ref": "#/$defs/ratio"},
+                "student_required": {"$ref": "#/$defs/ratio"}
+              }
+            }
+          }
+        }
+      }
+    },
+    "case_result": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["case_id", "split", "outcome", "field_correct", "skills_counts"],
+          "properties": {
+            "case_id": {"type": "string", "minLength": 1},
+            "split": {"enum": ["dev", "test"]},
+            "outcome": {"const": "scored"},
+            "field_correct": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["closing_date", "modality", "student_required", "skills_exact"],
+              "properties": {
+                "closing_date": {"type": "boolean"},
+                "modality": {"type": "boolean"},
+                "student_required": {"type": "boolean"},
+                "skills_exact": {"type": "boolean"}
+              }
+            },
+            "skills_counts": {"$ref": "#/$defs/skills_counts"}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["case_id", "split", "outcome", "error_code"],
+          "properties": {
+            "case_id": {"type": "string", "minLength": 1},
+            "split": {"enum": ["dev", "test"]},
+            "outcome": {"enum": ["provider_error", "internal_error", "format_error"]},
+            "error_code": {"type": "string", "pattern": "^[a-z][a-z0-9_]{0,63}$"}
+          }
+        }
+      ]
+    },
+    "skills_counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tp", "fp", "fn"],
+      "properties": {
+        "tp": {"type": "integer", "minimum": 0},
+        "fp": {"type": "integer", "minimum": 0},
+        "fn": {"type": "integer", "minimum": 0}
+      }
+    },
+    "elapsed": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["observations", "median"],
+      "properties": {
+        "observations": {"type": "integer", "minimum": 0},
+        "median": {"type": ["number", "null"], "minimum": 0}
+      }
+    },
+    "token_usage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["observations", "total"],
+      "properties": {
+        "observations": {"type": "integer", "minimum": 0},
+        "total": {"type": ["integer", "null"], "minimum": 0}
+      }
+    },
+    "cost_usage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["observations", "total"],
+      "properties": {
+        "observations": {"type": "integer", "minimum": 0},
+        "total": {
+          "anyOf": [
+            {"type": "string", "pattern": "^(?:0|[1-9][0-9]*)(?:\\.[0-9]+)?$"},
+            {"type": "null"}
+          ]
+        }
+      }
+    }
+  }
+}

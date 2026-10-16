@@ -10,6 +10,7 @@ import typer
 from evalia import __version__
 from evalia.providers.base import ProviderFailure
 from evalia.providers.ollama import DEFAULT_OLLAMA_URL
+from evalia.reports.score import RunScoreError, score_run, write_score_report
 from evalia.runner.inputs import RunInputError, run_dataset
 from evalia.validation import validate_jsonl
 
@@ -120,3 +121,23 @@ def run(
     )
     if manifest["failure_count"]:
         raise typer.Exit(code=1)
+
+
+@app.command("score-run")
+def score_run_command(
+    dataset: Annotated[Path, typer.Option(help="Conjunto JSONL de la corrida.")],
+    prompt: Annotated[Path, typer.Option(help="Prompt versionado usado en la corrida.")],
+    run_dir: Annotated[Path, typer.Option(help="Directorio privado con manifest y responses.")],
+) -> None:
+    """Puntúa una corrida 5.3 por dev/test sin ejecutar modelos ni publicar respuestas."""
+    try:
+        report = score_run(dataset, prompt, run_dir)
+        output = write_score_report(run_dir, report)
+    except (RunScoreError, RunInputError, FileExistsError, OSError) as error:
+        typer.echo(f"Puntuación rechazada: {error}", err=True)
+        raise typer.Exit(code=2) from error
+    typer.echo(
+        f"Informe privado: {output}. "
+        f"dev {report['splits']['dev']['scored_count']}/{report['splits']['dev']['eligible_count']}; "
+        f"test {report['splits']['test']['scored_count']}/{report['splits']['test']['eligible_count']}."
+    )
