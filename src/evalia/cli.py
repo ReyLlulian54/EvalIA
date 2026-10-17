@@ -10,6 +10,7 @@ import typer
 from evalia import __version__
 from evalia.providers.base import ProviderFailure
 from evalia.providers.ollama import DEFAULT_OLLAMA_URL
+from evalia.reports.compare import RunComparisonError, compare_runs, write_comparison
 from evalia.reports.score import RunScoreError, score_run, write_score_report
 from evalia.runner.inputs import RunInputError, run_dataset
 from evalia.validation import validate_jsonl
@@ -141,3 +142,21 @@ def score_run_command(
         f"dev {report['splits']['dev']['scored_count']}/{report['splits']['dev']['eligible_count']}; "
         f"test {report['splits']['test']['scored_count']}/{report['splits']['test']['eligible_count']}."
     )
+
+
+@app.command()
+def compare(
+    dataset: Annotated[Path, typer.Option(help="Conjunto JSONL de ambas corridas.")],
+    prompt: Annotated[Path, typer.Option(help="Prompt versionado de ambas corridas.")],
+    base_run: Annotated[Path, typer.Option(help="Directorio privado de la corrida base.")],
+    candidate_run: Annotated[Path, typer.Option(help="Directorio privado de la candidata.")],
+    output: Annotated[Path, typer.Option(help="Archivo JSON privado nuevo; no se sobrescribe.")],
+) -> None:
+    """Compara informes de corridas reauditoradas sin ejecutar modelos."""
+    try:
+        report = compare_runs(dataset, prompt, base_run, candidate_run)
+        destination = write_comparison(output, report)
+    except (RunComparisonError, RunInputError, FileExistsError, OSError) as error:
+        typer.echo(f"Comparación rechazada: {error}", err=True)
+        raise typer.Exit(code=2) from error
+    typer.echo(f"Comparación privada: {destination}. Dirección: base a candidata.")

@@ -1,0 +1,181 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EvalIA private paired comparison",
+  "description": "Comparación privada dirigida de dos informes de puntuación 0.1.0; sin predicciones, citas ni textos originales.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "created_at", "direction", "base", "candidate", "evidence_literal", "splits", "cases"],
+  "properties": {
+    "schema_version": {"const": "0.1.0"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "direction": {"const": "base_to_candidate"},
+    "base": {"$ref": "#/$defs/source"},
+    "candidate": {"$ref": "#/$defs/source"},
+    "evidence_literal": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status", "reason"],
+      "properties": {"status": {"const": "not_observed"}, "reason": {"const": "prompt_did_not_request_evidence"}}
+    },
+    "splits": {
+      "type": "object", "additionalProperties": false, "required": ["dev", "test"],
+      "properties": {"dev": {"$ref": "#/$defs/split"}, "test": {"$ref": "#/$defs/split"}}
+    },
+    "cases": {"type": "array", "items": {"$ref": "#/$defs/case"}}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "source": {
+      "type": "object", "additionalProperties": false,
+      "required": ["score_report_sha256", "run"],
+      "properties": {
+        "score_report_sha256": {"$ref": "#/$defs/sha256"},
+        "run": {
+          "type": "object", "additionalProperties": false,
+          "required": ["run_id", "provider_id", "model_id", "model_digest", "source_commit", "manifest_sha256", "responses_sha256", "dataset_sha256", "prompt_sha256", "request_count", "temperature", "max_output_tokens", "timeout_seconds", "max_retries"],
+          "properties": {
+            "run_id": {"type": "string", "pattern": "^[0-9a-f]{32}$"},
+            "provider_id": {"type": "string", "minLength": 1},
+            "model_id": {"type": "string", "minLength": 1},
+            "model_digest": {"anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+            "source_commit": {"anyOf": [{"type": "string", "pattern": "^[0-9a-f]{40}$"}, {"type": "null"}]},
+            "manifest_sha256": {"$ref": "#/$defs/sha256"},
+            "responses_sha256": {"$ref": "#/$defs/sha256"},
+            "dataset_sha256": {"$ref": "#/$defs/sha256"},
+            "prompt_sha256": {"$ref": "#/$defs/sha256"},
+            "request_count": {"type": "integer", "minimum": 1},
+            "temperature": {"type": "number", "minimum": 0},
+            "max_output_tokens": {"type": "integer", "minimum": 1},
+            "timeout_seconds": {"type": "number", "exclusiveMinimum": 0},
+            "max_retries": {"type": "integer", "minimum": 0}
+          }
+        }
+      }
+    },
+    "categories": {
+      "type": "object", "additionalProperties": false,
+      "required": ["improvement", "regression", "correct_tie", "incorrect_tie", "not_comparable"],
+      "properties": {
+        "improvement": {"$ref": "#/$defs/category"},
+        "regression": {"$ref": "#/$defs/category"},
+        "correct_tie": {"$ref": "#/$defs/category"},
+        "incorrect_tie": {"$ref": "#/$defs/category"},
+        "not_comparable": {"$ref": "#/$defs/category"}
+      }
+    },
+    "category": {
+      "type": "object", "additionalProperties": false, "required": ["count", "case_ids"],
+      "properties": {
+        "count": {"type": "integer", "minimum": 0},
+        "case_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "skills_counts": {
+      "type": "object", "additionalProperties": false, "required": ["tp", "fp", "fn"],
+      "properties": {
+        "tp": {"type": "integer", "minimum": 0},
+        "fp": {"type": "integer", "minimum": 0},
+        "fn": {"type": "integer", "minimum": 0}
+      }
+    },
+    "split": {
+      "type": "object", "additionalProperties": false,
+      "required": ["eligible_count", "coverage", "fields", "skills_counts", "telemetry"],
+      "properties": {
+        "eligible_count": {"type": "integer", "minimum": 0},
+        "coverage": {
+          "type": "object", "additionalProperties": false, "required": ["base", "candidate"],
+          "properties": {"base": {"$ref": "#/$defs/coverage"}, "candidate": {"$ref": "#/$defs/coverage"}}
+        },
+        "fields": {
+          "type": "object", "additionalProperties": false,
+          "required": ["closing_date", "modality", "student_required", "skills_exact"],
+          "properties": {
+            "closing_date": {"$ref": "#/$defs/categories"},
+            "modality": {"$ref": "#/$defs/categories"},
+            "student_required": {"$ref": "#/$defs/categories"},
+            "skills_exact": {"$ref": "#/$defs/categories"}
+          }
+        },
+        "skills_counts": {
+          "type": "object", "additionalProperties": false, "required": ["base", "candidate"],
+          "properties": {"base": {"$ref": "#/$defs/skills_counts"}, "candidate": {"$ref": "#/$defs/skills_counts"}}
+        },
+        "telemetry": {
+          "type": "object", "additionalProperties": false, "required": ["base", "candidate", "interpretation"],
+          "properties": {
+            "base": {"$ref": "#/$defs/telemetry"},
+            "candidate": {"$ref": "#/$defs/telemetry"},
+            "interpretation": {"const": "descriptive_only_load_and_gpu_conditions_differ"}
+          }
+        }
+      }
+    },
+    "coverage": {
+      "type": "object", "additionalProperties": false,
+      "required": ["scored_count", "provider_error_count", "internal_error_count", "format_error_count"],
+      "properties": {
+        "scored_count": {"type": "integer", "minimum": 0},
+        "provider_error_count": {"type": "integer", "minimum": 0},
+        "internal_error_count": {"type": "integer", "minimum": 0},
+        "format_error_count": {"type": "integer", "minimum": 0}
+      }
+    },
+    "telemetry": {
+      "type": "object", "additionalProperties": false,
+      "required": ["elapsed_ms", "prompt_tokens", "completion_tokens", "cost_usd"],
+      "properties": {
+        "elapsed_ms": {
+          "type": "object", "additionalProperties": false, "required": ["observations", "median"],
+          "properties": {
+            "observations": {"type": "integer", "minimum": 0},
+            "median": {"type": ["number", "null"], "minimum": 0}
+          }
+        },
+        "prompt_tokens": {"$ref": "#/$defs/token_usage"},
+        "completion_tokens": {"$ref": "#/$defs/token_usage"},
+        "cost_usd": {
+          "type": "object", "additionalProperties": false, "required": ["observations", "total"],
+          "properties": {
+            "observations": {"type": "integer", "minimum": 0},
+            "total": {"anyOf": [{"type": "string", "pattern": "^(?:0|[1-9][0-9]*)(?:\\.[0-9]+)?$"}, {"type": "null"}]}
+          }
+        }
+      }
+    },
+    "token_usage": {
+      "type": "object", "additionalProperties": false, "required": ["observations", "total"],
+      "properties": {
+        "observations": {"type": "integer", "minimum": 0},
+        "total": {"type": ["integer", "null"], "minimum": 0}
+      }
+    },
+    "case": {
+      "type": "object", "additionalProperties": false,
+      "required": ["case_id", "split", "base_outcome", "candidate_outcome", "fields"],
+      "properties": {
+        "case_id": {"type": "string", "minLength": 1},
+        "split": {"enum": ["dev", "test"]},
+        "base_outcome": {"$ref": "#/$defs/outcome"},
+        "candidate_outcome": {"$ref": "#/$defs/outcome"},
+        "fields": {
+          "type": "object", "additionalProperties": false,
+          "required": ["closing_date", "modality", "student_required", "skills_exact"],
+          "properties": {
+            "closing_date": {"$ref": "#/$defs/category_name"},
+            "modality": {"$ref": "#/$defs/category_name"},
+            "student_required": {"$ref": "#/$defs/category_name"},
+            "skills_exact": {"$ref": "#/$defs/category_name"}
+          }
+        }
+      }
+    },
+    "category_name": {"enum": ["improvement", "regression", "correct_tie", "incorrect_tie", "not_comparable"]},
+    "outcome": {
+      "type": "object", "additionalProperties": false, "required": ["status", "error_code"],
+      "properties": {
+        "status": {"enum": ["scored", "provider_error", "internal_error", "format_error"]},
+        "error_code": {"type": ["string", "null"]}
+      }
+    }
+  }
+}

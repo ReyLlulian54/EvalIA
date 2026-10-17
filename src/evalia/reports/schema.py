@@ -23,3 +23,16 @@ def score_report_validator() -> Draft202012Validator:
 
 def score_report_schema_version() -> str:
     return score_report_validator().schema["properties"]["schema_version"]["const"]
+
+
+@cache
+def comparison_validator() -> Draft202012Validator:
+    packaged = resources.files("evalia").joinpath("schemas/evalia-comparison.schema.json")
+    path = (
+        packaged
+        if packaged.is_file()
+        else Path(__file__).resolve().parents[3] / "schemas/evalia-comparison.schema.json"
+    )
+    schema = json.loads(path.read_text(encoding="utf-8"))
+    Draft202012Validator.check_schema(schema)
+    return Draft202012Validator(schema, format_checker=FormatChecker())
