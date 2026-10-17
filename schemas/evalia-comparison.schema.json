@@ -171,11 +171,19 @@
     },
     "category_name": {"enum": ["improvement", "regression", "correct_tie", "incorrect_tie", "not_comparable"]},
     "outcome": {
-      "type": "object", "additionalProperties": false, "required": ["status", "error_code"],
-      "properties": {
-        "status": {"enum": ["scored", "provider_error", "internal_error", "format_error"]},
-        "error_code": {"type": ["string", "null"]}
-      }
+      "oneOf": [
+        {
+          "type": "object", "additionalProperties": false, "required": ["status", "error_code"],
+          "properties": {"status": {"const": "scored"}, "error_code": {"type": "null"}}
+        },
+        {
+          "type": "object", "additionalProperties": false, "required": ["status", "error_code"],
+          "properties": {
+            "status": {"enum": ["provider_error", "internal_error", "format_error"]},
+            "error_code": {"type": "string", "pattern": "^[a-z][a-z0-9_]{0,63}$"}
+          }
+        }
+      ]
     }
   }
 }

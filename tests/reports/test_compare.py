@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 import pytest
+from jsonschema import ValidationError
 from typer.testing import CliRunner
 
 from evalia.cli import app
@@ -66,6 +67,10 @@ def test_paired_categories_and_private_contract(tmp_path: Path) -> None:
     dataset, base, candidate = _pair(tmp_path)
     report = compare_runs(dataset, PROMPT, base, candidate)
     comparison_validator().validate(report)
+    report["cases"][0]["base_outcome"]["error_code"] = "unexpected"
+    with pytest.raises(ValidationError):
+        comparison_validator().validate(report)
+    report["cases"][0]["base_outcome"]["error_code"] = None
     cases = {case["case_id"]: case for case in report["cases"]}
     assert cases["bench-001"]["fields"]["closing_date"] == "correct_tie"
     assert cases["bench-002"]["fields"]["modality"] == "improvement"
@@ -126,7 +131,7 @@ def test_rejects_incompatible_configuration(tmp_path: Path, key: str, value: int
         compare_runs(dataset, PROMPT, base, candidate)
 
 
-def test_cli_writes_once_and_rejects_reversed_missing_input(tmp_path: Path) -> None:
+def test_cli_writes_once_and_rejects_missing_output_directory(tmp_path: Path) -> None:
     dataset, base, candidate = _pair(tmp_path)
     output = tmp_path / "private.json"
     args = [
