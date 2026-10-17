@@ -1,0 +1,159 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EvalIA public report candidate",
+  "description": "Lista permitida de resultados estructurados; candidato privado pendiente de revisión manual antes de publicarse.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "generated_at", "publication_review", "provenance", "limitations", "splits", "cases"],
+  "properties": {
+    "schema_version": {"const": "0.1.0"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "publication_review": {"const": "pending_artifact_review"},
+    "provenance": {
+      "type": "object", "additionalProperties": false,
+      "required": ["dataset_sha256", "prompt_sha256", "comparison_sha256", "approval_sha256", "base", "candidate"],
+      "properties": {
+        "dataset_sha256": {"$ref": "#/$defs/sha256"},
+        "prompt_sha256": {"$ref": "#/$defs/sha256"},
+        "comparison_sha256": {"$ref": "#/$defs/sha256"},
+        "approval_sha256": {"$ref": "#/$defs/sha256"},
+        "base": {"$ref": "#/$defs/model"},
+        "candidate": {"$ref": "#/$defs/model"}
+      }
+    },
+    "limitations": {
+      "type": "object", "additionalProperties": false,
+      "required": ["dataset", "evidence_literal", "interpretation"],
+      "properties": {
+        "dataset": {"const": "selected_cases_only"},
+        "evidence_literal": {"const": "not_observed"},
+        "interpretation": {"const": "descriptive_no_winner"}
+      }
+    },
+    "splits": {
+      "type": "object", "additionalProperties": false, "required": ["dev", "test"],
+      "properties": {"dev": {"$ref": "#/$defs/split"}, "test": {"$ref": "#/$defs/split"}}
+    },
+    "cases": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/case"}}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "model": {
+      "type": "object", "additionalProperties": false,
+      "required": ["run_id", "model_id", "model_digest", "source_commit", "score_report_sha256"],
+      "properties": {
+        "run_id": {"type": "string", "pattern": "^[0-9a-f]{32}$"},
+        "model_id": {"type": "string", "minLength": 1},
+        "model_digest": {"anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "source_commit": {"anyOf": [{"type": "string", "pattern": "^[0-9a-f]{40}$"}, {"type": "null"}]},
+        "score_report_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "extraction": {
+      "type": "object", "additionalProperties": false,
+      "required": ["closing_date", "modality", "skills", "student_required"],
+      "properties": {
+        "closing_date": {"type": ["string", "null"], "format": "date", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+        "modality": {"enum": ["remota", "hibrida", "presencial", null]},
+        "skills": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "student_required": {"type": ["boolean", "null"]}
+      }
+    },
+    "outcome": {
+      "oneOf": [
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["status", "error_code", "prediction", "elapsed_ms"],
+          "properties": {
+            "status": {"const": "scored"}, "error_code": {"type": "null"},
+            "prediction": {"$ref": "#/$defs/extraction"}, "elapsed_ms": {"type": "number", "minimum": 0}
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["status", "error_code", "prediction", "elapsed_ms"],
+          "properties": {
+            "status": {"enum": ["provider_error", "internal_error", "format_error"]},
+            "error_code": {"type": "string", "pattern": "^[a-z][a-z0-9_]{0,63}$"},
+            "prediction": {"type": "null"}, "elapsed_ms": {"type": "number", "minimum": 0}
+          }
+        }
+      ]
+    },
+    "case": {
+      "type": "object", "additionalProperties": false,
+      "required": ["case_id", "split", "expected", "base", "candidate", "fields"],
+      "properties": {
+        "case_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{2,63}$"},
+        "split": {"enum": ["dev", "test"]},
+        "expected": {"$ref": "#/$defs/extraction"},
+        "base": {"$ref": "#/$defs/outcome"},
+        "candidate": {"$ref": "#/$defs/outcome"},
+        "fields": {
+          "type": "object", "additionalProperties": false,
+          "required": ["closing_date", "modality", "student_required", "skills_exact"],
+          "properties": {
+            "closing_date": {"$ref": "#/$defs/category_name"},
+            "modality": {"$ref": "#/$defs/category_name"},
+            "student_required": {"$ref": "#/$defs/category_name"},
+            "skills_exact": {"$ref": "#/$defs/category_name"}
+          }
+        }
+      }
+    },
+    "category_name": {"enum": ["improvement", "regression", "correct_tie", "incorrect_tie", "not_comparable"]},
+    "counts": {
+      "type": "object", "additionalProperties": false,
+      "required": ["improvement", "regression", "correct_tie", "incorrect_tie", "not_comparable"],
+      "properties": {
+        "improvement": {"type": "integer", "minimum": 0},
+        "regression": {"type": "integer", "minimum": 0},
+        "correct_tie": {"type": "integer", "minimum": 0},
+        "incorrect_tie": {"type": "integer", "minimum": 0},
+        "not_comparable": {"type": "integer", "minimum": 0}
+      }
+    },
+    "skills_counts": {
+      "type": "object", "additionalProperties": false, "required": ["tp", "fp", "fn"],
+      "properties": {
+        "tp": {"type": "integer", "minimum": 0},
+        "fp": {"type": "integer", "minimum": 0},
+        "fn": {"type": "integer", "minimum": 0}
+      }
+    },
+    "side": {
+      "type": "object", "additionalProperties": false,
+      "required": ["scored_count", "provider_error_count", "internal_error_count", "format_error_count", "skills_counts", "elapsed_ms"],
+      "properties": {
+        "scored_count": {"type": "integer", "minimum": 0},
+        "provider_error_count": {"type": "integer", "minimum": 0},
+        "internal_error_count": {"type": "integer", "minimum": 0},
+        "format_error_count": {"type": "integer", "minimum": 0},
+        "skills_counts": {"$ref": "#/$defs/skills_counts"},
+        "elapsed_ms": {
+          "type": "object", "additionalProperties": false, "required": ["observations", "median"],
+          "properties": {"observations": {"type": "integer", "minimum": 0}, "median": {"type": ["number", "null"], "minimum": 0}}
+        }
+      }
+    },
+    "split": {
+      "type": "object", "additionalProperties": false,
+      "required": ["selected_count", "fields", "base", "candidate"],
+      "properties": {
+        "selected_count": {"type": "integer", "minimum": 0},
+        "fields": {
+          "type": "object", "additionalProperties": false,
+          "required": ["closing_date", "modality", "student_required", "skills_exact"],
+          "properties": {
+            "closing_date": {"$ref": "#/$defs/counts"},
+            "modality": {"$ref": "#/$defs/counts"},
+            "student_required": {"$ref": "#/$defs/counts"},
+            "skills_exact": {"$ref": "#/$defs/counts"}
+          }
+        },
+        "base": {"$ref": "#/$defs/side"},
+        "candidate": {"$ref": "#/$defs/side"}
+      }
+    }
+  }
+}
