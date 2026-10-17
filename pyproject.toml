@@ -38,6 +38,7 @@ packages = ["src/evalia"]
 "schemas/evalia-prompt.schema.json" = "evalia/schemas/evalia-prompt.schema.json"
 "schemas/evalia-fixture.schema.json" = "evalia/schemas/evalia-fixture.schema.json"
 "schemas/evalia-score-report.schema.json" = "evalia/schemas/evalia-score-report.schema.json"
+"schemas/evalia-comparison.schema.json" = "evalia/schemas/evalia-comparison.schema.json"
 
 [tool.pytest.ini_options]
 addopts = ["--strict-config", "--strict-markers"]
