@@ -4,7 +4,7 @@ Evaluación reproducible de modelos y prompts en español. El objetivo es compar
 
 ## Estado del proyecto
 
-Proyecto en desarrollo. Los pasos 0 a 5 y las subtareas 6.a–c están completados. Existen un contrato de datos, diez casos ficticios de arranque, validación, normalizadores, métricas deterministas, una línea base por reglas y un motor de ejecución incremental con proveedor simulado y adaptador Ollama local. Nueve casos `seed` están `reviewed`; `seed-008` conserva `review_required` por un conflicto deliberado. Los 36 casos ficticios de `benchmark-v1` están `reviewed` y sus nueve casos `test` tienen una huella independiente. Las dos corridas principales, sus informes de puntuación, la comparación pareada y cuatro repeticiones de la muestra `dev` están guardadas en privado; aún no hay artefacto publicable.
+Proyecto en desarrollo. Los pasos 0 a 5 y las subtareas 6.a–d están completados. Existen un contrato de datos, diez casos ficticios de arranque, validación, normalizadores, métricas deterministas, una línea base por reglas y un motor de ejecución incremental con proveedor simulado y adaptador Ollama local. Nueve casos `seed` están `reviewed`; `seed-008` conserva `review_required` por un conflicto deliberado. Los 36 casos ficticios de `benchmark-v1` están `reviewed` y sus nueve casos `test` tienen una huella independiente. Las dos corridas principales, sus informes de puntuación, la comparación pareada y cuatro repeticiones de la muestra `dev` están guardadas en privado. El exportador seguro está implementado; todavía no hay artefacto publicable.
 
 La primera tarea es extraer fecha de cierre, modalidad, habilidades obligatorias y requisito de ser estudiante de fragmentos de convocatorias. La primera versión tendrá una interfaz web local para ejecutar experimentos y una demo pública de resultados precomputados.
 
@@ -24,8 +24,8 @@ La primera tarea es extraer fecha de cierre, modalidad, habilidades obligatorias
 | 6.a. Protocolo de comparación | Completa | Corridas, reglas, revisión humana y puertas de exportación fijadas antes de puntuar. |
 | 6.b. Puntuación por corrida | Completa | Dos informes privados conformes al esquema 0.1.0, lectura estricta y métricas separadas por `dev` y `test`. |
 | 6.c. Comparación pareada | Completa | `evalia compare`, contrato 0.1.0 e informe privado por campo/caso, con errores e incompatibilidades explícitos. |
-| 6.d. Exportación segura | Siguiente | Lista permitida, contrato público y rechazo de material sin permiso de redistribución. |
-| 6.e. Revisión humana | Pendiente | Revisar respaldo semántico y el artefacto exportado antes de publicarlo. |
+| 6.d. Exportación segura | Completa | Contrato público, lista permitida y rechazo cerrado sin revisión privada de permisos por caso. |
+| 6.e. Revisión humana | Siguiente | Revisar permisos y respaldo semántico, generar e inspeccionar el candidato real antes de publicar. |
 | 7–8. Paneles | Pendiente | Panel local y demo pública de solo lectura. |
 | 9. OpenRouter | Optativa | Solo tras comprobar costo, seguridad y utilidad del recorrido local. |
 
@@ -35,7 +35,7 @@ La revisión del código corrigió dos casos límite: la línea base 0.1.1 clasi
 
 Una revisión posterior de rendimiento y seguridad reutilizó en memoria los validadores del esquema de casos durante cada proceso, siguiendo el patrón que ya usaba el contrato de ejecuciones. La suite de 138 pruebas y la validación de los 36 casos conservan el comportamiento. El [registro de decisiones](docs/progress.md) explica qué propuestas adicionales se evaluaron y en qué etapa correspondería retomarlas.
 
-La **5.3.a** dejó un [protocolo de comparación local](docs/local-comparison-protocol.md) antes de ejecutar el benchmark con modelos: dos modelos, el mismo prompt y límites, 36 casos revisados y una muestra `dev` preseleccionada para estabilidad. En **5.3.b** y **5.3.c**, `qwen3:8b` y `qwen2.5-coder:7b` procesaron por separado los mismos 36 casos con cero errores de proveedor. La **5.3.d** añadió dos repeticiones por modelo de los nueve casos `dev` fijados: la auditoría de las seis corridas pasó y las tres respuestas crudas de cada caso coincidieron dentro de cada modelo. La [bitácora](docs/progress.md) registra artefactos privados, condiciones y límites. La **6.a** fijó el [protocolo de comparación y exportación](docs/comparison-protocol.md) antes de puntuar. La **6.b** añadió [`evalia score-run`](docs/score-run.md) y generó un informe privado para cada corrida principal. La **6.c** añadió [`evalia compare`](docs/compare.md) y comparó por campo y caso los dos informes, separando `dev` y `test` y conservando errores. La revisión semántica humana y la exportación pública siguen pendientes; la siguiente subtarea es **6.d**.
+La **5.3.a** dejó un [protocolo de comparación local](docs/local-comparison-protocol.md) antes de ejecutar el benchmark con modelos: dos modelos, el mismo prompt y límites, 36 casos revisados y una muestra `dev` preseleccionada para estabilidad. En **5.3.b** y **5.3.c**, `qwen3:8b` y `qwen2.5-coder:7b` procesaron por separado los mismos 36 casos con cero errores de proveedor. La **5.3.d** añadió dos repeticiones por modelo de los nueve casos `dev` fijados: la auditoría de las seis corridas pasó y las tres respuestas crudas de cada caso coincidieron dentro de cada modelo. La [bitácora](docs/progress.md) registra artefactos privados, condiciones y límites. La **6.a** fijó el [protocolo de comparación y exportación](docs/comparison-protocol.md) antes de puntuar. La **6.b** añadió [`evalia score-run`](docs/score-run.md) y generó un informe privado para cada corrida principal. La **6.c** añadió [`evalia compare`](docs/compare.md) y comparó por campo y caso los dos informes. La **6.d** añadió [`evalia export-public`](docs/export-public.md) con lista permitida y revisión explícita de permisos; la pareja real fue rechazada porque esa revisión todavía no existe. Sigue **6.e**, revisión humana y selección del artefacto.
 
 ## Documentación
 
@@ -47,6 +47,7 @@ La **5.3.a** dejó un [protocolo de comparación local](docs/local-comparison-pr
 - [Rúbrica de evaluación](docs/scoring.md): puntaje por campo, denominadores y exclusiones.
 - [Puntuación privada 6.b](docs/score-run.md) y [su contrato](schemas/evalia-score-report.schema.json): lectura estricta y reporte por corrida.
 - [Comparación pareada 6.c](docs/compare.md) y [su contrato](schemas/evalia-comparison.schema.json): categorías por campo y caso, procedencia y reporte privado.
+- [Exportación segura 6.d](docs/export-public.md), [contrato público](schemas/evalia-public-report.schema.json) y [contrato de permisos](schemas/evalia-publication-approval.schema.json): candidato privado y puertas de publicación.
 - [Línea base y reporte](docs/baseline.md): reglas, resultados del conjunto inicial y reproducción.
 - [Motor y proveedores](docs/runner.md): contrato compartido, ejecución sin red, persistencia y límites.
 - [Contrato de ejecuciones](schemas/evalia-run.schema.json): manifiesto y registros de respuestas 0.3.0.

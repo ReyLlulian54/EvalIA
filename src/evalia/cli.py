@@ -11,6 +11,11 @@ from evalia import __version__
 from evalia.providers.base import ProviderFailure
 from evalia.providers.ollama import DEFAULT_OLLAMA_URL
 from evalia.reports.compare import RunComparisonError, compare_runs, write_comparison
+from evalia.reports.export_public import (
+    PublicExportError,
+    export_public_candidate,
+    write_public_candidate,
+)
 from evalia.reports.score import RunScoreError, score_run, write_score_report
 from evalia.runner.inputs import RunInputError, run_dataset
 from evalia.validation import validate_jsonl
@@ -160,3 +165,35 @@ def compare(
         typer.echo(f"Comparación rechazada: {error}", err=True)
         raise typer.Exit(code=2) from error
     typer.echo(f"Comparación privada: {destination}. Dirección: base a candidata.")
+
+
+@app.command("export-public")
+def export_public(
+    dataset: Annotated[Path, typer.Option(help="Conjunto JSONL revisado.")],
+    prompt: Annotated[Path, typer.Option(help="Prompt versionado de las corridas.")],
+    base_run: Annotated[Path, typer.Option(help="Corrida base privada.")],
+    candidate_run: Annotated[Path, typer.Option(help="Corrida candidata privada.")],
+    comparison: Annotated[Path, typer.Option(help="Comparación privada 6.c.")],
+    approval: Annotated[Path, typer.Option(help="Revisión privada de permisos por caso.")],
+    output: Annotated[Path, typer.Option(help="Archivo candidato nuevo en ruta privada.")],
+) -> None:
+    """Genera un candidato estructurado, pendiente de revisión del artefacto."""
+    try:
+        report = export_public_candidate(
+            dataset, prompt, base_run, candidate_run, comparison, approval
+        )
+        destination = write_public_candidate(output, report)
+    except (
+        PublicExportError,
+        RunComparisonError,
+        RunScoreError,
+        RunInputError,
+        FileExistsError,
+        OSError,
+    ) as error:
+        typer.echo(f"Exportación rechazada: {error}", err=True)
+        raise typer.Exit(code=2) from error
+    typer.echo(
+        f"Candidato privado: {destination}. {len(report['cases'])} caso(s); "
+        "pendiente revisión manual antes de publicar."
+    )

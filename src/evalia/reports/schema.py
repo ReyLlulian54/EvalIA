@@ -36,3 +36,29 @@ def comparison_validator() -> Draft202012Validator:
     schema = json.loads(path.read_text(encoding="utf-8"))
     Draft202012Validator.check_schema(schema)
     return Draft202012Validator(schema, format_checker=FormatChecker())
+
+
+@cache
+def public_report_validator() -> Draft202012Validator:
+    packaged = resources.files("evalia").joinpath("schemas/evalia-public-report.schema.json")
+    path = (
+        packaged
+        if packaged.is_file()
+        else Path(__file__).resolve().parents[3] / "schemas/evalia-public-report.schema.json"
+    )
+    schema = json.loads(path.read_text(encoding="utf-8"))
+    Draft202012Validator.check_schema(schema)
+    return Draft202012Validator(schema, format_checker=FormatChecker())
+
+
+@cache
+def publication_approval_validator() -> Draft202012Validator:
+    packaged = resources.files("evalia").joinpath("schemas/evalia-publication-approval.schema.json")
+    path = (
+        packaged
+        if packaged.is_file()
+        else Path(__file__).resolve().parents[3] / "schemas/evalia-publication-approval.schema.json"
+    )
+    schema = json.loads(path.read_text(encoding="utf-8"))
+    Draft202012Validator.check_schema(schema)
+    return Draft202012Validator(schema, format_checker=FormatChecker())
