@@ -1,14 +1,14 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "EvalIA public report candidate",
-  "description": "Lista permitida de resultados estructurados; candidato privado pendiente de revisión manual antes de publicarse.",
+  "title": "EvalIA public report",
+  "description": "Lista permitida de resultados estructurados; el estado distingue el candidato privado del artefacto revisado para publicación.",
   "type": "object",
   "additionalProperties": false,
   "required": ["schema_version", "generated_at", "publication_review", "provenance", "limitations", "splits", "cases"],
   "properties": {
-    "schema_version": {"const": "0.1.0"},
+    "schema_version": {"const": "0.1.1"},
     "generated_at": {"type": "string", "format": "date-time"},
-    "publication_review": {"const": "pending_artifact_review"},
+    "publication_review": {"enum": ["pending_artifact_review", "approved_for_publication"]},
     "provenance": {
       "type": "object", "additionalProperties": false,
       "required": ["dataset_sha256", "prompt_sha256", "comparison_sha256", "approval_sha256", "base", "candidate"],
