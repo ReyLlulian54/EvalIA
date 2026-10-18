@@ -1,0 +1,1695 @@
+{
+  "cases": [
+    {
+      "base": {
+        "elapsed_ms": 7109.206000000995,
+        "error_code": "noncanonical_skill",
+        "prediction": null,
+        "status": "format_error"
+      },
+      "candidate": {
+        "elapsed_ms": 20172.66359999485,
+        "error_code": "noncanonical_skill",
+        "prediction": null,
+        "status": "format_error"
+      },
+      "case_id": "bench-001",
+      "expected": {
+        "closing_date": "2027-03-12",
+        "modality": "remota",
+        "skills": [
+          "Python",
+          "SQL"
+        ],
+        "student_required": true
+      },
+      "fields": {
+        "closing_date": "not_comparable",
+        "modality": "not_comparable",
+        "skills_exact": "not_comparable",
+        "student_required": "not_comparable"
+      },
+      "split": "test"
+    },
+    {
+      "base": {
+        "elapsed_ms": 816.3898999991943,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2027-04-18",
+          "modality": "hibrida",
+          "skills": [
+            "Git",
+            "Docker"
+          ],
+          "student_required": false
+        },
+        "status": "scored"
+      },
+      "candidate": {
+        "elapsed_ms": 769.9538000015309,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2027-04-18",
+          "modality": "hibrida",
+          "skills": [
+            "Git",
+            "Docker"
+          ],
+          "student_required": false
+        },
+        "status": "scored"
+      },
+      "case_id": "bench-002",
+      "expected": {
+        "closing_date": "2027-04-18",
+        "modality": "hibrida",
+        "skills": [
+          "Git",
+          "Docker"
+        ],
+        "student_required": false
+      },
+      "fields": {
+        "closing_date": "correct_tie",
+        "modality": "correct_tie",
+        "skills_exact": "correct_tie",
+        "student_required": "correct_tie"
+      },
+      "split": "dev"
+    },
+    {
+      "base": {
+        "elapsed_ms": 848.1567000053474,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2027-06-09",
+          "modality": "presencial",
+          "skills": [
+            "Python",
+            "Git"
+          ],
+          "student_required": null
+        },
+        "status": "scored"
+      },
+      "candidate": {
+        "elapsed_ms": 737.1289000002434,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2027-06-09",
+          "modality": "presencial",
+          "skills": [
+            "Python",
+            "Git"
+          ],
+          "student_required": false
+        },
+        "status": "scored"
+      },
+      "case_id": "bench-003",
+      "expected": {
+        "closing_date": "2027-06-09",
+        "modality": "presencial",
+        "skills": [
+          "Python",
+          "Git"
+        ],
+        "student_required": null
+      },
+      "fields": {
+        "closing_date": "correct_tie",
+        "modality": "correct_tie",
+        "skills_exact": "correct_tie",
+        "student_required": "regression"
+      },
+      "split": "dev"
+    },
+    {
+      "base": {
+        "elapsed_ms": 798.3319999984815,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2027-08-21",
+          "modality": "remota",
+          "skills": [
+            "SQL",
+            "Docker"
+          ],
+          "student_required": true
+        },
+        "status": "scored"
+      },
+      "candidate": {
+        "elapsed_ms": 754.3196999977226,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2027-08-21",
+          "modality": "remota",
+          "skills": [
+            "SQL",
+            "Docker"
+          ],
+          "student_required": true
+        },
+        "status": "scored"
+      },
+      "case_id": "bench-004",
+      "expected": {
+        "closing_date": "2027-08-21",
+        "modality": "remota",
+        "skills": [
+          "SQL",
+          "Docker"
+        ],
+        "student_required": true
+      },
+      "fields": {
+        "closing_date": "correct_tie",
+        "modality": "correct_tie",
+        "skills_exact": "correct_tie",
+        "student_required": "correct_tie"
+      },
+      "split": "dev"
+    },
+    {
+      "base": {
+        "elapsed_ms": 604.8778999975184,
+        "error_code": null,
+        "prediction": {
+          "closing_date": null,
+          "modality": "remota",
+          "skills": [
+            "Python"
+          ],
+          "student_required": true
+        },
+        "status": "scored"
+      },
+      "candidate": {
+        "elapsed_ms": 576.4325000054669,
+        "error_code": null,
+        "prediction": {
+          "closing_date": null,
+          "modality": "remota",
+          "skills": [
+            "Python"
+          ],
+          "student_required": true
+        },
+        "status": "scored"
+      },
+      "case_id": "bench-005",
+      "expected": {
+        "closing_date": null,
+        "modality": "remota",
+        "skills": [
+          "Python"
+        ],
+        "student_required": true
+      },
+      "fields": {
+        "closing_date": "correct_tie",
+        "modality": "correct_tie",
+        "skills_exact": "correct_tie",
+        "student_required": "correct_tie"
+      },
+      "split": "dev"
+    },
+    {
+      "base": {
+        "elapsed_ms": 753.326099998958,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2023-07-22",
+          "modality": "hibrida",
+          "skills": [
+            "SQL"
+          ],
+          "student_required": null
+        },
+        "status": "scored"
+      },
+      "candidate": {
+        "elapsed_ms": 760.9348000041791,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2023-07-22",
+          "modality": "hibrida",
+          "skills": [
+            "SQL"
+          ],
+          "student_required": false
+        },
+        "status": "scored"
+      },
+      "case_id": "bench-006",
+      "expected": {
+        "closing_date": null,
+        "modality": "hibrida",
+        "skills": [
+          "SQL"
+        ],
+        "student_required": null
+      },
+      "fields": {
+        "closing_date": "incorrect_tie",
+        "modality": "correct_tie",
+        "skills_exact": "correct_tie",
+        "student_required": "regression"
+      },
+      "split": "dev"
+    },
+    {
+      "base": {
+        "elapsed_ms": 750.270399999863,
+        "error_code": "noncanonical_skill",
+        "prediction": null,
+        "status": "format_error"
+      },
+      "candidate": {
+        "elapsed_ms": 574.4081999946502,
+        "error_code": null,
+        "prediction": {
+          "closing_date": null,
+          "modality": "presencial",
+          "skills": [
+            "Git"
+          ],
+          "student_required": false
+        },
+        "status": "scored"
+      },
+      "case_id": "bench-007",
+      "expected": {
+        "closing_date": null,
+        "modality": "presencial",
+        "skills": [
+          "Git"
+        ],
+        "student_required": false
+      },
+      "fields": {
+        "closing_date": "not_comparable",
+        "modality": "not_comparable",
+        "skills_exact": "not_comparable",
+        "student_required": "not_comparable"
+      },
+      "split": "test"
+    },
+    {
+      "base": {
+        "elapsed_ms": 590.0115999975242,
+        "error_code": null,
+        "prediction": {
+          "closing_date": null,
+          "modality": "remota",
+          "skills": [],
+          "student_required": null
+        },
+        "status": "scored"
+      },
+      "candidate": {
+        "elapsed_ms": 680.337600002531,
+        "error_code": null,
+        "prediction": {
+          "closing_date": null,
+          "modality": "remota",
+          "skills": [
+            "capacitación en herramientas digitales"
+          ],
+          "student_required": false
+        },
+        "status": "scored"
+      },
+      "case_id": "bench-008",
+      "expected": {
+        "closing_date": null,
+        "modality": "remota",
+        "skills": [],
+        "student_required": null
+      },
+      "fields": {
+        "closing_date": "correct_tie",
+        "modality": "correct_tie",
+        "skills_exact": "regression",
+        "student_required": "regression"
+      },
+      "split": "dev"
+    },
+    {
+      "base": {
+        "elapsed_ms": 622.1529999966151,
+        "error_code": null,
+        "prediction": {
+          "closing_date": null,
+          "modality": null,
+          "skills": [
+            "Docker"
+          ],
+          "student_required": true
+        },
+        "status": "scored"
+      },
+      "candidate": {
+        "elapsed_ms": 566.2190000002738,
+        "error_code": null,
+        "prediction": {
+          "closing_date": null,
+          "modality": null,
+          "skills": [
+            "Docker"
+          ],
+          "student_required": true
+        },
+        "status": "scored"
+      },
+      "case_id": "bench-009",
+      "expected": {
+        "closing_date": null,
+        "modality": null,
+        "skills": [
+          "Docker"
+        ],
+        "student_required": true
+      },
+      "fields": {
+        "closing_date": "correct_tie",
+        "modality": "correct_tie",
+        "skills_exact": "correct_tie",
+        "student_required": "correct_tie"
+      },
+      "split": "dev"
+    },
+    {
+      "base": {
+        "elapsed_ms": 838.0491000061738,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2027-05-10",
+          "modality": "remota",
+          "skills": [
+            "Python"
+          ],
+          "student_required": false
+        },
+        "status": "scored"
+      },
+      "candidate": {
+        "elapsed_ms": 698.1033000047319,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2027-05-10",
+          "modality": "remota",
+          "skills": [
+            "Python"
+          ],
+          "student_required": false
+        },
+        "status": "scored"
+      },
+      "case_id": "bench-010",
+      "expected": {
+        "closing_date": "2027-05-10",
+        "modality": "remota",
+        "skills": [
+          "Python"
+        ],
+        "student_required": false
+      },
+      "fields": {
+        "closing_date": "correct_tie",
+        "modality": "correct_tie",
+        "skills_exact": "correct_tie",
+        "student_required": "correct_tie"
+      },
+      "split": "dev"
+    },
+    {
+      "base": {
+        "elapsed_ms": 717.9557999988901,
+        "error_code": null,
+        "prediction": {
+          "closing_date": null,
+          "modality": "hibrida",
+          "skills": [
+            "SQL"
+          ],
+          "student_required": null
+        },
+        "status": "scored"
+      },
+      "candidate": {
+        "elapsed_ms": 587.5471999970614,
+        "error_code": null,
+        "prediction": {
+          "closing_date": null,
+          "modality": "hibrida",
+          "skills": [
+            "SQL"
+          ],
+          "student_required": false
+        },
+        "status": "scored"
+      },
+      "case_id": "bench-011",
+      "expected": {
+        "closing_date": null,
+        "modality": "hibrida",
+        "skills": [
+          "SQL"
+        ],
+        "student_required": null
+      },
+      "fields": {
+        "closing_date": "correct_tie",
+        "modality": "correct_tie",
+        "skills_exact": "correct_tie",
+        "student_required": "regression"
+      },
+      "split": "test"
+    },
+    {
+      "base": {
+        "elapsed_ms": 666.1698000025353,
+        "error_code": null,
+        "prediction": {
+          "closing_date": null,
+          "modality": "presencial",
+          "skills": [],
+          "student_required": false
+        },
+        "status": "scored"
+      },
+      "candidate": {
+        "elapsed_ms": 551.7647000015131,
+        "error_code": null,
+        "prediction": {
+          "closing_date": null,
+          "modality": "presencial",
+          "skills": [],
+          "student_required": false
+        },
+        "status": "scored"
+      },
+      "case_id": "bench-012",
+      "expected": {
+        "closing_date": null,
+        "modality": "presencial",
+        "skills": [],
+        "student_required": false
+      },
+      "fields": {
+        "closing_date": "correct_tie",
+        "modality": "correct_tie",
+        "skills_exact": "correct_tie",
+        "student_required": "correct_tie"
+      },
+      "split": "dev"
+    },
+    {
+      "base": {
+        "elapsed_ms": 809.8078000039095,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2027-10-07",
+          "modality": null,
+          "skills": [
+            "Python"
+          ],
+          "student_required": null
+        },
+        "status": "scored"
+      },
+      "candidate": {
+        "elapsed_ms": 677.1768999969936,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2027-10-07",
+          "modality": null,
+          "skills": [
+            "Python"
+          ],
+          "student_required": null
+        },
+        "status": "scored"
+      },
+      "case_id": "bench-013",
+      "expected": {
+        "closing_date": "2027-10-07",
+        "modality": null,
+        "skills": [
+          "Python"
+        ],
+        "student_required": null
+      },
+      "fields": {
+        "closing_date": "correct_tie",
+        "modality": "correct_tie",
+        "skills_exact": "correct_tie",
+        "student_required": "correct_tie"
+      },
+      "split": "dev"
+    },
+    {
+      "base": {
+        "elapsed_ms": 832.4357999954373,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2027-12-03",
+          "modality": null,
+          "skills": [
+            "Docker"
+          ],
+          "student_required": false
+        },
+        "status": "scored"
+      },
+      "candidate": {
+        "elapsed_ms": 687.263100000564,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2027-12-03",
+          "modality": null,
+          "skills": [
+            "Docker"
+          ],
+          "student_required": false
+        },
+        "status": "scored"
+      },
+      "case_id": "bench-014",
+      "expected": {
+        "closing_date": "2027-12-03",
+        "modality": null,
+        "skills": [
+          "Docker"
+        ],
+        "student_required": false
+      },
+      "fields": {
+        "closing_date": "correct_tie",
+        "modality": "correct_tie",
+        "skills_exact": "correct_tie",
+        "student_required": "correct_tie"
+      },
+      "split": "dev"
+    },
+    {
+      "base": {
+        "elapsed_ms": 961.6567000048235,
+        "error_code": null,
+        "prediction": {
+          "closing_date": null,
+          "modality": null,
+          "skills": [
+            "SQL"
+          ],
+          "student_required": true
+        },
+        "status": "scored"
+      },
+      "candidate": {
+        "elapsed_ms": 549.5817999981227,
+        "error_code": null,
+        "prediction": {
+          "closing_date": null,
+          "modality": null,
+          "skills": [
+            "SQL"
+          ],
+          "student_required": true
+        },
+        "status": "scored"
+      },
+      "case_id": "bench-015",
+      "expected": {
+        "closing_date": null,
+        "modality": null,
+        "skills": [
+          "SQL"
+        ],
+        "student_required": true
+      },
+      "fields": {
+        "closing_date": "correct_tie",
+        "modality": "correct_tie",
+        "skills_exact": "correct_tie",
+        "student_required": "correct_tie"
+      },
+      "split": "test"
+    },
+    {
+      "base": {
+        "elapsed_ms": 988.0165999929886,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2028-01-14",
+          "modality": null,
+          "skills": [
+            "Git"
+          ],
+          "student_required": null
+        },
+        "status": "scored"
+      },
+      "candidate": {
+        "elapsed_ms": 693.932299996959,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2028-01-14",
+          "modality": null,
+          "skills": [
+            "Git"
+          ],
+          "student_required": null
+        },
+        "status": "scored"
+      },
+      "case_id": "bench-016",
+      "expected": {
+        "closing_date": "2028-01-14",
+        "modality": null,
+        "skills": [
+          "Git"
+        ],
+        "student_required": null
+      },
+      "fields": {
+        "closing_date": "correct_tie",
+        "modality": "correct_tie",
+        "skills_exact": "correct_tie",
+        "student_required": "correct_tie"
+      },
+      "split": "dev"
+    },
+    {
+      "base": {
+        "elapsed_ms": 1004.4818000023952,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2028-03-17",
+          "modality": "remota",
+          "skills": [],
+          "student_required": true
+        },
+        "status": "scored"
+      },
+      "candidate": {
+        "elapsed_ms": 736.9360000011511,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2028-03-17",
+          "modality": "remota",
+          "skills": [
+            "Python",
+            "SQL"
+          ],
+          "student_required": true
+        },
+        "status": "scored"
+      },
+      "case_id": "bench-017",
+      "expected": {
+        "closing_date": "2028-03-17",
+        "modality": "remota",
+        "skills": [],
+        "student_required": true
+      },
+      "fields": {
+        "closing_date": "correct_tie",
+        "modality": "correct_tie",
+        "skills_exact": "regression",
+        "student_required": "correct_tie"
+      },
+      "split": "test"
+    },
+    {
+      "base": {
+        "elapsed_ms": 733.0297000007704,
+        "error_code": null,
+        "prediction": {
+          "closing_date": null,
+          "modality": "hibrida",
+          "skills": [
+            "Python"
+          ],
+          "student_required": false
+        },
+        "status": "scored"
+      },
+      "candidate": {
+        "elapsed_ms": 585.9620999981416,
+        "error_code": null,
+        "prediction": {
+          "closing_date": null,
+          "modality": "hibrida",
+          "skills": [
+            "Python"
+          ],
+          "student_required": false
+        },
+        "status": "scored"
+      },
+      "case_id": "bench-018",
+      "expected": {
+        "closing_date": null,
+        "modality": "hibrida",
+        "skills": [
+          "Python"
+        ],
+        "student_required": false
+      },
+      "fields": {
+        "closing_date": "correct_tie",
+        "modality": "correct_tie",
+        "skills_exact": "correct_tie",
+        "student_required": "correct_tie"
+      },
+      "split": "dev"
+    },
+    {
+      "base": {
+        "elapsed_ms": 901.1824999979581,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2028-06-25",
+          "modality": "presencial",
+          "skills": [
+            "Git",
+            "SQL"
+          ],
+          "student_required": null
+        },
+        "status": "scored"
+      },
+      "candidate": {
+        "elapsed_ms": 736.1636999994516,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2028-06-25",
+          "modality": "presencial",
+          "skills": [
+            "Git",
+            "SQL"
+          ],
+          "student_required": false
+        },
+        "status": "scored"
+      },
+      "case_id": "bench-019",
+      "expected": {
+        "closing_date": "2028-06-25",
+        "modality": "presencial",
+        "skills": [
+          "Git",
+          "SQL"
+        ],
+        "student_required": null
+      },
+      "fields": {
+        "closing_date": "correct_tie",
+        "modality": "correct_tie",
+        "skills_exact": "correct_tie",
+        "student_required": "regression"
+      },
+      "split": "dev"
+    },
+    {
+      "base": {
+        "elapsed_ms": 810.3824999998324,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2028-08-08",
+          "modality": null,
+          "skills": [],
+          "student_required": false
+        },
+        "status": "scored"
+      },
+      "candidate": {
+        "elapsed_ms": 691.5402000013273,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2028-08-08",
+          "modality": null,
+          "skills": [
+            "informática"
+          ],
+          "student_required": false
+        },
+        "status": "scored"
+      },
+      "case_id": "bench-020",
+      "expected": {
+        "closing_date": "2028-08-08",
+        "modality": null,
+        "skills": [],
+        "student_required": false
+      },
+      "fields": {
+        "closing_date": "correct_tie",
+        "modality": "correct_tie",
+        "skills_exact": "regression",
+        "student_required": "correct_tie"
+      },
+      "split": "dev"
+    },
+    {
+      "base": {
+        "elapsed_ms": 930.5097999967984,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2027-04-11",
+          "modality": "remota",
+          "skills": [
+            "Python"
+          ],
+          "student_required": true
+        },
+        "status": "scored"
+      },
+      "candidate": {
+        "elapsed_ms": 700.3671999991639,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2027-04-11",
+          "modality": "remota",
+          "skills": [
+            "Python"
+          ],
+          "student_required": true
+        },
+        "status": "scored"
+      },
+      "case_id": "bench-021",
+      "expected": {
+        "closing_date": "2027-04-11",
+        "modality": "remota",
+        "skills": [
+          "Python"
+        ],
+        "student_required": true
+      },
+      "fields": {
+        "closing_date": "correct_tie",
+        "modality": "correct_tie",
+        "skills_exact": "correct_tie",
+        "student_required": "correct_tie"
+      },
+      "split": "dev"
+    },
+    {
+      "base": {
+        "elapsed_ms": 922.9487999982666,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2027-05-02",
+          "modality": "hibrida",
+          "skills": [
+            "Docker"
+          ],
+          "student_required": false
+        },
+        "status": "scored"
+      },
+      "candidate": {
+        "elapsed_ms": 754.43990000349,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2027-05-02",
+          "modality": "hibrida",
+          "skills": [
+            "Docker"
+          ],
+          "student_required": false
+        },
+        "status": "scored"
+      },
+      "case_id": "bench-022",
+      "expected": {
+        "closing_date": "2027-05-02",
+        "modality": "hibrida",
+        "skills": [
+          "Docker"
+        ],
+        "student_required": false
+      },
+      "fields": {
+        "closing_date": "correct_tie",
+        "modality": "correct_tie",
+        "skills_exact": "correct_tie",
+        "student_required": "correct_tie"
+      },
+      "split": "test"
+    },
+    {
+      "base": {
+        "elapsed_ms": 672.5387999977102,
+        "error_code": null,
+        "prediction": {
+          "closing_date": null,
+          "modality": "presencial",
+          "skills": [
+            "SQL"
+          ],
+          "student_required": null
+        },
+        "status": "scored"
+      },
+      "candidate": {
+        "elapsed_ms": 575.9767999988981,
+        "error_code": null,
+        "prediction": {
+          "closing_date": null,
+          "modality": "presencial",
+          "skills": [
+            "SQL"
+          ],
+          "student_required": false
+        },
+        "status": "scored"
+      },
+      "case_id": "bench-023",
+      "expected": {
+        "closing_date": null,
+        "modality": "presencial",
+        "skills": [
+          "SQL"
+        ],
+        "student_required": null
+      },
+      "fields": {
+        "closing_date": "correct_tie",
+        "modality": "correct_tie",
+        "skills_exact": "correct_tie",
+        "student_required": "regression"
+      },
+      "split": "dev"
+    },
+    {
+      "base": {
+        "elapsed_ms": 918.3616999944206,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2027-07-30",
+          "modality": "remota",
+          "skills": [
+            "Git"
+          ],
+          "student_required": false
+        },
+        "status": "scored"
+      },
+      "candidate": {
+        "elapsed_ms": 807.623100001365,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2027-07-30",
+          "modality": "remota",
+          "skills": [
+            "Git"
+          ],
+          "student_required": false
+        },
+        "status": "scored"
+      },
+      "case_id": "bench-024",
+      "expected": {
+        "closing_date": "2027-07-30",
+        "modality": "remota",
+        "skills": [
+          "Git"
+        ],
+        "student_required": false
+      },
+      "fields": {
+        "closing_date": "correct_tie",
+        "modality": "correct_tie",
+        "skills_exact": "correct_tie",
+        "student_required": "correct_tie"
+      },
+      "split": "dev"
+    },
+    {
+      "base": {
+        "elapsed_ms": 813.5995000047842,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2027-10-18",
+          "modality": "hibrida",
+          "skills": [
+            "Python",
+            "SQL"
+          ],
+          "student_required": true
+        },
+        "status": "scored"
+      },
+      "candidate": {
+        "elapsed_ms": 762.7157999959309,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2027-10-18",
+          "modality": "hibrida",
+          "skills": [
+            "Python",
+            "SQL"
+          ],
+          "student_required": true
+        },
+        "status": "scored"
+      },
+      "case_id": "bench-025",
+      "expected": {
+        "closing_date": "2027-10-18",
+        "modality": "hibrida",
+        "skills": [
+          "Python",
+          "SQL"
+        ],
+        "student_required": true
+      },
+      "fields": {
+        "closing_date": "correct_tie",
+        "modality": "correct_tie",
+        "skills_exact": "correct_tie",
+        "student_required": "correct_tie"
+      },
+      "split": "dev"
+    },
+    {
+      "base": {
+        "elapsed_ms": 853.7837999974727,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2027-11-15",
+          "modality": "remota",
+          "skills": [
+            "Docker"
+          ],
+          "student_required": null
+        },
+        "status": "scored"
+      },
+      "candidate": {
+        "elapsed_ms": 717.9945000025327,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2027-11-15",
+          "modality": "remota",
+          "skills": [
+            "Docker"
+          ],
+          "student_required": false
+        },
+        "status": "scored"
+      },
+      "case_id": "bench-026",
+      "expected": {
+        "closing_date": "2027-11-15",
+        "modality": "remota",
+        "skills": [
+          "Docker"
+        ],
+        "student_required": null
+      },
+      "fields": {
+        "closing_date": "correct_tie",
+        "modality": "correct_tie",
+        "skills_exact": "correct_tie",
+        "student_required": "regression"
+      },
+      "split": "dev"
+    },
+    {
+      "base": {
+        "elapsed_ms": 750.5481000043801,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2028-02-09",
+          "modality": "presencial",
+          "skills": [
+            "Git"
+          ],
+          "student_required": false
+        },
+        "status": "scored"
+      },
+      "candidate": {
+        "elapsed_ms": 703.9271000030567,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2028-02-09",
+          "modality": "presencial",
+          "skills": [
+            "Git"
+          ],
+          "student_required": false
+        },
+        "status": "scored"
+      },
+      "case_id": "bench-027",
+      "expected": {
+        "closing_date": "2028-02-09",
+        "modality": "presencial",
+        "skills": [
+          "Git"
+        ],
+        "student_required": false
+      },
+      "fields": {
+        "closing_date": "correct_tie",
+        "modality": "correct_tie",
+        "skills_exact": "correct_tie",
+        "student_required": "correct_tie"
+      },
+      "split": "test"
+    },
+    {
+      "base": {
+        "elapsed_ms": 726.8413999991026,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2028-03-20",
+          "modality": null,
+          "skills": [
+            "Python"
+          ],
+          "student_required": true
+        },
+        "status": "scored"
+      },
+      "candidate": {
+        "elapsed_ms": 676.055499992799,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2028-03-20",
+          "modality": null,
+          "skills": [
+            "Python"
+          ],
+          "student_required": true
+        },
+        "status": "scored"
+      },
+      "case_id": "bench-028",
+      "expected": {
+        "closing_date": "2028-03-20",
+        "modality": null,
+        "skills": [
+          "Python"
+        ],
+        "student_required": true
+      },
+      "fields": {
+        "closing_date": "correct_tie",
+        "modality": "correct_tie",
+        "skills_exact": "correct_tie",
+        "student_required": "correct_tie"
+      },
+      "split": "dev"
+    },
+    {
+      "base": {
+        "elapsed_ms": 746.34949999745,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2028-04-23",
+          "modality": "remota",
+          "skills": [
+            "Git"
+          ],
+          "student_required": true
+        },
+        "status": "scored"
+      },
+      "candidate": {
+        "elapsed_ms": 701.0661000022083,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2028-04-23",
+          "modality": "remota",
+          "skills": [
+            "Git"
+          ],
+          "student_required": true
+        },
+        "status": "scored"
+      },
+      "case_id": "bench-029",
+      "expected": {
+        "closing_date": "2028-04-23",
+        "modality": "remota",
+        "skills": [
+          "Git"
+        ],
+        "student_required": true
+      },
+      "fields": {
+        "closing_date": "correct_tie",
+        "modality": "correct_tie",
+        "skills_exact": "correct_tie",
+        "student_required": "correct_tie"
+      },
+      "split": "dev"
+    },
+    {
+      "base": {
+        "elapsed_ms": 612.3485999996774,
+        "error_code": "noncanonical_skill",
+        "prediction": null,
+        "status": "format_error"
+      },
+      "candidate": {
+        "elapsed_ms": 574.7448000038275,
+        "error_code": "noncanonical_skill",
+        "prediction": null,
+        "status": "format_error"
+      },
+      "case_id": "bench-030",
+      "expected": {
+        "closing_date": null,
+        "modality": "remota",
+        "skills": [
+          "SQL"
+        ],
+        "student_required": false
+      },
+      "fields": {
+        "closing_date": "not_comparable",
+        "modality": "not_comparable",
+        "skills_exact": "not_comparable",
+        "student_required": "not_comparable"
+      },
+      "split": "dev"
+    },
+    {
+      "base": {
+        "elapsed_ms": 754.3808999980683,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2028-05-06",
+          "modality": "hibrida",
+          "skills": [
+            "SQL"
+          ],
+          "student_required": null
+        },
+        "status": "scored"
+      },
+      "candidate": {
+        "elapsed_ms": 713.2691999941017,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2028-05-06",
+          "modality": "hibrida",
+          "skills": [
+            "SQL"
+          ],
+          "student_required": false
+        },
+        "status": "scored"
+      },
+      "case_id": "bench-031",
+      "expected": {
+        "closing_date": "2028-05-06",
+        "modality": "hibrida",
+        "skills": [
+          "SQL"
+        ],
+        "student_required": null
+      },
+      "fields": {
+        "closing_date": "correct_tie",
+        "modality": "correct_tie",
+        "skills_exact": "correct_tie",
+        "student_required": "regression"
+      },
+      "split": "test"
+    },
+    {
+      "base": {
+        "elapsed_ms": 731.964099999459,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2028-06-16",
+          "modality": null,
+          "skills": [
+            "Git"
+          ],
+          "student_required": true
+        },
+        "status": "scored"
+      },
+      "candidate": {
+        "elapsed_ms": 685.0233999939519,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2028-06-16",
+          "modality": null,
+          "skills": [
+            "Git"
+          ],
+          "student_required": true
+        },
+        "status": "scored"
+      },
+      "case_id": "bench-032",
+      "expected": {
+        "closing_date": "2028-06-16",
+        "modality": null,
+        "skills": [
+          "Git"
+        ],
+        "student_required": true
+      },
+      "fields": {
+        "closing_date": "correct_tie",
+        "modality": "correct_tie",
+        "skills_exact": "correct_tie",
+        "student_required": "correct_tie"
+      },
+      "split": "dev"
+    },
+    {
+      "base": {
+        "elapsed_ms": 603.5326999990502,
+        "error_code": null,
+        "prediction": {
+          "closing_date": null,
+          "modality": null,
+          "skills": [
+            "Docker"
+          ],
+          "student_required": null
+        },
+        "status": "scored"
+      },
+      "candidate": {
+        "elapsed_ms": 567.3527999970247,
+        "error_code": null,
+        "prediction": {
+          "closing_date": null,
+          "modality": null,
+          "skills": [
+            "Docker"
+          ],
+          "student_required": false
+        },
+        "status": "scored"
+      },
+      "case_id": "bench-033",
+      "expected": {
+        "closing_date": null,
+        "modality": null,
+        "skills": [],
+        "student_required": null
+      },
+      "fields": {
+        "closing_date": "correct_tie",
+        "modality": "correct_tie",
+        "skills_exact": "incorrect_tie",
+        "student_required": "regression"
+      },
+      "split": "test"
+    },
+    {
+      "base": {
+        "elapsed_ms": 601.9899000020814,
+        "error_code": null,
+        "prediction": {
+          "closing_date": null,
+          "modality": "remota",
+          "skills": [
+            "Python"
+          ],
+          "student_required": false
+        },
+        "status": "scored"
+      },
+      "candidate": {
+        "elapsed_ms": 696.0600000020349,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2023-09-14",
+          "modality": "remota",
+          "skills": [
+            "Python"
+          ],
+          "student_required": false
+        },
+        "status": "scored"
+      },
+      "case_id": "bench-034",
+      "expected": {
+        "closing_date": null,
+        "modality": "remota",
+        "skills": [
+          "Python"
+        ],
+        "student_required": false
+      },
+      "fields": {
+        "closing_date": "regression",
+        "modality": "correct_tie",
+        "skills_exact": "correct_tie",
+        "student_required": "correct_tie"
+      },
+      "split": "dev"
+    },
+    {
+      "base": {
+        "elapsed_ms": 784.7980000005919,
+        "error_code": "noncanonical_skill",
+        "prediction": null,
+        "status": "format_error"
+      },
+      "candidate": {
+        "elapsed_ms": 742.5721999970847,
+        "error_code": "noncanonical_skill",
+        "prediction": null,
+        "status": "format_error"
+      },
+      "case_id": "bench-035",
+      "expected": {
+        "closing_date": "2028-10-05",
+        "modality": "hibrida",
+        "skills": [
+          "Python"
+        ],
+        "student_required": true
+      },
+      "fields": {
+        "closing_date": "not_comparable",
+        "modality": "not_comparable",
+        "skills_exact": "not_comparable",
+        "student_required": "not_comparable"
+      },
+      "split": "dev"
+    },
+    {
+      "base": {
+        "elapsed_ms": 806.8377999952645,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2028-02-29",
+          "modality": "presencial",
+          "skills": [
+            "SQL",
+            "Docker"
+          ],
+          "student_required": false
+        },
+        "status": "scored"
+      },
+      "candidate": {
+        "elapsed_ms": 745.254900000873,
+        "error_code": null,
+        "prediction": {
+          "closing_date": "2028-02-29",
+          "modality": "presencial",
+          "skills": [
+            "SQL",
+            "Docker"
+          ],
+          "student_required": false
+        },
+        "status": "scored"
+      },
+      "case_id": "bench-036",
+      "expected": {
+        "closing_date": "2028-02-29",
+        "modality": "presencial",
+        "skills": [
+          "SQL",
+          "Docker"
+        ],
+        "student_required": false
+      },
+      "fields": {
+        "closing_date": "correct_tie",
+        "modality": "correct_tie",
+        "skills_exact": "correct_tie",
+        "student_required": "correct_tie"
+      },
+      "split": "dev"
+    }
+  ],
+  "generated_at": "2026-10-18T00:47:35Z",
+  "limitations": {
+    "dataset": "selected_cases_only",
+    "evidence_literal": "not_observed",
+    "interpretation": "descriptive_no_winner"
+  },
+  "provenance": {
+    "approval_sha256": "da3339fa160c0e477bddd50f5a76a565f90e6e2dece24a543c3ac8f18b1e4dbe",
+    "base": {
+      "model_digest": "500a1f067a9f782620b40bee6f7b0c89e17ae61f686b92c24933e4ca4b2b8b41",
+      "model_id": "qwen3:8b",
+      "run_id": "ff195d0a8e354eef9f86861d0e9151ec",
+      "score_report_sha256": "48962475765f003798342af5153a73ae676da09a973d2417196ad5c995ef15d5",
+      "source_commit": "4a723e158072191f87250f46cec3123f836e741d"
+    },
+    "candidate": {
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "model_id": "qwen2.5-coder:7b",
+      "run_id": "b12d939a82fc47428b7f4716e09a68f4",
+      "score_report_sha256": "092dc0349226144283d96e8bb69e2cccd1f56c73e3916139be307658d2c488b1",
+      "source_commit": "cc7ade41b3d333788ef4717b060010d00bbbea17"
+    },
+    "comparison_sha256": "683253468e13c53ed26d58fe21af294bae6695cd63a3c6a8564b745f8ae8da87",
+    "dataset_sha256": "55641ff55409d3951c88a337635ccbb6a131f1f632d9efab50c96961df75536f",
+    "prompt_sha256": "2535a9c5f6ab590ca356647dc342958a5459f3a2685ab67523db55a9ed37c86e"
+  },
+  "publication_review": "approved_for_publication",
+  "schema_version": "0.1.1",
+  "splits": {
+    "dev": {
+      "base": {
+        "elapsed_ms": {
+          "median": 798.3319999984815,
+          "observations": 27
+        },
+        "format_error_count": 2,
+        "internal_error_count": 0,
+        "provider_error_count": 0,
+        "scored_count": 25,
+        "skills_counts": {
+          "fn": 0,
+          "fp": 0,
+          "tp": 28
+        }
+      },
+      "candidate": {
+        "elapsed_ms": {
+          "median": 696.0600000020349,
+          "observations": 27
+        },
+        "format_error_count": 2,
+        "internal_error_count": 0,
+        "provider_error_count": 0,
+        "scored_count": 25,
+        "skills_counts": {
+          "fn": 0,
+          "fp": 2,
+          "tp": 28
+        }
+      },
+      "fields": {
+        "closing_date": {
+          "correct_tie": 23,
+          "improvement": 0,
+          "incorrect_tie": 1,
+          "not_comparable": 2,
+          "regression": 1
+        },
+        "modality": {
+          "correct_tie": 25,
+          "improvement": 0,
+          "incorrect_tie": 0,
+          "not_comparable": 2,
+          "regression": 0
+        },
+        "skills_exact": {
+          "correct_tie": 23,
+          "improvement": 0,
+          "incorrect_tie": 0,
+          "not_comparable": 2,
+          "regression": 2
+        },
+        "student_required": {
+          "correct_tie": 19,
+          "improvement": 0,
+          "incorrect_tie": 0,
+          "not_comparable": 2,
+          "regression": 6
+        }
+      },
+      "selected_count": 27
+    },
+    "test": {
+      "base": {
+        "elapsed_ms": {
+          "median": 754.3808999980683,
+          "observations": 9
+        },
+        "format_error_count": 2,
+        "internal_error_count": 0,
+        "provider_error_count": 0,
+        "scored_count": 7,
+        "skills_counts": {
+          "fn": 0,
+          "fp": 1,
+          "tp": 5
+        }
+      },
+      "candidate": {
+        "elapsed_ms": {
+          "median": 703.9271000030567,
+          "observations": 9
+        },
+        "format_error_count": 1,
+        "internal_error_count": 0,
+        "provider_error_count": 0,
+        "scored_count": 8,
+        "skills_counts": {
+          "fn": 0,
+          "fp": 3,
+          "tp": 6
+        }
+      },
+      "fields": {
+        "closing_date": {
+          "correct_tie": 7,
+          "improvement": 0,
+          "incorrect_tie": 0,
+          "not_comparable": 2,
+          "regression": 0
+        },
+        "modality": {
+          "correct_tie": 7,
+          "improvement": 0,
+          "incorrect_tie": 0,
+          "not_comparable": 2,
+          "regression": 0
+        },
+        "skills_exact": {
+          "correct_tie": 5,
+          "improvement": 0,
+          "incorrect_tie": 1,
+          "not_comparable": 2,
+          "regression": 1
+        },
+        "student_required": {
+          "correct_tie": 4,
+          "improvement": 0,
+          "incorrect_tie": 0,
+          "not_comparable": 2,
+          "regression": 3
+        }
+      },
+      "selected_count": 9
+    }
+  }
+}
