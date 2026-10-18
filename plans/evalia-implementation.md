@@ -2,7 +2,7 @@
 
 Estado: aprobado por el usuario el 3 de octubre de 2026; implementación iniciada por subtareas. Horizonte: 10 a 12 semanas. Presupuesto máximo: USD 30 en total. El avance se registra en `docs/progress.md`.
 
-Avance al 15 de octubre de 2026: los pasos 0 a 5, incluidas 5.3.a–d, están completados. El benchmark v1 conserva 36 casos revisados, con 27 `dev` y 9 `test`, y una huella independiente del contenido final de `test`. Las dos corridas principales, con `qwen3:8b` y `qwen2.5-coder:7b`, registraron 36 respuestas cada una; cuatro repeticiones adicionales de nueve casos `dev` cerraron la auditoría técnica del [protocolo](../docs/local-comparison-protocol.md). La [bitácora](../docs/progress.md) registra resultados y límites. La 6.a fijó el [protocolo de comparación y exportación](../docs/comparison-protocol.md); la 6.b puntuó cada corrida por separado con informes privados. Sigue 6.c, comparación pareada; aún no hay artefacto publicable.
+Avance al 17 de octubre de 2026: los pasos 0 a 6 están completados. El benchmark conserva 36 casos revisados (27 `dev`, nueve `test`), dos corridas principales auditadas y cuatro repeticiones de nueve casos `dev`. La etapa 6 cerró puntuación, comparación, revisión humana y selección de un [reporte público aprobado](../examples/results/benchmark-v1-qwen3-vs-qwen25.json). La **7.a** fija el [protocolo del panel local](../docs/local-panel-protocol.md); sigue **7.b**, controlador con pruebas simuladas. La interfaz y la ejecución manual del panel siguen pendientes. La [bitácora](../docs/progress.md) conserva la evidencia y los límites de cada entrega.
 
 ## 1. Objetivo y usuario
 
@@ -181,6 +181,17 @@ Estado al 15 de octubre de 2026: **5.3.a–d completas**. Cada corrida principal
 El [protocolo de la etapa 6](../docs/comparison-protocol.md) divide el trabajo en **6.a** método y puertas, **6.b** puntuación privada por corrida, **6.c** comparación pareada, **6.d** exportación segura y **6.e** revisión humana y selección del artefacto público; las cinco subtareas están completas. La persona responsable confirmó los 80 juicios semánticos y los derechos de los 36 casos. El candidato real se auditó y se seleccionó un [reporte estructurado](../examples/results/benchmark-v1-qwen3-vs-qwen25.json) para la futura demo de solo lectura. Sigue **7**, panel web local. Cada fila se entregó por separado; las citas no pedidas por el prompt de 5.3 no se puntúan como si hubieran sido generadas.
 
 **7. Panel web local.** Contexto: reutiliza el motor; no crea lógica de evaluación nueva. Añadir `app/local_app.py` con selección de datos, prompt, modelo y límite de casos, más botón explícito para ejecutar. Enlazar solo a `127.0.0.1`; un rerun de Streamlit no debe repetir solicitudes. El panel resolverá rutas bajo directorios locales permitidos antes de pasarlas al motor y no expondrá un puerto de Ollama personalizado sin aceptación explícita. Verificar manualmente una ejecución de 10 casos y una prueba automática del controlador de ejecución. Salida: resultados consultables desde navegador local, incluso si no hay OpenRouter. Si la interfaz retrasa la entrega, reducir gráficos antes de tocar el motor.
+
+La etapa se divide en cuatro entregas con requisitos y pruebas fijados en el [protocolo 7.a](../docs/local-panel-protocol.md):
+
+| Subtarea | Estado | Entrega y puerta |
+| --- | --- | --- |
+| **7.a. Diseño y contrato** | Completa | Preparación separada de ejecución, autoridad de esquemas existentes, rutas, estados y criterios P01–P14. Diseño contrastado con el motor y el puntuador. |
+| **7.b. Controlador** | Siguiente | Tipos Python compartidos y operaciones de preparación, ejecución y consulta; pruebas simuladas de límites, rutas, duplicados y errores. |
+| **7.c. Interfaz Streamlit** | Pendiente | `app/local_app.py`, dependencia opcional, arranque en loopback, pruebas de interacción y revisión visual. |
+| **7.d. Verificación local** | Pendiente | Diez casos del benchmark con `qwen3:8b`, auditoría privada y prueba de que filtros/reruns no repiten inferencia. |
+
+La 7.a es documental: no se ha implementado ni ejecutado el panel. La 7.b no necesita configuración humana; 7.c incorporará Streamlit al entorno aislado y 7.d verificará el servidor Ollama en `127.0.0.1:11434`. El puntuador actual solo admite el prompt congelado de 6.b y splits `dev`/`test`; otras entradas válidas podrán ejecutarse, con puntuación explícitamente no disponible. El panel conserva ese límite y los contratos existentes.
 
 **8. Demo pública e integración.** Contexto: usa únicamente exportaciones del paso 6. Añadir `app/public_app.py` como punto de entrada separado que no importe ni instancie proveedores ni el motor, no acepte claves y lea solo artefactos precomputados permitidos; seleccionar dos ejecuciones comparables, mostrar filtros y casos fallidos, documentar instalación y límites, y configurar CI sin llamadas pagadas. Verificar instalación limpia, `python -m pytest`, `ruff check .`, prueba que bloquea ejecución en modo público y revisión manual de enlaces/artefactos. Publicar solo tras comprobar derechos de reutilización de cada caso. Salida: URL de demo y release inicial reproducible. Si Streamlit Cloud resulta insuficiente, exportar un reporte estático.
 
