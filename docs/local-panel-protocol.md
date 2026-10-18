@@ -1,6 +1,6 @@
 # Protocolo del panel local — etapa 7
 
-Estado: **7.a completa como diseño**, antes de implementar el controlador o la interfaz. Este documento fija el comportamiento y las pruebas de aceptación del panel. Los esquemas existentes siguen siendo la autoridad de los datos; las reglas siguientes no constituyen una implementación ni una prueba de funcionamiento.
+Estado: **7.a completa como diseño; 7.b implementada y verificada con simulación**. Este documento conserva el comportamiento y los criterios fijados antes del controlador. La [entrega 7.b](local-panel-controller.md) identifica la evidencia y lo pendiente de interfaz y prueba real. Los esquemas existentes siguen siendo la autoridad de los datos.
 
 ## Subtareas y puertas
 
@@ -11,7 +11,7 @@ Estado: **7.a completa como diseño**, antes de implementar el controlador o la 
 | **7.c. Interfaz** | `app/local_app.py`, dependencia opcional de Streamlit y arranque local documentado. | Pruebas de interacción sin inferencia real y revisión visual de formulario, estados y resultados. |
 | **7.d. Verificación local** | Recorrido manual de diez casos con Ollama, auditoría de solicitudes y comprobación de escucha local. | Evidencia privada, verificaciones pertinentes y documentación de instalación y límites. |
 
-Cada fila requiere una entrega y una PR revisables, con README, plan y bitácora actualizados. Sigue **7.b**. La demo pública corresponde al paso 8; la exportación mantiene las puertas de la etapa 6.
+Cada fila requiere una entrega y una PR revisables, con README, plan y bitácora actualizados. Sigue **7.c**. La demo pública corresponde al paso 8; la exportación mantiene las puertas de la etapa 6.
 
 ## Recorrido y presentación
 
@@ -64,7 +64,7 @@ Los parámetros del panel adoptan los límites de la CLI, con espera inicial de 
 | Prompt | [`evalia-prompt.schema.json`](../schemas/evalia-prompt.schema.json) y `load_prompt`; preservar identidad, versión y hash de bytes. |
 | Ejecución | [`run_dataset`](../src/evalia/runner/inputs.py), [`run_requests`](../src/evalia/runner/core.py) y [`evalia-run.schema.json`](../schemas/evalia-run.schema.json) 0.3.0. El panel no compone solicitudes, reintentos ni manifiestos alternativos. |
 | Puntuación | [`score_run` y `write_score_report`](../src/evalia/reports/score.py), [`evalia-score-report.schema.json`](../schemas/evalia-score-report.schema.json) 0.1.0 y [rúbrica](scoring.md). La vista consume los resultados sin recalcular métricas propias. |
-| Interfaz/controlador | Un tipo Python compartido de selección preparada y un resultado tipado, definidos antes de sus consumidores en 7.b. La interfaz y el controlador se distribuyen juntos; no se crea una API HTTP ni otro esquema de artefactos. |
+| Interfaz/controlador | [`types.py`](../src/evalia/panel/types.py) define la selección preparada y los resultados compartidos de 7.b. La interfaz y el controlador se distribuyen juntos; no se crea una API HTTP ni otro esquema de artefactos. |
 
 El tipo de selección preparada deberá conservar identificador de intención, archivos resueltos, hashes, IDs seleccionados, modelo, parámetros y destino. El resultado deberá distinguir rechazo previo, corrida con artefactos y fallo de lectura o puntuación. Las firmas y validaciones serán una única definición en el controlador, importada por `app/local_app.py`; este documento fija sus requisitos observables, no duplica tipos serializados.
 
@@ -133,4 +133,4 @@ Se revisaron el plan, la bitácora y las implementaciones de carga, ejecución, 
 
 Referencias técnicas oficiales: [formularios](https://docs.streamlit.io/develop/concepts/architecture/forms), [Session State](https://docs.streamlit.io/develop/api-reference/caching-and-state/st.session_state), [AppTest](https://docs.streamlit.io/develop/api-reference/app-testing/st.testing.v1.apptest) y [configuración](https://docs.streamlit.io/develop/api-reference/configuration/config.toml).
 
-**No se requiere configuración humana para 7.a ni para las pruebas simuladas de 7.b.** Antes de 7.c se instalará Streamlit en el entorno aislado como dependencia opcional; antes de 7.d se comprobarán Ollama y el modelo. Si el entorno impide esas operaciones, se informará el bloqueo y los pasos precisos para resolverlo. Esta entrega solo documenta el diseño: P01–P14 siguen pendientes de sus respectivas implementaciones y verificaciones.
+**No se requiere configuración humana para 7.a ni para las pruebas simuladas de 7.b.** Antes de 7.c se instalará Streamlit en el entorno aislado como dependencia opcional; antes de 7.d se comprobarán Ollama y el modelo. Si el entorno impide esas operaciones, se informará el bloqueo y los pasos precisos para resolverlo. La 7.a solo documentó el diseño. La [matriz de evidencia de 7.b](local-panel-controller.md) distingue ahora las pruebas del controlador de P01–P14 todavía pendientes en navegador o con modelos reales.
