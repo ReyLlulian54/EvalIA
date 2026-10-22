@@ -28,12 +28,21 @@ La primera tarea es extraer fecha de cierre, modalidad, habilidades obligatorias
 | 6.e. Revisión humana | Completa | 80 juicios confirmados, derechos de 36 casos verificados y reporte público 0.1.1 auditado y seleccionado. |
 | 7.a. Diseño del panel local | Completa | Recorrido, contratos existentes, rutas permitidas, estados y criterios de aceptación fijados. |
 | 7.b. Controlador local | Completa | Intenciones de un solo uso, bloqueo por proceso, rutas acotadas, consulta y puntuación auditadas; pruebas simuladas. |
-| 7.c. Interfaz Streamlit | Siguiente | Formulario, ejecución explícita, resultados y pruebas de interacción. |
-| 7.d. Verificación local | Pendiente | Escucha en loopback y recorrido manual auditado de diez casos. |
+| 7.c. Interfaz Streamlit | Completa | Formulario, ejecución explícita, consulta privada, puntuación auditada y pruebas simuladas de interacción. |
+| 7.d. Verificación local | Siguiente | Escucha de Ollama en loopback y recorrido manual auditado de diez casos. |
 | 8. Demo pública | Pendiente | Interfaz de solo lectura con exportaciones aprobadas. |
 | 9. OpenRouter | Optativa | Solo tras comprobar costo, seguridad y utilidad del recorrido local. |
 
 La [bitácora](docs/progress.md) contiene las verificaciones y el [plan](plans/evalia-implementation.md) fija el alcance de cada entrega. Esta tabla se actualizará con cada subtarea.
+
+Para abrir el panel local, instala la dependencia opcional y usa el lanzador desde la raíz del repositorio:
+
+```powershell
+.\.venv\Scripts\python -m pip install -e ".[dev,panel]"
+.\.venv\Scripts\python scripts\run_local_panel.py
+```
+
+La interfaz queda en <http://127.0.0.1:8501>. Consulta [el recorrido y sus límites](docs/local-panel-ui.md) antes de ejecutar; preparar y consultar no envían solicitudes de generación. Para 7.d habrá que comprobar el listener de Ollama y el modelo local `qwen3:8b`.
 
 La revisión del código corrigió dos casos límite: la línea base 0.1.1 clasifica cada habilidad en frases que mezclan requisitos obligatorios, deseables y negaciones, y `evalia run` informa de forma específica si el directorio de salida ya existe, sin alterar su contenido. El reporte público `seed` se regeneró con el hash del código actualizado; sus predicciones y métricas no cambiaron. La [documentación de la línea base](docs/baseline.md) describe el alcance de esta heurística.
 
@@ -41,7 +50,7 @@ Una revisión posterior de rendimiento y seguridad reutilizó en memoria los val
 
 La **5.3.a** dejó un [protocolo de comparación local](docs/local-comparison-protocol.md) antes de ejecutar el benchmark con modelos: dos modelos, el mismo prompt y límites, 36 casos revisados y una muestra `dev` preseleccionada para estabilidad. En **5.3.b** y **5.3.c**, `qwen3:8b` y `qwen2.5-coder:7b` procesaron por separado los mismos 36 casos con cero errores de proveedor. La **5.3.d** añadió dos repeticiones por modelo de los nueve casos `dev` fijados: la auditoría de las seis corridas pasó y las tres respuestas crudas de cada caso coincidieron dentro de cada modelo. La [bitácora](docs/progress.md) registra artefactos privados, condiciones y límites. La **6.a** fijó el [protocolo de comparación y exportación](docs/comparison-protocol.md) antes de puntuar. La **6.b** añadió [`evalia score-run`](docs/score-run.md) y generó un informe privado para cada corrida principal. La **6.c** añadió [`evalia compare`](docs/compare.md) y comparó por campo y caso los dos informes. La **6.d** añadió [`evalia export-public`](docs/export-public.md) con lista permitida y rechazo cerrado sin permiso revisado. En **6.e**, la persona responsable confirmó 80 juicios semánticos y derechos para los 36 casos; el candidato real pasó una auditoría de campos, procedencia y ausencia de datos privados. Se seleccionó [el reporte estructurado](examples/results/benchmark-v1-qwen3-vs-qwen25.json) bajo el contrato 0.1.1.
 
-La **7.a** fijó el [protocolo del panel local](docs/local-panel-protocol.md). La **7.b** implementó el [controlador Python](docs/local-panel-controller.md): preparar valida sin inferencia, ejecutar consume una intención una vez y el proceso admite una sola corrida activa. La consulta preserva errores y artefactos parciales; la puntuación reutiliza la auditoría existente y rechaza entradas incompatibles. La suite pasó **248 pruebas**, con una omitida por privilegios de symlinks de archivo en Windows; los junctions reales sí se probaron. Sigue **7.c**, interfaz Streamlit y pruebas de interacción. Se instalará como dependencia opcional en el entorno aislado; no necesitas configurar Ollama todavía. La prueba real de diez casos corresponde a 7.d.
+La **7.a** fijó el [protocolo del panel local](docs/local-panel-protocol.md). La **7.b** implementó el [controlador Python](docs/local-panel-controller.md): preparar valida sin inferencia, ejecutar consume una intención una vez y el proceso admite una sola corrida activa. La consulta preserva errores y artefactos parciales; la puntuación reutiliza la auditoría existente y rechaza entradas incompatibles. La **7.c** añadió la [interfaz Streamlit](docs/local-panel-ui.md), el arranque fijado a loopback y pruebas de interacción con proveedor simulado. Sigue **7.d**: requiere comprobar el listener de Ollama y tener `qwen3:8b` descargado antes de ejecutar diez casos reales desde el navegador.
 
 ## Documentación
 
@@ -57,6 +66,7 @@ La **7.a** fijó el [protocolo del panel local](docs/local-panel-protocol.md). L
 - [Revisión 6.e](docs/6-e-review.md): confirmación humana, derechos, auditoría y selección del reporte estructurado.
 - [Protocolo del panel local 7.a](docs/local-panel-protocol.md): subtareas, recorrido, límites, estados y pruebas de aceptación.
 - [Controlador local 7.b](docs/local-panel-controller.md): API Python, selección inmutable, concurrencia, rutas y evidencia de pruebas simuladas.
+- [Interfaz local 7.c](docs/local-panel-ui.md): instalación opcional, arranque en loopback, recorrido y límites de interpretación.
 - [Línea base y reporte](docs/baseline.md): reglas, resultados del conjunto inicial y reproducción.
 - [Motor y proveedores](docs/runner.md): contrato compartido, ejecución sin red, persistencia y límites.
 - [Contrato de ejecuciones](schemas/evalia-run.schema.json): manifiesto y registros de respuestas 0.3.0.
@@ -119,6 +129,6 @@ El 8 de octubre de 2026, una prueba local con `qwen3:8b` completó nueve solicit
 
 ### Conjunto ampliado revisado
 
-Los 36 casos de `datasets/benchmark-v1.jsonl` son convocatorias ficticias. La partición `test` quedó fijada antes de cualquier ejecución de modelos sobre ellos. Una lectura asistida reconstruyó 144 valores esperados sin discrepancias y examinó 113 citas; dos textos recibieron correcciones editoriales, sin cambiar las etiquetas. La muestra diferida de nueve casos se completó después del plazo correspondiente a los textos corregidos. La persona responsable confirmó explícitamente como conformes los 36 casos de la versión borrador con hash LF `b4ee52f0c16ea937a87c112540a37d2ca5424c6792c9a2e1cdd88856c35e8b0d`; solo entonces cambiaron a `reviewed`. La versión final es `benchmark-v1-1.0.0`, con hash LF `598740b54573749e6c7eb9007117f39d9fc971c7a1ee93550a44243d22c0926c` y hash `test` `86dca1777e7b3dbb4dd523d3204f797f2ed5b2f6b42d4cb7d92334ec87b40e34`. El [registro](docs/benchmark-v1-review.md) conserva decisiones y límites; la [hoja de revisión humana](docs/benchmark-v1-human-review.md) enlaza los casos. La comparación y selección del reporte se completaron en la etapa 6. El siguiente trabajo es **7.c**, interfaz Streamlit del panel local; la futura prueba real de 7.d requerirá Ollama y el modelo elegido disponibles.
+Los 36 casos de `datasets/benchmark-v1.jsonl` son convocatorias ficticias. La partición `test` quedó fijada antes de cualquier ejecución de modelos sobre ellos. Una lectura asistida reconstruyó 144 valores esperados sin discrepancias y examinó 113 citas; dos textos recibieron correcciones editoriales, sin cambiar las etiquetas. La muestra diferida de nueve casos se completó después del plazo correspondiente a los textos corregidos. La persona responsable confirmó explícitamente como conformes los 36 casos de la versión borrador con hash LF `b4ee52f0c16ea937a87c112540a37d2ca5424c6792c9a2e1cdd88856c35e8b0d`; solo entonces cambiaron a `reviewed`. La versión final es `benchmark-v1-1.0.0`, con hash LF `598740b54573749e6c7eb9007117f39d9fc971c7a1ee93550a44243d22c0926c` y hash `test` `86dca1777e7b3dbb4dd523d3204f797f2ed5b2f6b42d4cb7d92334ec87b40e34`. El [registro](docs/benchmark-v1-review.md) conserva decisiones y límites; la [hoja de revisión humana](docs/benchmark-v1-human-review.md) enlaza los casos. La comparación y selección del reporte se completaron en la etapa 6. El siguiente trabajo es **7.d**, recorrido real de diez casos desde el panel; requiere comprobar la escucha de Ollama y el modelo local antes de inferir.
 
 La licencia de distribución del código sigue pendiente de definición. La publicación del repositorio no constituye una autorización de reutilización de textos de terceros.
