@@ -15,7 +15,7 @@ Abrir <http://127.0.0.1:8501>. Para detener el servidor, pulsar Ctrl+C en la ter
 
 El [lanzador](../scripts/run_local_panel.py) obtiene la raíz desde su ubicación y utiliza el mismo intérprete. Fija por argumentos de mayor precedencia `server.address=127.0.0.1`, puerto 8501, CORS y XSRF activos y estadísticas desactivadas, incluso si existe una configuración global distinta. Oculta las opciones de despliegue y trazas de la barra integrada de Streamlit. Desactiva la vigilancia de archivos y la ejecución al guardar para evitar recargas del código durante una corrida. No acepta argumentos que cambien estos valores. El modo soportado es un solo proceso; si el puerto está ocupado, detener el panel anterior antes de iniciar otro.
 
-No se necesita Ollama para abrir, preparar, consultar artefactos o ejecutar las pruebas simuladas. Para inferencia se necesita el servidor local y el nombre exacto de un modelo ya descargado. El panel usa `http://127.0.0.1:11434`, sin heredar `OLLAMA_HOST`, descargar modelos ni iniciar servicios. Antes de **7.d** se comprobará dónde escucha Ollama y se verificará el modelo; no basta con que el cliente use una URL local.
+No se necesita Ollama para abrir, preparar, consultar artefactos o ejecutar las pruebas simuladas. Para inferencia se necesita el servidor local y el nombre exacto de un modelo ya descargado. El panel usa `http://127.0.0.1:11434`, sin heredar `OLLAMA_HOST`, descargar modelos ni iniciar servicios. La [verificación 7.d](local-panel-verification.md) comprobó dónde escuchaban ambos servidores y el digest del modelo antes de la corrida; no basta con que el cliente use una URL local.
 
 ## Recorrido
 
@@ -41,6 +41,6 @@ Las pruebas de interacción usan `streamlit.testing.v1.AppTest`, el controlador 
 .\.venv\Scripts\ruff check .
 ```
 
-La [bitácora](progress.md) registra las versiones efectivamente probadas, los resultados de las pruebas y la revisión visual. El recorrido real con diez casos, la auditoría de solicitudes y la comprobación de escucha de Ollama siguen en **7.d**. La demo pública corresponde al paso 8.
+La [bitácora](progress.md) registra las versiones efectivamente probadas, los resultados de las pruebas y la revisión visual. El [acta 7.d](local-panel-verification.md) registra el recorrido real con diez casos, la auditoría de solicitudes, la comprobación de escucha de Ollama y los límites observados. La demo pública corresponde al paso 8.
 
 Referencias oficiales consultadas mediante Context7: [formularios](https://docs.streamlit.io/develop/concepts/architecture/forms), [Session State](https://docs.streamlit.io/develop/api-reference/caching-and-state/st.session_state), [AppTest](https://docs.streamlit.io/develop/api-reference/app-testing/st.testing.v1.apptest) y [precedencia de configuración](https://docs.streamlit.io/develop/concepts/configuration/options).
