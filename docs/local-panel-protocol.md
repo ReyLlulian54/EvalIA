@@ -1,6 +1,6 @@
 # Protocolo del panel local — etapa 7
 
-Estado: **7.a, 7.b y 7.c completas; sigue 7.d**. Este documento conserva el comportamiento y los criterios fijados antes del controlador. Las entregas [7.b](local-panel-controller.md) y [7.c](local-panel-ui.md) identifican la evidencia y lo pendiente de prueba real. Los esquemas existentes siguen siendo la autoridad de los datos.
+Estado: **7.a–7.d completas; sigue el paso 8**. Este documento conserva el comportamiento y los criterios fijados antes del controlador. Las entregas [7.b](local-panel-controller.md), [7.c](local-panel-ui.md) y [7.d](local-panel-verification.md) identifican su evidencia y límites. Los esquemas existentes siguen siendo la autoridad de los datos.
 
 ## Subtareas y puertas
 
@@ -11,7 +11,7 @@ Estado: **7.a, 7.b y 7.c completas; sigue 7.d**. Este documento conserva el comp
 | **7.c. Interfaz** | `app/local_app.py`, dependencia opcional de Streamlit y arranque local documentado. | Pruebas de interacción sin inferencia real y revisión visual de formulario, estados y resultados. |
 | **7.d. Verificación local** | Recorrido manual de diez casos con Ollama, auditoría de solicitudes y comprobación de escucha local. | Evidencia privada, verificaciones pertinentes y documentación de instalación y límites. |
 
-Cada fila requiere una entrega y una PR revisables, con README, plan y bitácora actualizados. Sigue **7.d**. La demo pública corresponde al paso 8; la exportación mantiene las puertas de la etapa 6.
+Cada fila requiere una entrega y una PR revisables, con README, plan y bitácora actualizados. La verificación manual de **7.d** se registró en su [acta](local-panel-verification.md). Sigue el paso 8, demo pública; la exportación mantiene las puertas de la etapa 6.
 
 ## Recorrido y presentación
 
@@ -125,7 +125,7 @@ La vista de puntuación muestra `dev` y `test` por separado, cobertura y errores
 
 Las pruebas de 7.b usarán fixtures y transporte simulado. Las de 7.c usan `streamlit.testing.v1.AppTest` con el proveedor sustituido y el controlador real; un conteo de llamadas verifica P01/P02. Ninguna prueba automática llamará a modelos reales ni servicios pagados. La dependencia opcional se incorporó y se comprobó en 7.c.
 
-Para 7.d se fijan desde ahora `benchmark-v1.jsonl`, `extraction-v1.json`, `qwen3:8b`, límite 10, temperatura 0, máximo 256 tokens, espera 120 segundos y cero reintentos. La selección actual es `bench-001` a `bench-010` (ocho `dev`, dos `test`); se comprobarán IDs, hashes y digest antes de ejecutar. Es una prueba del recorrido web, no una nueva comparación de calidad ni una ocasión para ajustar el prompt con `test`. El cierre exige auditar manifiesto y diez registros, puntuación compatible y ausencia de ejecuciones adicionales al interactuar; fallos observados se registran y resuelven antes de declarar el recorrido aceptado.
+Para 7.d se fijaron `benchmark-v1.jsonl`, `extraction-v1.json`, `qwen3:8b`, límite 10, temperatura 0, máximo 256 tokens, espera 120 segundos y cero reintentos. La selección fue `bench-001` a `bench-010` (ocho `dev`, dos `test`); se comprobaron IDs, hashes y digest antes de ejecutar. Es una prueba del recorrido web, no una nueva comparación de calidad ni una ocasión para ajustar el prompt con `test`. El [acta de 7.d](local-panel-verification.md) audita el manifiesto, diez registros, puntuación compatible y ausencia de ejecuciones adicionales al interactuar. Los errores de formato observados quedaron atribuidos al contenido de dos respuestas y conservados en privado, sin reintento ni cambio del contrato.
 
 ## Preparación y evidencia de 7.a
 
