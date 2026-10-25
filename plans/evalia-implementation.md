@@ -2,7 +2,7 @@
 
 Estado: aprobado por el usuario el 3 de octubre de 2026; implementación iniciada por subtareas. Horizonte: 10 a 12 semanas. Presupuesto máximo: USD 30 en total. El avance se registra en `docs/progress.md`.
 
-Avance al 24 de octubre de 2026: los pasos 0 a 7 están completados y **8.a** fijó el [protocolo de la demo pública](../docs/public-demo-protocol.md). El benchmark conserva 36 casos revisados (27 `dev`, nueve `test`), dos corridas principales auditadas y cuatro repeticiones de nueve casos `dev`. La etapa 6 cerró puntuación, comparación, revisión humana y selección de un [reporte público aprobado](../examples/results/benchmark-v1-qwen3-vs-qwen25.json). La etapa 7 entregó el [panel local](../docs/local-panel-protocol.md) y su [verificación real](../docs/local-panel-verification.md). Sigue **8.b**, visor público de solo lectura. La [bitácora](../docs/progress.md) conserva la evidencia y los límites de cada entrega.
+Avance al 25 de octubre de 2026: los pasos 0 a 7 están completados; **8.a** fijó el [protocolo de la demo pública](../docs/public-demo-protocol.md) y **8.b** añadió el [visor de solo lectura](../docs/public-demo-ui.md). El benchmark conserva 36 casos revisados (27 `dev`, nueve `test`), dos corridas principales auditadas y cuatro repeticiones de nueve casos `dev`. La etapa 6 cerró puntuación, comparación, revisión humana y selección de un [reporte público aprobado](../examples/results/benchmark-v1-qwen3-vs-qwen25.json). La etapa 7 entregó el [panel local](../docs/local-panel-protocol.md) y su [verificación real](../docs/local-panel-verification.md). Sigue **8.c**, integración y CI sin inferencia. La [bitácora](../docs/progress.md) conserva la evidencia y los límites de cada entrega.
 
 ## 1. Objetivo y usuario
 
@@ -200,11 +200,11 @@ El [protocolo 8.a](../docs/public-demo-protocol.md) divide la etapa en entregas 
 | Subtarea | Estado | Entrega y puerta |
 | --- | --- | --- |
 | **8.a. Diseño y contrato** | Completa | Fuente pública única, arquitectura separada, recorrido, estados y criterios D01–D12 fijados antes de implementar. |
-| **8.b. Visor de solo lectura** | Siguiente | Lector del artefacto aprobado y `app/public_app.py`; pruebas focalizadas y revisión visual local. |
-| **8.c. Integración y CI** | Pendiente | Aislamiento, instalación limpia, suite completa, Ruff y CI sin inferencias. |
+| **8.b. Visor de solo lectura** | Completa | Lector del artefacto aprobado y `app/public_app.py`; pruebas focalizadas y revisión visual local. |
+| **8.c. Integración y CI** | Siguiente | Aislamiento, instalación limpia, suite completa, Ruff y CI sin inferencias. |
 | **8.d. Publicación** | Pendiente | Revisión final de permisos, licencia, alojamiento, URL y release. |
 
-La 8.a no modifica el contrato público 0.1.1 ni los resultados seleccionados. La aprobación de 6.e cubre los 36 casos del artefacto fijado; la licencia del código y la configuración de alojamiento siguen como puertas de 8.d. Cada fila requiere su propia revisión antes de avanzar.
+La 8.b consume el contrato público 0.1.1 y el artefacto seleccionado sin modificar sus resultados. La aprobación de 6.e cubre los 36 casos del artefacto fijado; la licencia del código y la configuración de alojamiento siguen como puertas de 8.d. Cada fila requiere su propia revisión antes de avanzar.
 
 **9. OpenRouter optativo.** Contexto: una comparación remota puede enriquecer el portafolio, pero no determina si EvalIA funciona. Antes de activar llamadas, estimar tokens/costo por caso, fijar número máximo de casos y salida, límites de reintentos y tope acumulado de clave sin reinicio. Implementar adaptador y pruebas con respuestas simuladas; correr primero 3 casos y revisar uso real. Salida: comparación adicional dentro del presupuesto. Si el costo o el plazo no pasan la puerta, registrar la decisión y mantener la versión local.
 
