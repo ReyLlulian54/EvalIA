@@ -2,7 +2,7 @@
 
 Estado: aprobado por el usuario el 3 de octubre de 2026; implementación iniciada por subtareas. Horizonte: 10 a 12 semanas. Presupuesto máximo: USD 30 en total. El avance se registra en `docs/progress.md`.
 
-Avance al 24 de octubre de 2026: los pasos 0 a 7 están completados. El benchmark conserva 36 casos revisados (27 `dev`, nueve `test`), dos corridas principales auditadas y cuatro repeticiones de nueve casos `dev`. La etapa 6 cerró puntuación, comparación, revisión humana y selección de un [reporte público aprobado](../examples/results/benchmark-v1-qwen3-vs-qwen25.json). La **7.a** fijó el [protocolo del panel local](../docs/local-panel-protocol.md), **7.b** implementó el [controlador](../docs/local-panel-controller.md), **7.c** añadió la [interfaz Streamlit](../docs/local-panel-ui.md) y **7.d** verificó [el recorrido real desde el navegador](../docs/local-panel-verification.md). Sigue **8**, demo pública de solo lectura. La [bitácora](../docs/progress.md) conserva la evidencia y los límites de cada entrega.
+Avance al 24 de octubre de 2026: los pasos 0 a 7 están completados y **8.a** fijó el [protocolo de la demo pública](../docs/public-demo-protocol.md). El benchmark conserva 36 casos revisados (27 `dev`, nueve `test`), dos corridas principales auditadas y cuatro repeticiones de nueve casos `dev`. La etapa 6 cerró puntuación, comparación, revisión humana y selección de un [reporte público aprobado](../examples/results/benchmark-v1-qwen3-vs-qwen25.json). La etapa 7 entregó el [panel local](../docs/local-panel-protocol.md) y su [verificación real](../docs/local-panel-verification.md). Sigue **8.b**, visor público de solo lectura. La [bitácora](../docs/progress.md) conserva la evidencia y los límites de cada entrega.
 
 ## 1. Objetivo y usuario
 
@@ -194,6 +194,17 @@ La etapa se divide en cuatro entregas con requisitos y pruebas fijados en el [pr
 La 7.a fijó el diseño; la 7.b implementó el controlador, con 248 pruebas que pasaron y una omitida en su entrega. La 7.c incorporó Streamlit como dependencia opcional y conservó ese controlador sin duplicar contratos. La 7.d comprobó que Ollama escuchaba en `127.0.0.1:11434`, ejecutó diez casos reales y conservó el informe privado, incluidos errores de formato de salida. El puntuador solo admite el prompt congelado de 6.b y splits `dev`/`test`; otras entradas válidas pueden ejecutarse, con puntuación explícitamente no disponible.
 
 **8. Demo pública e integración.** Contexto: usa únicamente exportaciones del paso 6. Añadir `app/public_app.py` como punto de entrada separado que no importe ni instancie proveedores ni el motor, no acepte claves y lea solo artefactos precomputados permitidos; seleccionar dos ejecuciones comparables, mostrar filtros y casos fallidos, documentar instalación y límites, y configurar CI sin llamadas pagadas. Verificar instalación limpia, `python -m pytest`, `ruff check .`, prueba que bloquea ejecución en modo público y revisión manual de enlaces/artefactos. Publicar solo tras comprobar derechos de reutilización de cada caso. Salida: URL de demo y release inicial reproducible. Si Streamlit Cloud resulta insuficiente, exportar un reporte estático.
+
+El [protocolo 8.a](../docs/public-demo-protocol.md) divide la etapa en entregas independientes:
+
+| Subtarea | Estado | Entrega y puerta |
+| --- | --- | --- |
+| **8.a. Diseño y contrato** | Completa | Fuente pública única, arquitectura separada, recorrido, estados y criterios D01–D12 fijados antes de implementar. |
+| **8.b. Visor de solo lectura** | Siguiente | Lector del artefacto aprobado y `app/public_app.py`; pruebas focalizadas y revisión visual local. |
+| **8.c. Integración y CI** | Pendiente | Aislamiento, instalación limpia, suite completa, Ruff y CI sin inferencias. |
+| **8.d. Publicación** | Pendiente | Revisión final de permisos, licencia, alojamiento, URL y release. |
+
+La 8.a no modifica el contrato público 0.1.1 ni los resultados seleccionados. La aprobación de 6.e cubre los 36 casos del artefacto fijado; la licencia del código y la configuración de alojamiento siguen como puertas de 8.d. Cada fila requiere su propia revisión antes de avanzar.
 
 **9. OpenRouter optativo.** Contexto: una comparación remota puede enriquecer el portafolio, pero no determina si EvalIA funciona. Antes de activar llamadas, estimar tokens/costo por caso, fijar número máximo de casos y salida, límites de reintentos y tope acumulado de clave sin reinicio. Implementar adaptador y pruebas con respuestas simuladas; correr primero 3 casos y revisar uso real. Salida: comparación adicional dentro del presupuesto. Si el costo o el plazo no pasan la puerta, registrar la decisión y mantener la versión local.
 
