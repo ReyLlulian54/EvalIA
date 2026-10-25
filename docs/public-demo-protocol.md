@@ -1,17 +1,17 @@
 # Protocolo de la demo pública — etapa 8
 
-Estado: **8.a, diseño y contrato; siguen 8.b–8.d**. Este documento fija la fuente, el recorrido y las puertas antes de implementar `app/public_app.py`. La demo presenta una comparación descriptiva ya aprobada; nunca ejecuta modelos ni exporta datos privados.
+Estado: **8.a y 8.b completas; siguen 8.c–8.d**. Este documento fija la fuente, el recorrido y las puertas del visor de solo lectura. La demo presenta una comparación descriptiva ya aprobada; nunca ejecuta modelos ni exporta datos privados. El [recorrido local de 8.b](public-demo-ui.md) registra el arranque y sus límites.
 
 ## Subtareas y puertas
 
 | Subtarea | Entrega | Puerta de salida |
 | --- | --- | --- |
 | **8.a. Diseño y contrato** | Este protocolo: fuente única, arquitectura, estados, vista, filtros, límites y criterios D01–D12. | Coherencia con el esquema público 0.1.1, el artefacto aprobado, el plan y las guías de despliegue; enlaces y diff revisados. |
-| **8.b. Visor de solo lectura** | `app/public_app.py` independiente y lector de ruta fija; resumen por split, filtros y detalle de casos/errores. | Pruebas focalizadas de datos y `AppTest`, rechazo cerrado de artefactos no aprobados, y revisión visual local. |
+| **8.b. Visor de solo lectura** | `app/public_app.py` independiente y lector de ruta fija; resumen por split, filtros y detalle de casos/errores. | Completada: pruebas focalizadas de datos y `AppTest`, rechazo cerrado de artefactos no aprobados, y revisión visual local. |
 | **8.c. Integración y CI** | Dependencias reproducibles, instalación limpia y flujo de CI sin proveedor. | Suite completa, Ruff, comprobaciones de aislamiento/importaciones/red y prueba de arranque en entorno limpio. |
 | **8.d. Publicación** | Revisión final de permisos, configuración del alojamiento, URL y release inicial. | Artefacto/hash y enlaces auditados, licencia del código resuelta, revisión visual en la URL final y autorización para publicar. |
 
-Una entrega y una PR revisables corresponden a cada fila. Completar 8.a no autoriza desplegar ni comenzar 8.b por iniciativa propia.
+Una entrega y una PR revisables corresponden a cada fila. La 8.b no autoriza desplegar ni comenzar 8.c por iniciativa propia.
 
 ## Fuente y límite de confianza
 
