@@ -25,6 +25,8 @@ El último comando sirve para comprobar el arranque local y se detiene con Ctrl+
 
 El [flujo de GitHub Actions](../.github/workflows/ci.yml) se ejecuta en PR hacia `main` y en `push` a `main` con Python 3.11. Instala desde `requirements.txt` y el extra de desarrollo, comprueba dependencias, ejecuta la suite y Ruff. Tiene `contents: read`, no persiste credenciales del checkout, no recibe secretos de inferencia y no incluye un paso de despliegue. Las acciones están fijadas a SHA verificadas.
 
+En la [PR #40](https://github.com/ReyLlulian54/EvalIA/pull/40), el job pasó sobre el commit `bb7222f`: `pip check` sin conflictos, 288 pruebas aprobadas y Ruff correcto. El primer intento reveló que el prompt llegaba con LF a Linux; se fijó CRLF para ese único archivo mediante `.gitattributes` sin alterar el blob ni el hash aprobado.
+
 La [prueba de aislamiento](../tests/panel/test_public_isolation.py) revisa las importaciones del punto de entrada, lector y validador; además ejecuta `AppTest` y un filtro con puertas cerradas para importaciones del motor, lectura de `runs/` y `work/`, y sockets externos. El canal interno `socketpair` de asyncio queda permitido para que Streamlit pueda ejecutar la prueba. Las pruebas existentes conservan hash, esquema, aprobación, `null`/`false`, errores y denominadores.
 
 La publicación por URL, la licencia del código y la verificación final de permisos pertenecen a **8.d**. La integración de esta PR no equivale a un despliegue ni acredita calidad de producción de los modelos.

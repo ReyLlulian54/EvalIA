@@ -1,6 +1,6 @@
 # Protocolo de la demo pública — etapa 8
 
-Estado: **8.a y 8.b completas; 8.c en verificación; sigue 8.d**. Este documento fija la fuente, el recorrido y las puertas del visor de solo lectura. La demo presenta una comparación descriptiva ya aprobada; nunca ejecuta modelos ni exporta datos privados. El [recorrido local de 8.b](public-demo-ui.md) registra el arranque y sus límites; la [integración 8.c](public-demo-ci.md), sus pruebas y su CI se revisan por separado.
+Estado: **8.a, 8.b y 8.c completas; sigue 8.d**. Este documento fija la fuente, el recorrido y las puertas del visor de solo lectura. La demo presenta una comparación descriptiva ya aprobada; nunca ejecuta modelos ni exporta datos privados. El [recorrido local de 8.b](public-demo-ui.md) registra el arranque y sus límites; la [integración 8.c](public-demo-ci.md), sus pruebas y su CI se revisan por separado.
 
 ## Subtareas y puertas
 
@@ -8,7 +8,7 @@ Estado: **8.a y 8.b completas; 8.c en verificación; sigue 8.d**. Este documento
 | --- | --- | --- |
 | **8.a. Diseño y contrato** | Este protocolo: fuente única, arquitectura, estados, vista, filtros, límites y criterios D01–D12. | Coherencia con el esquema público 0.1.1, el artefacto aprobado, el plan y las guías de despliegue; enlaces y diff revisados. |
 | **8.b. Visor de solo lectura** | `app/public_app.py` independiente y lector de ruta fija; resumen por split, filtros y detalle de casos/errores. | Completada: pruebas focalizadas de datos y `AppTest`, rechazo cerrado de artefactos no aprobados, y revisión visual local. |
-| **8.c. Integración y CI** | Dependencias reproducibles desde el checkout, instalación limpia y flujo de CI sin proveedor. | En revisión: suite completa, Ruff, aislamiento y arranque local superados; falta la ejecución de GitHub Actions. Las versiones transitivas no están congeladas. |
+| **8.c. Integración y CI** | Dependencias reproducibles desde el checkout, instalación limpia y flujo de CI sin proveedor. | PR #40: suite local, Ruff, aislamiento y arranque superados; GitHub Actions aprobó 288 pruebas en Python 3.11. Las versiones transitivas no están congeladas. |
 | **8.d. Publicación** | Revisión final de permisos, configuración del alojamiento, URL y release inicial. | Artefacto/hash y enlaces auditados, licencia del código resuelta, revisión visual en la URL final y autorización para publicar. |
 
 Una entrega y una PR revisables corresponden a cada fila. La 8.c no autoriza desplegar ni comenzar 8.d por iniciativa propia.
