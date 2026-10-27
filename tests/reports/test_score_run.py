@@ -11,10 +11,17 @@ from evalia.cli import app
 from evalia.graders.dataset import evaluate_dataset
 from evalia.reports.schema import score_report_validator
 from evalia.reports.score import RunScoreError, score_run, write_score_report
-from evalia.runner.inputs import run_dataset
+from evalia.runner.inputs import load_prompt, run_dataset
 
 ROOT = Path(__file__).resolve().parents[2]
 PROMPT = ROOT / "prompts/extraction-v1.json"
+
+
+def test_scoring_prompt_keeps_frozen_byte_hash() -> None:
+    assert (
+        load_prompt(PROMPT).sha256
+        == "2535a9c5f6ab590ca356647dc342958a5459f3a2685ab67523db55a9ed37c86e"
+    )
 
 
 def _fixture_run(

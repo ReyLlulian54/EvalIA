@@ -1,1 +1,2 @@
 examples/results/benchmark-v1-qwen3-vs-qwen25.json text eol=lf
+prompts/extraction-v1.json text eol=crlf

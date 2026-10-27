@@ -6,6 +6,9 @@ La [demo de 8.b](public-demo-ui.md) se instala desde el checkout y consume solam
 
 [`requirements.txt`](../requirements.txt) contiene `-e .[panel]`: instala el paquete y el extra de Streamlit desde la raíz del repositorio, donde permanece la ruta fija del reporte. `pyproject.toml` conserva las versiones admitidas. Esta configuración hace repetible el procedimiento de instalación; **no congela versiones transitivas exactas**. Un wheel trasladado fuera del checkout no dispone de la ruta del reporte y no es el formato de publicación de esta etapa.
 
+[`prompts/extraction-v1.json`](../prompts/extraction-v1.json) se materializa con CRLF en todos los sistemas por `.gitattributes`: la puntuación 6.b exige el SHA-256 de sus bytes congelados. La prueba comprueba ese hash para detectar un checkout con saltos diferentes antes de puntuar.
+La verificación de puntuación presupone un checkout Git que aplique ese atributo; un archivo fuente extraído de un ZIP puede conservar LF y ser rechazado por el contrato 6.b.
+
 En un entorno virtual nuevo, desde la raíz:
 
 ```powershell
