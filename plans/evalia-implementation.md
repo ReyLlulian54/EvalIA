@@ -2,7 +2,7 @@
 
 Estado: aprobado por el usuario el 3 de octubre de 2026; implementación iniciada por subtareas. Horizonte: 10 a 12 semanas. Presupuesto máximo: USD 30 en total. El avance se registra en `docs/progress.md`.
 
-Avance al 25 de octubre de 2026: los pasos 0 a 7 están completados; **8.a** fijó el [protocolo de la demo pública](../docs/public-demo-protocol.md) y **8.b** añadió el [visor de solo lectura](../docs/public-demo-ui.md). El benchmark conserva 36 casos revisados (27 `dev`, nueve `test`), dos corridas principales auditadas y cuatro repeticiones de nueve casos `dev`. La etapa 6 cerró puntuación, comparación, revisión humana y selección de un [reporte público aprobado](../examples/results/benchmark-v1-qwen3-vs-qwen25.json). La etapa 7 entregó el [panel local](../docs/local-panel-protocol.md) y su [verificación real](../docs/local-panel-verification.md). Sigue **8.c**, integración y CI sin inferencia. La [bitácora](../docs/progress.md) conserva la evidencia y los límites de cada entrega.
+Avance al 27 de octubre de 2026: los pasos 0 a 7 están completados; **8.a** fijó el [protocolo de la demo pública](../docs/public-demo-protocol.md), **8.b** añadió el [visor de solo lectura](../docs/public-demo-ui.md) y **8.c** está en [verificación de integración y CI](../docs/public-demo-ci.md). El benchmark conserva 36 casos revisados (27 `dev`, nueve `test`), dos corridas principales auditadas y cuatro repeticiones de nueve casos `dev`. La etapa 6 cerró puntuación, comparación, revisión humana y selección de un [reporte público aprobado](../examples/results/benchmark-v1-qwen3-vs-qwen25.json). La etapa 7 entregó el [panel local](../docs/local-panel-protocol.md) y su [verificación real](../docs/local-panel-verification.md). La [bitácora](../docs/progress.md) conserva la evidencia y los límites de cada entrega.
 
 ## 1. Objetivo y usuario
 
@@ -201,7 +201,7 @@ El [protocolo 8.a](../docs/public-demo-protocol.md) divide la etapa en entregas 
 | --- | --- | --- |
 | **8.a. Diseño y contrato** | Completa | Fuente pública única, arquitectura separada, recorrido, estados y criterios D01–D12 fijados antes de implementar. |
 | **8.b. Visor de solo lectura** | Completa | Lector del artefacto aprobado y `app/public_app.py`; pruebas focalizadas y revisión visual local. |
-| **8.c. Integración y CI** | Siguiente | Aislamiento, instalación limpia, suite completa, Ruff y CI sin inferencias. |
+| **8.c. Integración y CI** | En revisión | Aislamiento e instalación limpia comprobados localmente; falta observar la ejecución de CI en la PR. |
 | **8.d. Publicación** | Pendiente | Revisión final de permisos, licencia, alojamiento, URL y release. |
 
 La 8.b consume el contrato público 0.1.1 y el artefacto seleccionado sin modificar sus resultados. La aprobación de 6.e cubre los 36 casos del artefacto fijado; la licencia del código y la configuración de alojamiento siguen como puertas de 8.d. Cada fila requiere su propia revisión antes de avanzar.

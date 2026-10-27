@@ -1,0 +1,2 @@
+# Demo pública: instalar el paquete desde este checkout para conservar la ruta fija del reporte.
+-e .[panel]
